@@ -23,6 +23,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		return iaView::errorPage(iaView::ERROR_NOT_FOUND);
 	}
 
+	if ($article['status'] == $iaArticle::STATUS_DRAFT && (!iaUsers::hasIdentity() || iaUsers::getIdentity()->id != $article['member_id']))
+	{
+		return iaView::errorPage(iaView::ERROR_FORBIDDEN);
+	}
+
 	$article['item'] = $iaArticle->getItemName();
 	$article['pictures'] = empty($article['pictures']) ? array() : explode(',', $article['pictures']);
 
