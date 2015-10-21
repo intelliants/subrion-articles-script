@@ -40,10 +40,9 @@ $(function()
 {
 	$('.js-delete-article').on('click', function(e)
 	{
-		if (!confirm(_t('do_you_really_want_to_delete_article')))
-		{
-			e.preventDefault();
-		}
+		e.preventDefault();
+
+		intelli.confirm(_t('do_you_really_want_to_delete_article'), { url: $(this).attr('href') });
 	});
 
 	$('#article_data').sisyphus(
