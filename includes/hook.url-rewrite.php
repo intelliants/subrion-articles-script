@@ -4,7 +4,7 @@
 $package = 'publishing';
 $accessGranted = false;
 $isDefaultPackage = (bool)($iaCore->get('default_package') == $package);
-$isCompactUrlMode = (bool)$iaCore->get('articles_compact_url', false);
+$isCompactUrlMode = (bool)$iaCore->get('articles_compact_url');
 $isCategory = true;
 $isArticle = false;
 $extras = $iaCore->getExtras($package);
@@ -73,7 +73,7 @@ if ($accessGranted)
 
 	if ($isArticle)
 	{
-		if ($iaCore->get('articles_url_validation', false))
+		if ($iaCore->get('articles_url_validation'))
 		{
 			$category = $iaDb->row_bind(array('title', 'title_alias'), '`status` = :status AND `id` = :id', array('status' => iaCore::STATUS_ACTIVE, 'id' => $articleData['category_id']), 'articles_categories');
 
