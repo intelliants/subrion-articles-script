@@ -6,7 +6,7 @@
 	{capture name='title' append='field_before'}
 	<div class="control-group">
 		{if $core.config.articles_categories_selector == 'Handy javascript tree'}
-			{include file='tree.tpl' url="{$packages.publishing.url}add.json"}
+			{include file='tree.tpl' url="{$core.packages.publishing.url}add.json"}
 		{else}
 			<label for="field_category_select" class="control-label">{lang key='field_category_id_annotation'}:</label>
 			<div class="controls">
