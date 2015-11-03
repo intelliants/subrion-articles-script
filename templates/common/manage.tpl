@@ -4,16 +4,14 @@
 	{include file='plans.tpl'}
 
 	{capture name='title' append='field_before'}
-	<div class="control-group">
-		{if $core.config.articles_categories_selector == 'Handy javascript tree'}
-			{include file='tree.tpl' url="{$core.packages.publishing.url}add.json"}
-		{else}
-			<label for="field_category_select" class="control-label">{lang key='field_category_id_annotation'}:</label>
-			<div class="controls">
-				<select name="category_id" id="field_category_select">{$categories}</select>
-			</div>
-		{/if}
-	</div>
+		<div class="form-group">
+			{if $core.config.articles_categories_selector == 'Handy javascript tree'}
+				{include file='tree.tpl' url="{$core.packages.publishing.url}add.json"}
+			{else}
+				<label for="field_category_select">{lang key='field_category_id_annotation'}:</label>
+				<select class="form-control" name="category_id" id="field_category_select">{$categories}</select>
+			{/if}
+		</div>
 	{/capture}
 
 	{capture append='fieldset_after' name='general'}
@@ -21,13 +19,13 @@
 	{/capture}
 
 	{capture append='tabs_after' name='__all__'}
-		<div class="form-actions">
-			<button type="submit" class="btn btn-primary btn-plain" name="data-article">{lang key='save'}</button>
+		<div class="fieldset__actions">
+			<button type="submit" class="btn btn-primary" name="data-article">{lang key='save'}</button>
 			{if $member}
-				<button type="submit" name="draft" class="btn btn-info btn-plain">{lang key='save_as_draft'}</button>
+				<button type="submit" name="draft" class="btn btn-default">{lang key='save_as_draft'}</button>
 			{/if}
 			{if iaCore::ACTION_EDIT == $pageAction}
-				<button type="submit" name="delete" class="btn btn-danger btn-plain js-delete-article">{lang key='delete'}</button>
+				<button type="submit" name="delete" class="btn btn-danger js-delete-article">{lang key='delete'}</button>
 			{/if}
 		</div>
 	{/capture}
