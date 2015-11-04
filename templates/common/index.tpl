@@ -11,12 +11,12 @@
 {/if}
 
 {if isset($show['years'])}
-	<table class="table table-bordered archive">
+	<table class="table table-bordered">
 		{foreach $years as $y => $year}
 			{if $year@first}<tr>{/if}
 				<td>
-					<h3><a class="title" href="{$smarty.const.IA_SELF}{$y}/">{$y}</a></h3>
-					<ul class="unstyled">
+					<h3 class="m-a-0"><a href="{$smarty.const.IA_SELF}{$y}/">{$y}</a></h3>
+					<ul class="list-unstyled">
 						{foreach $year.months as $m => $month}
 							{if isset($month.articles)}
 								<li><a href="{$smarty.const.IA_SELF}{$y}/{$m}/">{lang key=$month.name}</a></li>
@@ -33,7 +33,7 @@
 {/if}
 
 {if isset($show['months'])}
-	<table class="table table-bordered archive">
+	<table class="table table-bordered">
 		{foreach $months as $m => $month}
 			{if $month@first}<tr>{/if}
 				<td>
