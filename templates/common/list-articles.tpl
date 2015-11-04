@@ -1,46 +1,48 @@
-<div id="article_{$listing.id}" class="media ia-item ia-item-bordered {$listing.status}{if $listing.sponsored} ia-item-sponsored{/if}{if $listing.featured} ia-item-featured{/if}">
-	{if $listing.featured}<span class="ia-badge ia-badge-featured" title="{lang key='featured'}"><i class="icon-star"></i></span>{/if}
-	{if $listing.sponsored}<span class="ia-badge ia-badge-sponsored" title="{lang key='sponsored'}"><i class="icon-dollar"></i></span>{/if}
-	{if $member && $member.id == $listing.member_id && iaCore::STATUS_ACTIVE != $listing.status}
-		<span class="ia-badge ia-badge-{$listing.status}" title="{lang key=$listing.status default=$listing.status}"><i class="icon-warning-sign"></i></span>
-	{/if}
-
+<div class="ia-item ia-item--{$listing.status}{if $listing.sponsored} ia-item--sponsored{/if}{if $listing.featured} ia-item--featured{/if} has-panel" id="article-{$listing.id}">
 	{if $listing.image}
-		<a class="pull-left" href="{ia_url type='url' item='articles' data=$listing}">
-			{printImage imgfile=$listing.image.path title=$listing.title width=150 class='media-object'}
+		<a class="ia-item__image" href="{ia_url type='url' item='articles' data=$listing}">
+			{printImage imgfile=$listing.image.path title=$listing.title class='img-responsive'}
 		</a>
 	{/if}
 
-	<div class="media-body">
-		<h3 class="media-heading">
-			{ia_url item='articles' type='link' data=$listing text=$listing.title}
-		</h3>
-
-		<p class="ia-item-date">
-			{lang key='by'}
-			{if $listing.account_username}
-				<a href="{$smarty.const.IA_URL}member/{$listing.account_username}.html">{$listing.account_fullname}</a>
-			{else}
-				{lang key='guest'}
-			{/if}
-			{lang key='on'} {$listing.date_added|date_format:$core.config.date_format}
-		</p>
-
-		<p class="ia-item-body">{$listing.summary} <a href="{ia_url type='url' item='articles' data=$listing}">{lang key='continue_reading'}</a></p>
+	<div class="ia-item__labels">
+		{if $member && $member.id == $listing.member_id && iaCore::STATUS_ACTIVE != $listing.status}
+			<span class="label label-{$listing.status}" title="{lang key=$listing.status default=$listing.status}"><span class="fa fa-warning"></span> {lang key=$listing.status default=$listing.status}</span>
+		{/if}
+		{if $listing.sponsored}<span class="label label-warning" title="{lang key='sponsored'}"><span class="fa fa-star"></span> {lang key='sponsored'}</span>{/if}
+		{if $listing.featured}<span class="label label-info" title="{lang key='featured'}"><span class="fa fa-star-o"></span> {lang key='featured'}</span>{/if}
 	</div>
 
-	<div class="ia-item-panel">
-		{ia_url type='icon' item='articles' data=$listing classname='btn-info pull-left'}
-		{printFavorites item=$listing itemtype='articles' classname='pull-left'}
-		{if !empty($listing.transaction_id)}
-			<a rel="nofollow" href="{$smarty.const.IA_URL}pay/{$listing.transaction_id}/" class="btn btn-small btn-danger pull-right"><i class="icon-usd"></i> {lang key='pay'}</a>
-		{/if}
-		{accountActions item=$listing itemtype='articles' classname='btn-info pull-right'}
+	<div class="ia-item__content">
+		<div class="ia-item__actions">
+			{printFavorites item=$listing itemtype='articles' guests=true}
+			{accountActions item=$listing itemtype='articles'}
+			{if !empty($listing.transaction_id)}
+				<a rel="nofollow" href="{$smarty.const.IA_URL}pay/{$listing.transaction_id}/"><span class="fa fa-usd"></span> {lang key='pay'}</a>
+			{/if}
+			<a href="{ia_url item='articles' data=$listing type='url'}">{lang key='details'} <span class="fa fa-angle-double-right"></span></a>
+		</div>
 
-		{if 'publishing_home' != $core.page.name && $listing.category_title}
-			<span class="panel-item pull-left"><i class="icon-folder-close"></i> <a href="{ia_url type='url' item='articlecats' data=$listing}">{$listing.category_title}</a></span> 
-		{/if}
+		<div class="ia-item__title">
+			{ia_url item='articles' type='link' data=$listing text=$listing.title}
+		</div>
 
-		<span class="panel-item pull-right"><i class="icon-eye-open"></i> {$listing.views_num} {if 1 == $listing.views_num}{lang key='view'}{else}{lang key='views'}{/if}</span>
+		<div class="ia-item__additional">
+			<p>
+				{lang key='by'}
+				{if $listing.account_username}
+					<a href="{$smarty.const.IA_URL}member/{$listing.account_username}.html">{$listing.account_fullname}</a>
+				{else}
+					{lang key='guest'}
+				{/if}
+				{lang key='on'} {$listing.date_added|date_format:$core.config.date_format}
+			</p>
+			{if 'publishing_home' != $core.page.name && $listing.category_title}
+				<p><span class="fa fa-folder"></span> <a href="{ia_url type='url' item='articlecats' data=$listing}">{$listing.category_title}</a></p>
+			{/if}
+			<p><span class="fa fa-eye"></span> {$listing.views_num} {if 1 == $listing.views_num}{lang key='view'}{else}{lang key='views'}{/if}</p>
+		</div>
+
+		<p>{$listing.summary} <a href="{ia_url type='url' item='articles' data=$listing}">{lang key='continue_reading'}</a></p>
 	</div>
 </div>

@@ -207,7 +207,6 @@
 			width="16" height="16" editable="0" adminonly="1" thumb_width="32" thumb_height="32"
 			page="publishing_home" folder_name="publishing_categs_icons">Category Icon</field>
 
-		<field name="member_info" item="members" group="general" type="textarea" length="500" required="0" page="profile">Member info</field>
 		<field name="adsense_id" item="members" group="members_publishing" type="text" length="23" required="0" page="profile">Google AdSense id</field>
 		<field name="articles_url" item="members" group="articles_link" type="text" length="255" required="0" page="profile"
 			actions="if (!empty($_POST['articles_url']) &amp;&amp; $_POST['articles_url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['articles_url'])) { $error = true; $messages[] = iaLanguage::get('error_url');}">Article URL</field>
@@ -296,8 +295,8 @@
 	<blocks>
 		<block name="articles_archive" title="Articles Archive" position="right" type="smarty" header="1" collapsible="1" filename="block.articles-archive"><![CDATA[]]></block>
 		<block name="new_articles" title="New Articles" position="bottom" type="smarty" header="0" sticky="0" pages="index,publishing_home" filename="block.new-articles"><![CDATA[]]></block>
-		<block name="featured_articles" title="Featured Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" filename="block.featured-articles"><![CDATA[]]></block>
-		<block name="sponsored_articles" title="Sponsored Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" filename="block.sponsored-articles"><![CDATA[]]></block>
+		<block name="featured_articles" title="Featured Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--featured" filename="block.featured-articles"><![CDATA[]]></block>
+		<block name="sponsored_articles" title="Sponsored Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--sponsored" filename="block.sponsored-articles"><![CDATA[]]></block>
 		<block name="random_articles" title="Random Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" filename="block.random-articles"><![CDATA[]]></block>
 		<block name="latest_articles" order="2" title="Latest Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.latest-articles"><![CDATA[]]></block>
 		<block name="popular_articles" order="3" title="Popular Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.popular-articles"><![CDATA[]]></block>

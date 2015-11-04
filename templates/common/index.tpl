@@ -51,11 +51,11 @@
 
 {if isset($articles) && $articles}
 	{if !isset($articles_sorting) || $articles_sorting}
-		<div class="dropdown-sort clearfix">
-			<form action="{$smarty.const.IA_SELF}" method="post" id="sort_form" class="form-inline pull-right">
+		<div class="ia-sorting">
+			<form action="{$smarty.const.IA_SELF}" method="post" id="sort_form" class="form-inline pull-left m-0">
 				{preventCsrf}
 				<label>{lang key='sort_by'}:</label>
-				<select name="sort_by" onchange="$('#sort_form').submit()" class="span2">
+				<select name="sort_by" onchange="$('#sort_form').submit()" class="form-control">
 					<option value="date_added-desc"{if $smarty.session.p_order == 'date_added-desc'} selected="selected"{/if}>{lang key='date_desc'}</option>
 					<option value="date_added-asc"{if $smarty.session.p_order == 'date_added-asc'} selected="selected"{/if}>{lang key='date_asc'}</option>
 					<option value="title-desc"{if $smarty.session.p_order == 'title-desc'} selected="selected"{/if}>{lang key='title_desc'}</option>
@@ -67,7 +67,7 @@
 		</div>
 	{/if}
 
-	<div class="articles-items">
+	<div class="ia-items">
 		{foreach $articles as $listing}
 			{include file='extra:publishing/list-articles'}
 		{/foreach}

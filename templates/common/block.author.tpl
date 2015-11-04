@@ -1,6 +1,6 @@
 {if isset($author)}
-	<div class="media ia-item ia-item--author-block">
-		<a class="pull-left" href="{ia_url type='url' item='members' data=$author}">
+	<div class="ia-item-author p-a clearfix">
+		<a class="pull-left m-r" href="{ia_url type='url' item='members' data=$author}">
 			{if $author.avatar}
 				{$avatar = $author.avatar|unserialize}
 				{if $avatar}
@@ -14,12 +14,12 @@
 		</a>
 		<div class="media-body">
 			<h4 class="media-heading"><a href="{ia_url type='url' item='members' data=$author}">{$author.fullname}</a></h4>
-			{if !empty($author.member_info)}
-				<p class="ia-item-body">{$author.member_info}</p>
+			{if !empty($author.biography)}
+				<p class="text-fade-50">{$author.biography}</p>
 			{/if}
-			<ul class="ia-list-items">
-				<li><i class="icon-file-alt"></i> {lang key='articles'}: {$author.articles_num|string_format:'%d'} <a href="{$author.rss}" title="{lang key='rss'}"><i class="rss"></i></a></li>
-				<li><i class="icon-envelope-alt"></i> <a href="#send-email-box" data-toggle="modal">{lang key='send_email'}</a></li>
+			<ul class="list-inline">
+				<li>{lang key='articles'}: {$author.articles_num|string_format:'%d'} <a href="{$author.rss}" title="{lang key='rss'}"><i class="fa fa-rss"></i></a></li>
+				<li><a href="#send-email-box" data-toggle="modal">{lang key='send_email'}</a></li>
 			</ul>
 		</div>
 	</div>
@@ -58,7 +58,7 @@
 			{/if}
 
 			<input type="hidden" id="author-id" name="author_id" value="{$author.id}">
-			<input type="hidden" id="regarding-page" name="regarding" value="{$page.title|escape:'html'}">
+			<input type="hidden" id="regarding-page" name="regarding" value="{$core.page.title|escape:'html'}">
 		</div>
 		<div class="modal-footer">
 			<a href="{$smarty.const.IA_SELF}#" class="btn" data-dismiss="modal">{lang key='cancel'}</a>
