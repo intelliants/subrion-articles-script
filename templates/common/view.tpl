@@ -59,13 +59,13 @@
 
 	<!-- simple sharing buttons -->
 	<ul class="list-inline share-buttons">
-		<li><a href="https://www.facebook.com/sharer/sharer.php?u={$smarty.const.IA_SELF}&t={$item.title}" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square fa-2x"></i></a></li>
-		<li><a href="https://twitter.com/intent/tweet?source={$smarty.const.IA_SELF}&text={$item.title}:{$smarty.const.IA_SELF}" target="_blank" title="Tweet"><i class="fa fa-twitter-square fa-2x"></i></a></li>
-		<li><a href="https://plus.google.com/share?url={$smarty.const.IA_SELF}" target="_blank" title="Share on Google+"><i class="fa fa-google-plus-square fa-2x"></i></a></li>
+		<li><a href="https://www.facebook.com/sharer/sharer.php?u={$smarty.const.IA_SELF|escape:'url'}&t={$item.title}" target="_blank" title="Share on Facebook"><i class="fa fa-facebook-square fa-2x"></i></a></li>
+		<li><a href="https://twitter.com/intent/tweet?source={$smarty.const.IA_SELF|escape:'url'}&text={$item.title}:{$smarty.const.IA_SELF|escape:'url'}" target="_blank" title="Tweet"><i class="fa fa-twitter-square fa-2x"></i></a></li>
+		<li><a href="https://plus.google.com/share?url={$smarty.const.IA_SELF|escape:'url'}" target="_blank" title="Share on Google+"><i class="fa fa-google-plus-square fa-2x"></i></a></li>
 		{if $item.image}
-			<li><a href="http://pinterest.com/pin/create/button/?url={$smarty.const.IA_SELF}&media={printImage imgfile=$item.image.path url=true fullimage=true}&description={$item.body|strip_tags|truncate:250:'...'}" target="_blank" title="Pin it"><i class="fa fa-pinterest-square fa-2x"></i></a></li>
+			<li><a href="http://pinterest.com/pin/create/button/?url={$smarty.const.IA_SELF|escape:'url'}&media={printImage imgfile=$item.image.path url=true fullimage=true}&description={$item.body|strip_tags|truncate:250:'...'}" target="_blank" title="Pin it"><i class="fa fa-pinterest-square fa-2x"></i></a></li>
 		{/if}
-		<li><a href="mailto:?subject={$item.title}&body={$item.body|strip_tags|truncate:250:'...'}:{$smarty.const.IA_SELF}" target="_blank" title="Email"><i class="fa fa-envelope-square fa-2x"></i></a></li>
+		<li><a href="mailto:?subject={$item.title}&body={$item.body|strip_tags|truncate:250:'...'}:{$smarty.const.IA_SELF|escape:'url'}" target="_blank" title="Email"><i class="fa fa-envelope-square fa-2x"></i></a></li>
 	</ul>
 
 	{if !empty($item.prev_article) || !empty($item.next_article)}
