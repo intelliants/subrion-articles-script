@@ -1,7 +1,9 @@
 <form id="article_data" method="post" enctype="multipart/form-data" class="ia-form">
 	{preventCsrf}
 
-	{include file='plans.tpl'}
+	{capture name='general' append='fieldset_before'}
+		{include file='plans.tpl'}
+	{/capture}
 
 	{capture name='title' append='field_before'}
 		<div class="form-group">
