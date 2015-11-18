@@ -4,9 +4,9 @@
 	<summary>This package is intended to publish articles on your Subrion CMS powered website</summary>
 	<author>Intelliants LLC</author>
 	<contributor>Intelliants LLC</contributor>
-	<version>3.3.0</version>
-	<date>2015-05-25</date>
-	<compatibility>3.3.3</compatibility>
+	<version>4.0.0</version>
+	<date>2015-11-18</date>
+	<compatibility>4.0</compatibility>
 	<url>articles</url>
 
 	<screenshots>
@@ -179,7 +179,7 @@
 			actions="if (empty($_POST['summary'])){	$item['summary'] = iaSanitize::snippet($_POST['body'], $iaCore-&gt;get('snip_len'));}"
 			page="publishing_home,view_member">Article Summary</field>
 		<field name="body" item="articles" group="general" type="textarea" editor="1" editable="0" searchable="1" required="1"
-			   required_checks="if(!empty($_POST['body'])){$iaCore = iaCore::instance();$l = utf8_strlen(html_entity_decode(str_replace(array('\\r','\\n'), '*', iaSanitize::tags($_POST['body']))));list($min, $max) = explode(',', $iaCore-&gt;get('article_length'));if ($l &lt; $min || $l &gt; $max){ $error = true; $messages[] = iaLanguage::getf('body_length_error', array('min' =&gt; $min, 'max' =&gt; $max));}}"
+			required_checks="if(!empty($_POST['body'])){$iaCore = iaCore::instance();$l = utf8_strlen(html_entity_decode(str_replace(array('\\r','\\n'), '*', iaSanitize::tags($_POST['body']))));list($min, $max) = explode(',', $iaCore-&gt;get('article_length'));if ($l &lt; $min || $l &gt; $max){ $error = true; $messages[] = iaLanguage::getf('body_length_error', array('min' =&gt; $min, 'max' =&gt; $max));}}"
 			page="edit_article,add_article,view_article,rss_articles">Article Body</field>
 		<field name="meta_description" item="articles" group="general" type="textarea"
 			adminonly="1" length="" editable="0">Meta-Description</field>
@@ -251,6 +251,7 @@
 		<phrase category="common" key="field_member_id">Member</phrase>
 		<phrase category="common" key="hidden">Hidden</phrase>
 		<phrase category="common" key="incorrect_article_url">URL is incorrect. Please input correct URL or leave it empty.</phrase>
+		<phrase category="common" key="priority">Priority</phrase>
 		<phrase category="common" key="publishing">Publishing</phrase>
 		<phrase category="common" key="rss">RSS</phrase>
 
@@ -302,6 +303,7 @@
 		<block name="popular_articles" order="3" title="Popular Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.popular-articles"><![CDATA[]]></block>
 		<block name="sticky_articles" title="Sticky Articles" position="left" type="smarty" header="1" sticky="0" pages="index" collapsible="1" filename="block.sticky-articles"><![CDATA[]]></block>
 		<block name="top_categories" order="1" title="Top Categories" position="left" type="smarty" header="1" sticky="1" collapsible="1" pages="publishing_home" filename="block.top-categories"><![CDATA[]]></block>
+		<block name="priority_categories" order="2" title="Featured Categories" position="bottom" type="smarty" header="1" sticky="0" collapsible="1" pages="publishing_home" filename="block.priority-categories"><![CDATA[]]></block>
 		<block name="author_info" title="Author" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" order="-1" filename="block.author"><![CDATA[]]></block>
 		<block name="related_articles" title="Related Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.related-articles" status="inactive"><![CDATA[]]></block>
 		<block name="most_viewed_articles" title="Most Viewed Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-viewed-articles" status="inactive"><![CDATA[]]></block>
@@ -408,6 +410,7 @@ CREATE TABLE `{prefix}articles_categories` (
 	`status` enum('inactive', 'active') NOT NULL default 'inactive',
 	`locked` tinyint(1) unsigned NOT NULL,
 	`nofollow` tinyint(1) unsigned NOT NULL,
+	`priority` tinyint(1) unsigned NOT NULL,
 	`level` tinyint(3) unsigned NOT NULL,
 	`parents` tinytext NOT NULL,
 	`child` text NOT NULL,
@@ -443,37 +446,4 @@ ALTER TABLE `{prefix}members` DROP `articles_url`, `articles_url_description`
 			]]>
 		</sql>
 	</uninstall>
-
-	<upgrade>
-		<sql version="3.1.1">
-			<![CDATA[
-ALTER TABLE `{prefix}articles` DROP `comments`
-			]]>
-		</sql>
-		<sql version="3.1.1">
-			<![CDATA[
-DELETE FROM `{prefix}hooks` WHERE `name` = 'init' AND `extras` = 'publishing'
-			]]>
-		</sql>
-		<sql version="3.1.1">
-			<![CDATA[
-DELETE FROM `{prefix}config` WHERE `name` IN ('articles_div1', 'allow_flash', 'articles_div2', 'articles_div3')
-			]]>
-		</sql>
-		<sql version="3.1.1">
-			<![CDATA[
-UPDATE `{prefix}config` SET `order` = (SELECT `order` FROM (SELECT * FROM `{prefix}config`) t2 WHERE t2.`name` = 'articles_categories_selector') - 1 WHERE `name` = 'articles'
-			]]>
-		</sql>
-		<sql version="3.1.1">
-			<![CDATA[
-UPDATE `{prefix}config` SET `order` = (SELECT `order` FROM (SELECT * FROM `{prefix}config`) t2 WHERE t2.`name` = 'articles_compact_url') - 1 WHERE `name` = 'pub_div2'
-			]]>
-		</sql>
-		<sql version="3.1.1">
-			<![CDATA[
-UPDATE `{prefix}config` SET `order` = (SELECT `order` FROM (SELECT * FROM `{prefix}config`) t2 WHERE t2.`name` = 'categories_columns') - 1 WHERE `name` = 'pub_div3'
-			]]>
-		</sql>
-	</upgrade>
 </package>

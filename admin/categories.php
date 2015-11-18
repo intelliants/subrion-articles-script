@@ -128,6 +128,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 			'title_alias' => '',
 			'locked' => false,
 			'nofollow' => false,
+			'priority' => false,
 			'status' => iaCore::STATUS_ACTIVE
 		);
 	}
@@ -139,6 +140,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 		$entry['locked'] = (int)$data['locked'];
 		$entry['nofollow'] = (int)$data['nofollow'];
+		$entry['priority'] = (int)$data['priority'];
 		$entry['parent_id'] = (int)$data['tree_id'];
 
 		if ($entry['parent_id'] != $this->_rootCategory['parent_id'])

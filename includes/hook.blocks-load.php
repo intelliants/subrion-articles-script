@@ -162,8 +162,17 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			->get($iaCore->get('art_view_category', true) ? '' : ' AND `num_all_articles` > 0', 0, $iaCore->get('article_top_categories', 12), 1, '`num_all_articles` DESC, `title` ASC');
 		if ($data)
 		{
-			$iaArticle->wrapValues($data);
 			$iaView->assign('top_categories', $data);
+		}
+	}
+
+	if ($iaView->blockExists('priority_categories'))
+	{
+		$data = $iaCore->factoryPackage('articlecat', 'publishing')
+				->get('`priority` = 1 && ' . ($iaCore->get('art_view_category', true) ? '' : ' AND `num_all_articles` > 0'), 0, $iaCore->get('article_top_categories', 12), 1, '`title` ASC');
+		if ($data)
+		{
+			$iaView->assign('priority_categories', $data);
 		}
 	}
 
