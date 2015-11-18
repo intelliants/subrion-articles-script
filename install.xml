@@ -4,7 +4,7 @@
 	<summary>This package is intended to publish articles on your Subrion CMS powered website</summary>
 	<author>Intelliants LLC</author>
 	<contributor>Intelliants LLC</contributor>
-	<version>4.0.0</version>
+	<version>4.0.1</version>
 	<date>2015-11-18</date>
 	<compatibility>4.0</compatibility>
 	<url>articles</url>
@@ -94,8 +94,16 @@
 	<config group="publishing" type="text" name="max_title" description="Max title length">100</config>
 	<config group="publishing" type="text" name="article_length" description="Article length (min,max)">50,50000</config>
 	<config group="publishing" type="text" name="art_perpage" description="Number of articles per page">10</config>
-	<config group="publishing" type="text" name="art_perpage_block" description="Number of articles per block">5</config>
 	<config group="publishing" type="text" name="article_max_links" description="Max number of links per article">0</config>
+
+	<config group="publishing" type="divider" name="pub_div4">Blocks limits</config>
+	<config group="publishing" type="text" name="art_per_block" description="Number of articles per block">4</config>
+	<config group="publishing" type="text" name="art_per_block_new" description="Number of articles in New Articles block">6</config>
+	<config group="publishing" type="text" name="art_per_block_featured" description="Number of articles in Featured block">6</config>
+	<config group="publishing" type="text" name="art_per_block_sponsored" description="Number of articles in Sponsored block">6</config>
+	<config group="publishing" type="text" name="art_per_block_sticky" description="Number of articles in Sticky block">6</config>
+	<config group="publishing" type="text" name="art_per_block_popular" description="Number of articles in Popular block">6</config>
+	<config group="publishing" type="text" name="art_per_block_random" description="Number of articles in Random block">6</config>
 	<config group="publishing" type="text" name="article_top_categories" description="Categories number for Top Categories block">12</config>
 
 	<config group="email_templates" type="divider" name="article_divider" description="Publishing"><![CDATA[]]></config>
