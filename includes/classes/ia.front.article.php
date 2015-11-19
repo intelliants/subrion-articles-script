@@ -9,6 +9,12 @@ class iaArticle extends abstractPublishingPackageFront
 
 	protected $_statuses = array(iaCore::STATUS_ACTIVE, iaCore::STATUS_APPROVAL, self::STATUS_REJECTED, self::STATUS_HIDDEN, self::STATUS_SUSPENDED, self::STATUS_DRAFT, self::STATUS_PENDING);
 
+	public $coreSearchEnabled = true;
+	public $coreSearchOptions = array(
+		'tableAlias' => 't1',
+		'regularSearchStatements' => array("t1.`title` LIKE '%:query%' OR t1.`body` LIKE '%:query%'")
+	);
+
 	private $_urlPatterns = array(
 		'default' => ':base:action/:id/',
 		'view' => ':base:category_alias:id-:title_alias.html',
@@ -48,6 +54,15 @@ class iaArticle extends abstractPublishingPackageFront
 		}
 
 		return array($url, '');
+	}
+
+	// called at search pages
+	public function coreSearch($stmt, $start, $limit, $order)
+	{
+		$stmt = $stmt ? ('AND ' . $stmt . $order) : null;
+		$rows = $this->get($stmt, $start, $limit);
+
+		return array($this->iaDb->foundRows(), $rows);
 	}
 
 	/**
