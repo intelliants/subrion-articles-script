@@ -24,47 +24,51 @@
 		</div>
 	</div>
 
-	<div id="send-email-box" class="modal hide fade">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3>{lang key="send_email"}</h3>
-		</div>
-		<div class="modal-body">
-			<div id="author-block-alert" class="alert" style="display: none;"></div>
-			<div class="row-fluid">
-				<div class="span6">
-					<label class="control-label" for="from-name">{lang key='your_name'}:</label>
-					<div class="controls">
-						<input type="text" id="from-name" name="from_name" class="input-block-level">
+	<div class="modal fade" id="send-email-box">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">{lang key="send_email"}</h4>
+				</div>
+				<div class="modal-body">
+					<div id="author-block-alert" class="alert" style="display: none;"></div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="from-name">{lang key='your_name'}:</label>
+								<input type="text" id="from-name" name="from_name" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="from-email">{lang key='your_email'}:</label>
+								<input type="text" id="from-email" name="from_email" class="form-control">
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="span6">
-					<label class="control-label fright" for="from-email">{lang key='your_email'}:</label>
-					<div class="controls fright">
-						<input type="text" id="from-email" name="from_email" class="input-block-level">
+
+					<div class="form-group">
+						<label for="email-body">{lang key='msg'}:</label>
+						<textarea id="email-body" name="email_body" class="form-control" rows="4"></textarea>
 					</div>
+
+					{if !$member}
+						<div class="captcha">
+							{captcha}
+						</div>
+					{/if}
+
+					<input type="hidden" id="author-id" name="author_id" value="{$author.id}">
+					<input type="hidden" id="regarding-page" name="regarding" value="{$core.page.title|escape:'html'}">
 				</div>
-			</div>
-
-			<label class="control-label" for="email-body">{lang key='msg'}:</label>
-			<div class="controls">
-				<textarea id="email-body" name="email_body" class="input-block-level" rows="4"></textarea>
-			</div>
-
-			{if !$member}
-				<div class="captcha">
-					{captcha}
+				<div class="modal-footer">
+					<a href="{$smarty.const.IA_SELF}#" class="btn" data-dismiss="modal">{lang key='cancel'}</a>
+					<a href="{$smarty.const.IA_SELF}#" class="btn btn-primary" id="send-email">{lang key='send'}</a>
 				</div>
-			{/if}
-
-			<input type="hidden" id="author-id" name="author_id" value="{$author.id}">
-			<input type="hidden" id="regarding-page" name="regarding" value="{$core.page.title|escape:'html'}">
-		</div>
-		<div class="modal-footer">
-			<a href="{$smarty.const.IA_SELF}#" class="btn" data-dismiss="modal">{lang key='cancel'}</a>
-			<a href="{$smarty.const.IA_SELF}#" class="btn btn-primary" id="send-email">{lang key='send'}</a>
-		</div>
-	</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 
 	{ia_add_js}
 $(function()
