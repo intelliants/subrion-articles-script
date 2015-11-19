@@ -139,13 +139,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		$article['body'] .= iaLanguage::getf('article_source_url', array('url' => $iaArticle->url('view', $article)));
 	}
-
-	// TODO: remove once implemented in the core script
-	$article = array($article);
-	$iaArticle->wrapValues($article);
-	$article = array_shift($article);
-	//
-
 	$iaView->assign('item', $article);
 	$iaView->assign('session_id', session_id());
 

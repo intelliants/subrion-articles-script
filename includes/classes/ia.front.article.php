@@ -163,7 +163,14 @@ class iaArticle extends abstractPublishingPackageFront
 		$sql .= $order ? 'ORDER BY ' . $order : '';
 		$sql .= ' LIMIT 1';
 
-		return $this->iaDb->getRow($sql);
+		if ($article = $this->iaDb->getRow($sql))
+		{
+			$result = array($article);
+			$this->wrapValues($result);
+			$article = array_shift($result);
+		}
+
+		return $article;
 	}
 
 	/**
