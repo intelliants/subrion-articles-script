@@ -320,14 +320,14 @@
 	</blocks>
 
 	<hooks>
-		<hook name="init" type="php" page_type="front" filename="packages/publishing/includes/hook.url-rewrite.php"><![CDATA[]]></hook>
+		<hook name="init" page_type="front" filename="packages/publishing/includes/hook.url-rewrite.php"><![CDATA[]]></hook>
 		<hook name="phpCoreBeforePageDisplay" page_type="front" filename="packages/publishing/includes/hook.blocks-load.php"><![CDATA[]]></hook>
-		<hook name="adminQuickSearch" type="php" page_type="admin">
+		<hook name="adminQuickSearch" page_type="admin">
 			<![CDATA[
 $items['articles'] = array('title' => iaLanguage::get('articles'), 'url' => 'publishing/articles/');
 			]]>
 		</hook>
-		<hook name="populateCommonStatisticsBlock" type="php" page_type="front">
+		<hook name="populateCommonStatisticsBlock" page_type="front">
 			<![CDATA[
 $condition = iaDb::printf("`status` = ':status'", array('status' => iaCore::STATUS_ACTIVE));
 $statistics['publishing'] = array(
@@ -349,8 +349,8 @@ $statistics['publishing'] = array(
 {/if}
 			]]>
 		</hook>
-		<hook name="adminDatabaseConsistency" type="smarty" page_type="admin" filename="packages/publishing/templates/admin/hook.db-consistency.tpl"><![CDATA[]]></hook>
-		<hook name="phpAdminDatabaseConsistencyType" type="php" page_type="admin">
+		<hook name="adminDatabaseConsistency" type="smarty" page_type="admin" filename="hook.db-consistency"><![CDATA[]]></hook>
+		<hook name="phpAdminDatabaseConsistencyType" page_type="admin">
 			<![CDATA[
 if (in_array($_GET['type'], array('repair_articlecats', 'rebuild_articlecats_paths', 'repair_articlecats_num')))
 {
