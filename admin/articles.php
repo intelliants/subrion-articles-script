@@ -73,10 +73,6 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 	{
 		$entryData['date_modified'] = date(iaDb::DATETIME_FORMAT);
 
-		if (isset($entryData['title']))
-		{
-			$entryData['title'] = iaSanitize::html($entryData['title']);
-		}
 		if (isset($entryData['url']))
 		{
 			$entryData['url'] = $this->_processUrl($entryData['url']);
