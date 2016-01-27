@@ -110,7 +110,9 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 			$order = " ORDER BY t1." . $order;
 
-			$articles = $iaArticle->get($where . " AND t1.`category_id` = '{$category['id']}' " . $order, $start, $pagination['limit']);
+			$where .= $iaCore->get('articles_show_children') ? " AND t1.`category_id` IN ({$category['child']}) " : " AND t1.`category_id` = ({$category['id']}) " ;
+
+			$articles = $iaArticle->get($where . $order, $start, $pagination['limit']);
 
 			$pagination['total'] = $iaDb->foundRows();
 			$pagination['template'] = IA_PACKAGE_URL . $category['title_alias'] . '?page={page}';

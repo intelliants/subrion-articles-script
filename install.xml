@@ -76,6 +76,7 @@
 	<config group="publishing" type="radio" name="article_auto_approval" values="1,0" description="Article auto approval">1</config>
 	<config group="publishing" type="radio" name="allow_icons" values="1,0" description="Enable categories icons">0</config>
 	<config group="publishing" type="radio" name="art_view_category" values="1,0" description="Allow to display empty categories">1</config>
+	<config group="publishing" type="radio" name="articles_show_children" values="1,0" description="Show subcategories articles in the parents">1</config>
 	<config group="publishing" type="select" name="articles_categs_sort" values="'by title','by order'" description="Sort categories in dropdown box">by title</config>
 	<config group="publishing" type="radio" name="articles_allow_adsense_code" values="1,0" description="Adsense sharing">1</config>
 
