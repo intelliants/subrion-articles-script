@@ -8,6 +8,9 @@ interface iaPublishingPackage
 	const STATUS_SUSPENDED = 'suspended';
 	const STATUS_DRAFT = 'draft';
 	const STATUS_PENDING = 'pending';
+
+	const COUNTER_ACTION_INCREMENT = '+';
+	const COUNTER_ACTION_DECREMENT = '-';
 }
 
 abstract class abstractPublishingPackageAdmin extends abstractPackageAdmin implements iaPublishingPackage

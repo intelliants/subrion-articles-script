@@ -39,12 +39,42 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 					break;
 
+				case 'pre_repair_articlecats_paths':
+					$total = $this->getHelper()->getCount();
+
+					$this->_iaCore->iaView->assign('total', $total);
+
+					break;
+
+				case 'pre_repair_articlecats_num':
+					$this->getHelper()->clearArticlesNum();
+					$total = $this->getHelper()->getCount();
+
+					$this->_iaCore->iaView->assign('total', $total);
+
+					break;
+
 				case 'repair_articlecats':
-					$rows = $this->_iaDb->all(array(iaDb::ID_COLUMN_SELECTION), iaDb::convertIds(0, 'parent_id', false), (int)$_POST['start'], (int)$_POST['limit']);
+					$rows = $this->_iaDb->all(array(iaDb::ID_COLUMN_SELECTION), '', (int)$_POST['start'], (int)$_POST['limit']);
+
 					foreach ($rows as $row)
 					{
 						$this->getHelper()->rebuildRelations($row['id']);
 					}
+
+					break;
+
+				case 'rebuild_articlecats_paths':
+					$rows = $this->_iaDb->all(array(iaDb::ID_COLUMN_SELECTION), iaDb::convertIds(0, 'parent_id', false), (int)$_POST['start'], (int)$_POST['limit']);
+					foreach ($rows as $row)
+					{
+						$this->getHelper()->rebuildAliases($row['id']);
+					}
+
+					break;
+
+				case 'repair_articlecats_num':
+					$output = $this->getHelper()->calculateArticles((int)$_POST['start'], (int)$_POST['limit']);
 			}
 
 			return;

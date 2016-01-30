@@ -114,4 +114,48 @@ class iaArticle extends abstractPublishingPackageAdmin
 			'total' => number_format($total)
 		), $this->dashboardStatistics);
 	}
+
+	protected function _editCounter($categId, $action)
+	{
+		$iaArticlecat = $this->iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
+
+		$pattern = 'UPDATE `:table` SET `num_articles` = '
+			. 'IF(`id` = :catId, `num_articles` :action 1, `num_articles`), '
+			. '`num_all_articles` = `num_all_articles` :action 1 '
+			. 'WHERE FIND_IN_SET(:catId, `child`)';
+		$sql = iaDb::printf($pattern, array(
+			'table' => iaArticlecat::getTable(true),
+			'action' => $action,
+			'catId' => $categId
+		));
+
+		return $this->iaDb->query($sql);
+	}
+
+	public function recount($entryId, array $newData, array $oldData)
+	{
+		if (!isset($newData['status']))
+		{
+			return;
+		}
+
+		$newData = $this->getById($entryId);
+
+		if ($newData['status'] == iaCore::STATUS_ACTIVE && $oldData['status'] != iaCore::STATUS_ACTIVE) // status of the listing has been changed to Active
+		{
+			$this->_editCounter($newData['category_id'], self::COUNTER_ACTION_INCREMENT);
+		}
+		elseif ($oldData['status'] == iaCore::STATUS_ACTIVE && $newData['status'] != iaCore::STATUS_ACTIVE) // listing has been deactivated
+		{
+			$this->_editCounter($oldData['category_id'], self::COUNTER_ACTION_DECREMENT);
+		}
+		elseif ($newData['status'] == iaCore::STATUS_ACTIVE && $oldData['status'] == iaCore::STATUS_ACTIVE) // listing has only been moved to another category
+		{
+			if (isset($newData['category_id']) && $newData['category_id'] != $oldData['category_id'])
+			{
+				$this->_editCounter($newData['category_id'], self::COUNTER_ACTION_INCREMENT);
+				$this->_editCounter($oldData['category_id'], self::COUNTER_ACTION_DECREMENT);
+			}
+		}
+	}
 }

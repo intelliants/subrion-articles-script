@@ -83,9 +83,6 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	public function updateCounters($entryId, array $entryData, $action, $previousData = null)
 	{
-		$this->_iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN)
-			->calculateArticles();
-
 		if (iaCore::ACTION_EDIT == $action)
 		{
 			// notify owner on status change
@@ -103,6 +100,9 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 				$this->getHelper()->sendMail('article_' . $action, $owner['email'], $entry);
 			}
 		}
+
+		$this->getHelper()->recount($entryId, $entryData, $previousData);
+		// $this->_iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN)->recount($entryId, $entryData, $previousData);
 	}
 
 	protected function _setDefaultValues(array &$entry)

@@ -88,38 +88,13 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 		return $path;
 	}
 
-	public function rebuildAliases()
+	public function rebuildAliases($id)
 	{
 		$this->_iaDb->setTable(self::getTable());
 
-		// clean all title_aliases for categories
-		$this->_iaDb->update(array('title_alias' => ''), iaDb::EMPTY_CONDITION);
-
-		$categories = $this->iaDb->all(array('id', 'parent_id', 'title'), '`parent_id` != 0 ORDER BY `level` ASC');
-
-		$sql_post = '';
-		$sql_pre = "UPDATE `" . self::getTable(true) . "` SET `title_alias` = CASE ";
-
-		foreach ($categories as $key => $category)
-		{
-			$path = $this->_getPathForRebuild($category['title'], $category['parent_id']);
-
-			$sql_post .= "WHEN `id` = '{$category['id']}' THEN '{$path}' ";
-
-			$ids[] = $category['id'];
-
-			if (('0' != $key) && ($key % 50 != 0))
-			{
-				$sql_post .= "END WHERE `id` IN ('" . implode("','", $ids) . "')";
-
-				$sql = $sql_pre . $sql_post;
-
-				$sql_post = '';
-				$ids = array();
-
-				$this->iaDb->query($sql);
-			}
-		}
+		$category = $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds($id));
+		$path = $this->_getPathForRebuild($category['title'], $category['parent_id']);
+		$this->_iaDb->update(array('title_alias' => $path), iaDb::convertIds($category['id']));
 
 		$this->_iaDb->resetTable();
 	}
@@ -127,36 +102,42 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 	/**
 	 * Updates number of active articles for each category
 	 */
-	public function calculateArticles()
+	public function calculateArticles($start = 0, $limit = 10)
 	{
-		$sql  =
-			'SELECT a.`category_id`, COUNT(a.`id`) ' .
-			"FROM `{$this->iaDb->prefix}articles` a " .
-			"LEFT JOIN `{$this->iaDb->prefix}members` m ON (a.`member_id` = m.`id`) " .
-			"WHERE a.`status` = 'active' AND (m.`status` = 'active' OR m.`status` IS NULL) " .
-			'GROUP BY a.`category_id` ';
-		$count = $this->iaDb->getKeyValue($sql);
-
 		$this->iaDb->setTable(self::getTable());
 
-		$this->iaDb->update(array('num_articles' => 0, 'num_all_articles' => 0));
+		$categories = $this->iaDb->all(array('id', 'parent_id', 'child'), '1 ORDER BY `level` DESC', $start, $limit);
 
-		$maxLevel = $this->iaDb->one('MAX(`level`)');
-
-		for ($lvl = $maxLevel; $lvl > 0; $lvl--)
+		foreach ($categories as $cat)
 		{
-			$rows = $this->iaDb->all(array('id', 'parents'), "`level` = {$lvl}");
-
-			foreach ($rows as $category)
+			if (-1 != $cat['parent_id'])
 			{
-				if (isset($count[$category['id']]))
+				$_id = $cat['id'];
+
+				$sql  = 'SELECT COUNT(a.`id`) `num`';
+				$sql .= "FROM `{$this->iaDb->prefix}articles` a ";
+				$sql .= "LEFT JOIN `{$this->iaDb->prefix}members` acc ON (a.`member_id` = acc.`id`) ";
+				$sql .= "WHERE a.`status`= 'active' AND (acc.`status` = 'active' OR acc.`status` IS NULL) ";
+				$sql .= "AND a.`category_id` = {$_id}";
+
+				$num_articles = $this->iaDb->getOne($sql);
+				$_num_articles = $num_articles ? $num_articles : 0;
+				$num_all_articles = 0;
+
+				if (!empty($cat['child']) && $cat['child'] != $cat['id'])
 				{
-					$this->iaDb->update(null, "`id` IN ({$category['parents']})", array('num_articles' => "IF(`id`={$category['id']}, `num_articles`+{$count[$category['id']]}, `num_articles`)", 'num_all_articles' => "`num_all_articles` + {$count[$category['id']]}"));
+					$num_all_articles = $this->iaDb->one('SUM(`num_articles`)', "`id` IN ({$cat['child']})", self::getTable());
 				}
+
+				$num_all_articles += $_num_articles;
+
+				$this->iaDb->update(array('num_articles' => $_num_articles, 'num_all_articles' => $num_all_articles), iaDb::convertIds($_id));
 			}
 		}
 
 		$this->iaDb->resetTable();
+
+		return true;
 	}
 
 	protected function _getParents($cId, $parents = array(), $update = true)
@@ -222,6 +203,12 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 	public function dropRelations()
 	{
 		$this->iaDb->update(array('child' => '', 'parents' => ''), iaDb::EMPTY_CONDITION, self::getTable());
+	}
+
+
+	public function clearArticlesNum()
+	{
+		$this->iaDb->update(array('num_articles' => 0, 'num_all_articles' => 0), iaDb::EMPTY_CONDITION, self::getTable());
 	}
 
 	public function getCount()

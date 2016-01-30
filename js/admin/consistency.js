@@ -1,19 +1,19 @@
 $(function()
 {
-	$('#repair-articlecats').on('click', function(e)
+	$('.js-repair').on('click', function(e)
 	{
 		e.preventDefault();
 
 		var start = 0,
 			limit = 20,
-			action = 'repair_articlecats',
+			action = $(this).data('action'),
 			total = 0,
 			progress = 0,
 			interval = 3000,
 			url = intelli.config.admin_url + '/publishing/categories/read.json',
 			timer;
 
-		var $barHolder = $('#repair-articlecats-progress');
+		var $barHolder = $(this).parent().next().find('.js-repair-progress');
 		var $bar = $('.progress-bar', $barHolder);
 		var $button = $(this);
 		var startText = $button.text();
@@ -23,7 +23,7 @@ $(function()
 		$button.prop('disabled', true);
 
 		$.ajaxSetup({async: false});
-		$.post(url, {action: 'pre_repair_articlecats'}, function(response)
+		$.post(url, {action: $(this).data('pre')}, function(response)
 		{
 			total = response.total;
 			timer = setInterval(function()
