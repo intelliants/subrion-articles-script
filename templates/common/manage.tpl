@@ -27,7 +27,7 @@
 				<button type="submit" name="draft" class="btn btn-default">{lang key='save_as_draft'}</button>
 			{/if}
 			{if iaCore::ACTION_EDIT == $pageAction}
-				<button type="submit" name="delete" class="btn btn-danger js-delete-article">{lang key='delete'}</button>
+				<a href="{$smarty.const.IA_URL}delete/{$item.id}" class="btn btn-danger js-delete-article">{lang key='delete'}</a>
 			{/if}
 		</div>
 	{/capture}

@@ -95,17 +95,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	$iaPlan = $iaCore->factory('plan');
 	$iaView->assign('plans', $iaPlan->getPlans($iaArticle->getItemName()));
 
-	if (isset($_POST['delete']))
-	{
-		$result = $iaArticle->delete($id);
-		if ($result)
-		{
-			$iaCore->factory('log')->write(iaLog::ACTION_DELETE, array('item' => 'article', 'name' => $article['title'], 'id' => $id));
-		}
-
-		iaUtil::redirect(iaLanguage::get('thanks'), iaLanguage::get('art_deleted'), $iaArticle->url('my', $result));
-	}
-
 	// Save article
 	if (isset($_POST['data-article']) || isset($_POST['draft']))
 	{

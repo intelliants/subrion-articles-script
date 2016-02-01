@@ -51,6 +51,7 @@
 		<page group="publishing" url="|PACKAGE|article/" name="view_article" filename="view" readonly="1" nofollow="1" fields_item="articles">View Article</page>
 		<page group="publishing" url="|PACKAGE|add/" action="add" parent="publishing_home" name="add_article" filename="manage" menus="publishing,main" fields_item="articles">Add Article</page>
 		<page group="publishing" url="|PACKAGE|edit/" action="edit" parent="publishing_home" name="edit_article" filename="manage" readonly="1" fields_item="articles">Edit Article</page>
+		<page group="publishing" url="|PACKAGE|delete/" name="delete_article" filename="manage" action="delete" parent="view_article" service="1">Delete Article</page>
 		<page group="publishing" url="|PACKAGE|date/" name="date_articles" menus="publishing" fields_item="articles">Articles Archive</page>
 		<page group="publishing" url="profile/articles/" name="my_articles" menus="account" nofollow="1" parent="profile" fields_item="articles">My Articles</page>
 		<page group="publishing" url="|PACKAGE|latest/" name="latest_articles" menus="publishing" fields_item="articles">Latest Articles</page>
@@ -62,6 +63,8 @@
 	<permissions>
 		<object id="publishing_home" action="add" access="1">Add Article</object>
 		<object id="publishing_home" action="edit" access="1">Edit Article</object>
+		<object id="publishing_home" action="delete" access="1">Delete Article</object>
+
 		<object meta_object="admin_page" id="articles_manage" action="add" access="1">Add Article</object>
 		<object meta_object="admin_page" id="articles_manage" action="edit" access="1">Edit Article</object>
 

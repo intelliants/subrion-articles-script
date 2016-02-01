@@ -100,3 +100,13 @@
 </div>
 
 {ia_hooker name='smartyViewListingBeforeFooter'}
+
+{ia_add_js}
+$(function() {
+	$('.js-delete-article').on('click', function(e) {
+		e.preventDefault();
+
+		intelli.confirm(_t('do_you_really_want_to_delete_article'), { url: $(this).attr('href') });
+	});
+});
+{/ia_add_js}

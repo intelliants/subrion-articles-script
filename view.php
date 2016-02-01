@@ -57,6 +57,14 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 						'href' => $iaArticle->url(iaCore::ACTION_EDIT, $article)
 					)
 				));
+				$iaItem->setItemTools(array(
+					'id' => 'action-delete',
+					'title' => iaLanguage::get('delete_article'),
+					'attributes' => array(
+						'href' => $iaArticle->url(iaCore::ACTION_DELETE, $article),
+						'class' => 'js-delete-article'
+					)
+				));
 			}
 
 			if ($iaView->blockExists('author_info'))
