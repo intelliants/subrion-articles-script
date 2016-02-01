@@ -70,7 +70,7 @@ class iaArticlecat extends abstractPublishingPackageFront
 	 */
 	public function get($conditions = false, $aStart = 0, $aLimit = 0, $parentId = 0, $sorting = false)
 	{
-		$fields = "SQL_CALC_FOUND_ROWS `id`, `title`, `level`, `title_alias`, `icon`, `nofollow`, `num_all_articles` 'num'";
+		$fields = "SQL_CALC_FOUND_ROWS `id`, `title`, `level`, `title_alias`, `child`, `icon`, `nofollow`, `num_all_articles` 'num'";
 		$statement = "`status` = 'active' AND `parent_id` != 0 " . ($parentId > 0 ? "AND `parent_id`='{$parentId}' " : '');
 		if ($conditions)
 		{

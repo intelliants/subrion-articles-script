@@ -21,13 +21,15 @@
 	{/if}
 
 	{capture name='systems' append='fieldset_before'}
-		<div class="row">
-			<label class="col col-lg-2 control-label">{lang key='priority'}</label>
+		{if 0 != $item.parent_id}
+			<div class="row">
+				<label class="col col-lg-2 control-label">{lang key='priority'}</label>
 
-			<div class="col col-lg-4">
-				{html_radio_switcher name='priority' value=$item.priority|default:0}
+				<div class="col col-lg-4">
+					{html_radio_switcher name='priority' value=$item.priority|default:0}
+				</div>
 			</div>
-		</div>
+		{/if}
 
 		<div class="row">
 			<label class="col col-lg-2 control-label">{lang key='enable_no_follow'}</label>

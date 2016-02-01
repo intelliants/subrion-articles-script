@@ -171,6 +171,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		$data = $iaCore->factoryPackage('articlecat', 'publishing')->get(' && `priority` = 1 ' . ($iaCore->get('art_view_category', true) ? '' : ' && `num_all_articles` > 0'), 0, $iaCore->get('article_top_categories', 12), 1, '`title` ASC');
 		if ($data)
 		{
+			foreach ($data as $key => $value)
+			{
+				$data[$key]['articles'] = $iaArticle->get(" AND t1.`category_id` IN ({$value['child']}) ORDER BY t1.`date_added` DESC", 0, $iaCore->get('art_per_block_featured_categories', 6));
+			}
+
 			$iaView->assign('priority_categories', $data);
 		}
 	}
