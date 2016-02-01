@@ -115,6 +115,17 @@ class iaArticle extends abstractPublishingPackageAdmin
 		), $this->dashboardStatistics);
 	}
 
+	public function rebuildArticleAliases($id)
+	{
+		$this->_iaDb->setTable(self::getTable());
+
+		$article = $this->iaDb->row('id, title', iaDb::convertIds($id));
+		$alias = iaSanitize::alias($article['title']);
+		$this->_iaDb->update(array('title_alias' => $alias), iaDb::convertIds($article['id']));
+
+		$this->_iaDb->resetTable();
+	}
+
 	protected function _editCounter($categId, $action)
 	{
 		$iaArticlecat = $this->iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
@@ -157,5 +168,10 @@ class iaArticle extends abstractPublishingPackageAdmin
 				$this->_editCounter($oldData['category_id'], self::COUNTER_ACTION_DECREMENT);
 			}
 		}
+	}
+
+	public function getCount()
+	{
+		return $this->iaDb->one(iaDb::STMT_COUNT_ROWS, null, self::getTable());
 	}
 }

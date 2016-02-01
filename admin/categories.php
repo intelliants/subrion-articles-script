@@ -19,7 +19,6 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	private $_rootCategory;
 
-
 	public function init()
 	{
 		$this->_rootCategory = $this->getHelper()->getRoot();
@@ -27,6 +26,8 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected function _gridRead($params)
 	{
+		$iaArticle = $this->_iaCore->factoryPackage('article', $this->getPackageName(), iaCore::ADMIN);
+
 		if (isset($_POST['action']))
 		{
 			switch ($_POST['action'])
@@ -34,14 +35,12 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 				case 'pre_repair_articlecats':
 					$this->getHelper()->dropRelations();
 					$total = $this->getHelper()->getCount();
-
 					$this->_iaCore->iaView->assign('total', $total);
 
 					break;
 
 				case 'pre_repair_articlecats_paths':
 					$total = $this->getHelper()->getCount();
-
 					$this->_iaCore->iaView->assign('total', $total);
 
 					break;
@@ -49,7 +48,12 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 				case 'pre_repair_articlecats_num':
 					$this->getHelper()->clearArticlesNum();
 					$total = $this->getHelper()->getCount();
+					$this->_iaCore->iaView->assign('total', $total);
 
+					break;
+
+				case 'pre_rebuild_article_paths':
+					$total = $iaArticle->getCount();
 					$this->_iaCore->iaView->assign('total', $total);
 
 					break;
@@ -75,6 +79,17 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 				case 'repair_articlecats_num':
 					$output = $this->getHelper()->calculateArticles((int)$_POST['start'], (int)$_POST['limit']);
+
+					break;
+
+				// Rebuld Article Paths
+				case 'rebuild_article_paths':
+					$rows = $this->_iaDb->all(array(iaDb::ID_COLUMN_SELECTION), '', (int)$_POST['start'], (int)$_POST['limit'], iaArticle::getTable());
+
+					foreach ($rows as $row)
+					{
+						$iaArticle->rebuildArticleAliases($row['id']);
+					}
 			}
 
 			return;

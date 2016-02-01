@@ -241,13 +241,12 @@
 		<phrase category="admin" key="owner">Owner</phrase>
 		<phrase category="admin" key="parent_category">Parent category</phrase>
 		<phrase category="admin" key="publishing_package">&quot;Publishing&quot; package</phrase>
-		<phrase category="admin" key="rebuild_articlecats_paths">Rebuild article categories paths</phrase>
 		<phrase category="admin" key="rejected">Rejected</phrase>
+		<phrase category="admin" key="rebuild_articlecats_paths">Rebuild article categories paths</phrase>
+		<phrase category="admin" key="rebuild_article_paths">Rebuild article paths</phrase>
 		<phrase category="admin" key="repair_articlecats">Repair article categories</phrase>
 		<phrase category="admin" key="repair_articlecats_num">Recount article categories</phrase>
-		<phrase category="admin" key="rebuild_articlecats_paths_success">Articles categories paths have been successfully rebuilt.</phrase>
-		<phrase category="admin" key="repair_articlecats_success">Articles categories have been successfully repaired.</phrase>
-		<phrase category="admin" key="repair_articlecats_num_success">Article categories have been successfully recounted.</phrase>
+
 		<phrase category="admin" key="specified_category_title_exists">Category with the same title already exists.</phrase>
 
 		<phrase category="common" key="add_article">Add Article</phrase>
