@@ -130,7 +130,7 @@ class iaArticle extends abstractPublishingPackageFront
 		return $articles;
 	}
 
-	public function getArticleBy($where, $order = '', $displayInactive = false)
+	public function getArticleBy($where, $order = '', $displayInactive = false, $decorateValues = true)
 	{
 		$accountId = iaUsers::hasIdentity() ? iaUsers::getIdentity()->id : false;
 
@@ -166,7 +166,10 @@ class iaArticle extends abstractPublishingPackageFront
 		if ($article = $this->iaDb->getRow($sql))
 		{
 			$result = array($article);
-			// $this->wrapValues($result);
+			if ($result && $decorateValues)
+			{
+				$this->wrapValues($result);
+			}
 			$article = array_shift($result);
 		}
 
@@ -181,9 +184,9 @@ class iaArticle extends abstractPublishingPackageFront
 	 *
 	 * @return array
 	 */
-	public final function getById($id, $displayInactive = false)
+	public final function getById($id, $displayInactive = false, $decorateValues = true)
 	{
-		return $this->getArticleBy("art.`id` = '{$id}'", '', $displayInactive);
+		return $this->getArticleBy("art.`id` = '{$id}'", '', $displayInactive, $decorateValues);
 	}
 
 	public function getPreviousArticle($date, $categoryId)
