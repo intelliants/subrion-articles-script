@@ -315,7 +315,7 @@
 		<block name="popular_articles" order="3" title="Popular Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.popular-articles"><![CDATA[]]></block>
 		<block name="sticky_articles" title="Sticky Articles" position="left" type="smarty" header="1" sticky="0" pages="index" collapsible="1" filename="block.sticky-articles"><![CDATA[]]></block>
 		<block name="top_categories" order="1" title="Top Categories" position="left" type="smarty" header="1" sticky="1" collapsible="1" pages="publishing_home" filename="block.top-categories"><![CDATA[]]></block>
-		<block name="priority_categories" order="2" title="Featured Categories" position="verytop" type="smarty" header="1" sticky="0" collapsible="1" pages="index" filename="block.priority-categories"><![CDATA[]]></block>
+		<block name="priority_categories" order="2" title="Featured Categories" position="bottom" type="smarty" header="1" sticky="0" collapsible="1" pages="index" filename="block.priority-categories"><![CDATA[]]></block>
 		<block name="author_info" title="Author" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" order="-1" filename="block.author"><![CDATA[]]></block>
 		<block name="related_articles" title="Related Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.related-articles" status="inactive"><![CDATA[]]></block>
 		<block name="most_viewed_articles" title="Most Viewed Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-viewed-articles" status="inactive"><![CDATA[]]></block>
