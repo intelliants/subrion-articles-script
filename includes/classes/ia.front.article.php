@@ -166,7 +166,7 @@ class iaArticle extends abstractPublishingPackageFront
 		if ($article = $this->iaDb->getRow($sql))
 		{
 			$result = array($article);
-			$this->wrapValues($result);
+			// $this->wrapValues($result);
 			$article = array_shift($result);
 		}
 
