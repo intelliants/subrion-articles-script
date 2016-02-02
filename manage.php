@@ -92,6 +92,18 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		}
 	}
 
+	if (iaCore::ACTION_DELETE == $pageAction)
+	{
+		$result = $iaArticle->delete($id);
+		if ($result)
+		{
+			$iaCore->factory('log')->write(iaLog::ACTION_DELETE, array('item' => 'article', 'name' => $article['title'], 'id' => $id));
+		}
+
+		iaUtil::redirect(iaLanguage::get('thanks'), iaLanguage::get('art_deleted'), $iaArticle->url('my', $result));
+	}
+
+
 	$iaPlan = $iaCore->factory('plan');
 	$iaView->assign('plans', $iaPlan->getPlans($iaArticle->getItemName()));
 
