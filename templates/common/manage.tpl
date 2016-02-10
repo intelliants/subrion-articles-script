@@ -2,13 +2,13 @@
 	{preventCsrf}
 
 	{capture name='general' append='fieldset_before'}
-		{include file='plans.tpl'}
+		{include 'plans.tpl'}
 	{/capture}
 
 	{capture name='title' append='field_before'}
 		<div class="form-group">
 			{if $core.config.articles_categories_selector == 'Handy javascript tree'}
-				{include file='tree.tpl' url="{$core.packages.publishing.url}add.json"}
+				{include 'tree.tpl' url="{$core.packages.publishing.url}add.json"}
 			{else}
 				<label for="field_category_select">{lang key='field_category_id_annotation'}:</label>
 				<select class="form-control" name="category_id" id="field_category_select">{$categories}</select>
@@ -17,7 +17,7 @@
 	{/capture}
 
 	{capture append='fieldset_after' name='general'}
-		{include file='captcha.tpl'}
+		{include 'captcha.tpl'}
 	{/capture}
 
 	{capture append='tabs_after' name='__all__'}
@@ -32,7 +32,7 @@
 		</div>
 	{/capture}
 
-	{include file='item-view-tabs.tpl'}
+	{include 'item-view-tabs.tpl'}
 </form>
 {ia_add_media files='js:_IA_URL_packages/publishing/js/jquery.sisyphus.min'}
 {ia_add_js}
