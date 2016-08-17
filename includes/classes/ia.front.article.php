@@ -12,7 +12,8 @@ class iaArticle extends abstractPublishingPackageFront
 	public $coreSearchEnabled = true;
 	public $coreSearchOptions = array(
 		'tableAlias' => 't1',
-		'regularSearchStatements' => array("t1.`title` LIKE '%:query%' OR t1.`body` LIKE '%:query%'")
+		'regularSearchStatements' => array("t1.`title` LIKE '%:query%' OR t1.`body` LIKE '%:query%'"),
+		'customColumns' => array('keywords', 'c', 'sc')
 	);
 
 	private $_urlPatterns = array(
@@ -63,6 +64,34 @@ class iaArticle extends abstractPublishingPackageFront
 		$rows = $this->get($stmt, $start, $limit);
 
 		return array($this->iaDb->foundRows(), $rows);
+	}
+
+	public function coreSearchTranslateColumn($column, $value)
+	{
+		switch ($column)
+		{
+			case 'keywords':
+				$fields = array('title', 'description');
+				$value = "'%" . iaSanitize::sql($value) . "%'";
+
+				$result = array();
+				foreach ($fields as $fieldName)
+				{
+					$result[] = array('col' => ':column', 'cond' => 'LIKE', 'val' => $value, 'field' => $fieldName);
+				}
+
+				return $result;
+
+			case 'c':
+				$iaArticlecat = $this->iaCore->factoryPackage('articlecat', $this->getPackageName());
+
+				$sql = sprintf('SELECT `id` FROM `%s` WHERE `parent_id` = %d', $iaArticlecat::getTable(true), $value);
+
+				return array('col' => ':column', 'cond' => 'IN', 'val' => '(' . $sql . ')', 'field' => 'category_id');
+
+			case 'sc':
+				return array('col' => ':column', 'cond' => '=', 'val' => (int)$value, 'field' => 'category_id');
+		}
 	}
 
 	/**

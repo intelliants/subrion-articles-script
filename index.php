@@ -3,6 +3,27 @@
 
 $iaArticle = $iaCore->factoryPackage('article', IA_CURRENT_PACKAGE);
 
+if (iaView::REQUEST_JSON == $iaView->getRequestType())
+{
+	$categoryId = isset($_GET['id']) ? (int)$_GET['id'] : $iaDb->one('id', '`parent_id` = 0', 'articles_categories');
+
+	$where = "`parent_id` = $categoryId && `status` = 'active'";
+	$where .= " ORDER BY `title`";
+
+	$data = array();
+	$rows = $iaDb->all(array('id', 'title', 'title_alias', 'locked', 'child'), $where, null, null, 'articles_categories');
+	foreach ($rows as &$row)
+	{
+		$data[] = array(
+			'id' => (int)$row['id'],
+			'text' => $row['title'],
+			'children' => $row['child'] && $row['child'] != $row['id']
+		);
+	}
+
+	$iaView->assign($data);
+}
+
 if (iaView::REQUEST_HTML == $iaView->getRequestType())
 {
 	$pagination = array(
@@ -293,6 +314,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	);
 
 	$iaView->set('actions', $pageActions);
+	$iaView->set('filtersItemName', $iaArticle->getItemName());
 
 	$iaView->assign('fields', $iaCore->factory('field')->filter($articles, $iaArticle->getItemName()));
 	$iaView->assign('category', $category);

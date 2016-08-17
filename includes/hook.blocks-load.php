@@ -198,4 +198,16 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 		$iaView->assign('articles_archive', $data);
 	}
+
+	if ($iaView->blockExists('filters') && $iaArticle->getItemName() == $iaView->get('filtersItemName'))
+	{
+		$iaArticlecat = $iaCore->factoryPackage('articlecat', $iaArticle->getPackageName());
+
+		$categories = $iaDb->all(array('id', 'title'), "`status` = 'active' AND `level` = 1 ORDER BY `title`", null, null, $iaArticlecat::getTable());
+
+		if (!empty($categories))
+		{
+			$iaView->assign('publishingFiltersCategories', $categories);
+		}
+	}
 }

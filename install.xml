@@ -326,6 +326,7 @@
 	<hooks>
 		<hook name="init" page_type="front" filename="packages/publishing/includes/hook.url-rewrite.php"><![CDATA[]]></hook>
 		<hook name="phpCoreBeforePageDisplay" page_type="front" filename="packages/publishing/includes/hook.blocks-load.php"><![CDATA[]]></hook>
+		<hook name="smartyFrontFiltersBeforeFields" type="smarty" page_type="front" filename="search.filters"><![CDATA[]]></hook>
 		<hook name="adminQuickSearch" page_type="admin">
 			<![CDATA[
 $items['articles'] = array('title' => iaLanguage::get('articles'), 'url' => 'publishing/articles/');
