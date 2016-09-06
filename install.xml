@@ -65,8 +65,15 @@
 		<object id="publishing_home" action="edit" access="1">Edit Article</object>
 		<object id="publishing_home" action="delete" access="1">Delete Article</object>
 
-		<object meta_object="admin_page" id="articles" action="add" access="1">Add Article</object>
-		<object meta_object="admin_page" id="articles" action="edit" access="1">Edit Article</object>
+		<object meta_object="admin_page" id="articles" access="1">View Articles</object>
+		<object meta_object="admin_page" id="articles" action="add">Add Article</object>
+		<object meta_object="admin_page" id="articles" action="edit">Edit Article</object>
+		<object meta_object="admin_page" id="articles" action="delete">Delete Article</object>
+
+		<object meta_object="admin_page" id="categories" access="1">View Categories</object>
+		<object meta_object="admin_page" id="categories" action="add">Add Category</object>
+		<object meta_object="admin_page" id="categories" action="edit">Edit Category</object>
+		<object meta_object="admin_page" id="categories" action="delete">Delete Category</object>
 
 		<permission type="group" type_id="4" access="0">my_articles</permission>
 	</permissions>
