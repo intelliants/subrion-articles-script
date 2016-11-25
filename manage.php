@@ -55,13 +55,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	$itemData = array();
 
-	// get fieldgroups
-	list($tabs, $fieldgroups) = $iaField->generateTabs($iaField->filterByGroup($itemData, $iaArticle->getItemName()));
-
-	// compose tabs
-	$sections = array_merge(array('common' => $fieldgroups), $tabs);
-	$iaView->assign('sections', $sections);
-
 	$id = 0;
 	if (isset($iaCore->requestPath[0]) && is_numeric($iaCore->requestPath[0]))
 	{
@@ -113,8 +106,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		$messages = array();
 		$error = false;
 
-		$fields = $iaField->getByItemName($iaArticle->getItemName());
-		list($itemData, $error, $messages) = $iaField->parsePost($fields, $article);
+		list($itemData, $error, $messages) = $iaField->parsePost($iaArticle->getItemName(), $article);
 
 		if (!iaUsers::hasIdentity() && !iaValidate::isCaptchaValid())
 		{
@@ -177,7 +169,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		$itemData['meta_description'] = iaSanitize::tags($itemData['summary']);
 		$itemData['meta_description'] = str_replace(PHP_EOL, '', $itemData['meta_description']);
 
-		if (!$itemData['meta_keywords'] && $itemData['body'])
+		if (empty($itemData['meta_keywords']) && $itemData['body'])
 		{
 			$itemData['meta_keywords'] = iaUtil::getMetaKeywords($itemData['body']);
 		}
@@ -231,7 +223,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		else
 		{
 			$article['category_id'] = $itemData['category_id'];
-			iaField::keepValues($itemData, $fields, $article);
 		}
 
 		$iaView->assign('item', $itemData);
@@ -284,6 +275,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 		$iaView->assign('categories', $categoryOptions);
 	}
+
+	$iaView->assign('sections', $iaField->getTabs($iaArticle->getItemName(), $article));
 
 	$iaView->display('manage');
 }

@@ -14,6 +14,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 
 		$stmt = '`parent_id` != 0 AND `status` = :status ORDER BY `title`';
 		$this->iaDb->bind($stmt, array('status' => iaCore::STATUS_ACTIVE));
+
 		if ($entries = $this->iaDb->onefield('title_alias', $stmt, null, null, self::getTable()))
 		{
 			$baseUrl = $this->getInfo('url');
@@ -34,7 +35,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 
 	public function rebuildRelations($id)
 	{
-		$this->_iaDb->setTable(self::getTable());
+		$this->iaDb->setTable(self::getTable());
 
 		$category = $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds($id));
 
@@ -54,9 +55,9 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 			'child' => implode(',', $children)
 		);
 
-		$this->_iaDb->update($entry, iaDb::convertIds($category['id']));
+		$this->iaDb->update($entry, iaDb::convertIds($category['id']));
 
-		$this->_iaDb->resetTable();
+		$this->iaDb->resetTable();
 	}
 
 	protected function _getPathForRebuild($title, $pid, $path = '')
@@ -90,13 +91,13 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 
 	public function rebuildAliases($id)
 	{
-		$this->_iaDb->setTable(self::getTable());
+		$this->iaDb->setTable(self::getTable());
 
 		$category = $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds($id));
 		$path = $this->_getPathForRebuild($category['title'], $category['parent_id']);
-		$this->_iaDb->update(array('title_alias' => $path), iaDb::convertIds($category['id']));
+		$this->iaDb->update(array('title_alias' => $path), iaDb::convertIds($category['id']));
 
-		$this->_iaDb->resetTable();
+		$this->iaDb->resetTable();
 	}
 
 	/**

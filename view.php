@@ -114,13 +114,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	iaBreadcrumb::replaceEnd($article['title'], IA_SELF);
 	//
 
-	// get fieldgroups
-	list($tabs, $fieldgroups) = $iaField->generateTabs($iaField->filterByGroup($article, $iaArticle->getItemName()));
-
-	// compose tabs
-	$sections = array_merge(array('common' => $fieldgroups), $tabs);
-	$iaView->assign('sections', $sections);
-
 	if (iaCore::STATUS_ACTIVE != $article['status'])
 	{
 		$iaView->setMessages(iaLanguage::get('article_' . $article['status']), iaView::ALERT);
@@ -147,7 +140,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		$article['body'] .= iaLanguage::getf('article_source_url', array('url' => $iaArticle->url('view', $article)));
 	}
+
+	$sections = $iaField->getTabs($iaArticle->getItemName(), $article);
+
 	$iaView->assign('item', $article);
+	$iaView->assign('sections', $sections);
 	$iaView->assign('session_id', session_id());
 
 	// define page params

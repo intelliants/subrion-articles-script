@@ -316,7 +316,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	$iaView->set('actions', $pageActions);
 	$iaView->set('filtersItemName', $iaArticle->getItemName());
 
-	$iaView->assign('fields', $iaCore->factory('field')->filter($articles, $iaArticle->getItemName()));
+	$iaView->assign('fields', $iaCore->factory('field')->filter($iaArticle->getItemName(), $articles));
 	$iaView->assign('category', $category);
 	$iaView->assign('categories', $categories);
 

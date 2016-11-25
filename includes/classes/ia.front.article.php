@@ -138,7 +138,7 @@ class iaArticle extends abstractPublishingPackageFront
 		if ($joinTransactions)
 		{
 			$iaTransaction = $this->iaCore->factory('transaction');
-			$fields[] = "SUBSTRING(GROUP_CONCAT(t4.`sec_key` ORDER BY t4.`date`) FROM -14) `transaction_id`";
+			$fields[] = "SUBSTRING(GROUP_CONCAT(t4.`sec_key` ORDER BY t4.`date_created`) FROM -14) `transaction_id`";
 
 			list($where, $order) = explode('ORDER BY', $stmtWhere);
 
