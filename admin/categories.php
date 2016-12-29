@@ -15,8 +15,6 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected $_activityLog = array('item' => 'category');
 
-	protected $_setQuickSearch = false;
-
 	private $_rootCategory;
 
 	public function init()

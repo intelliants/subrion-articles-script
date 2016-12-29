@@ -35,12 +35,7 @@ Ext.onReady(function()
 			}
 		};
 
-		var searchParam = intelli.urlVal('q');
-		if (searchParam)
-		{
-			intelli.articles.storeParams = {title: searchParam};
-		}
-		searchParam = intelli.urlVal('status');
+		var searchParam = intelli.urlVal('status');
 		if (searchParam)
 		{
 			intelli.articles.storeParams = {status: searchParam};
@@ -84,11 +79,6 @@ Ext.onReady(function()
 		if (searchParam)
 		{
 			Ext.getCmp('fltStatus').setValue(searchParam);
-		}
-		searchParam = intelli.urlVal('q');
-		if (searchParam)
-		{
-			Ext.getCmp('fltTitle').setValue(searchParam);
 		}
 
 		intelli.articles.init();
