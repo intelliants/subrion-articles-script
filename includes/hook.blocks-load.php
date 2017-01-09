@@ -20,27 +20,26 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		$max = (int)$iaDb->one('MAX(`id`) as `max`', null, 'articles');
 		$sql2 = $iaCore->iaDb->orderByRand($max, 'a.`id`') . " ORDER BY RAND() LIMIT 0, " . (int)$iaCore->get('art_per_block_random', 6);
-		if ($data = $iaDb->getAll($sql . $sql2))
+		if ($data = $iaArticle->getByQuery($sql . $sql2))
 		{
-			$iaArticle->wrapValues($data);
 			$iaView->assign('random_articles', $data);
 		}
 	}
+
 	if ($iaView->blockExists('latest_articles'))
 	{
 		$sql2 = 'ORDER BY a.`date_added` DESC LIMIT 0, ' . $defaultLimit;
-		if ($data = $iaDb->getAll($sql . $sql2))
+		if ($data = $iaArticle->getByQuery($sql . $sql2))
 		{
-			$iaArticle->wrapValues($data);
 			$iaView->assign('latest_articles', $data);
 		}
 	}
+
 	if ($iaView->blockExists('popular_articles'))
 	{
 		$sql2 = 'ORDER BY a.`views_num` DESC LIMIT 0, ' . (int)$iaCore->get('art_per_block_popular', 6);
-		if ($data = $iaDb->getAll($sql . $sql2))
+		if ($data = $iaArticle->getByQuery($sql . $sql2))
 		{
-			$iaArticle->wrapValues($data);
 			$iaView->assign('popular_articles', $data);
 		}
 	}
@@ -48,10 +47,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	if ($iaView->blockExists('featured_articles'))
 	{
 		$sql2  = " AND a.featured = 1 AND (a.`featured_end` > '" . date('Y-m-d') . "') ORDER BY a.`date_added` DESC LIMIT 0, " . (int)$iaCore->get('art_per_block_featured', 6);
-
-		if ($data = $iaDb->getAll($sql . $sql2))
+		if ($data = $iaArticle->getByQuery($sql . $sql2))
 		{
-			$iaArticle->wrapValues($data);
 			$iaView->assign('featured_articles', $data);
 		}
 	}
@@ -59,10 +56,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	if ($iaView->blockExists('sponsored_articles'))
 	{
 		$sql2  = " AND a.sponsored = 1 AND (a.`sponsored_end` > '" . date('Y-m-d') . "') ORDER BY a.`date_added` DESC LIMIT 0, " . (int)$iaCore->get('art_per_block_sponsored', 6);
-
-		if ($data = $iaDb->getAll($sql . $sql2))
+		if ($data = $iaArticle->getByQuery($sql . $sql2))
 		{
-			$iaArticle->wrapValues($data);
 			$iaView->assign('sponsored_articles', $data);
 		}
 	}
@@ -70,10 +65,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	if ($iaView->blockExists('sticky_articles'))
 	{
 		$sql2  = ' AND a.sticky = 1 ORDER BY a.`date_added` DESC LIMIT 0, ' . (int)$iaCore->get('art_per_block_sticky', 5);
-
-		if ($data = $iaDb->getAll($sql . $sql2))
+		if ($data = $iaArticle->getByQuery($sql . $sql2))
 		{
-			$iaArticle->wrapValues($data);
 			$iaView->assign('sticky_articles', $data);
 		}
 	}
@@ -90,19 +83,16 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 				'category_id' => (int)$listingData['category_id'],
 				'limit' => $defaultLimit
 			));
-			if ($data = $iaDb->getAll($sql . $sql2))
+			if ($data = $iaArticle->getByQuery($sql . $sql2))
 			{
-				$iaArticle->wrapValues($data);
 				$iaView->assign('most_viewed_articles', $data);
 			}
 		}
 	}
+
 	if ($iaView->blockExists('most_recent_articles'))
 	{
-		if (!isset($listingData))
-		{
-			$listingData = $iaView->getValues('item');
-		}
+		isset($listingData) || $listingData = $iaView->getValues('item');
 		if (isset($listingData['category_id']) && $listingData['category_id'])
 		{
 			$sql2 = iaDb::printf(' AND a.`id` != :id AND a.`category_id` = :category_id ORDER BY a.`date_added` DESC LIMIT :limit', array(
@@ -110,9 +100,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 				'category_id' => (int)$listingData['category_id'],
 				'limit' => $defaultLimit
 			));
-			if ($data = $iaDb->getAll($sql . $sql2))
+			if ($data = $iaArticle->getByQuery($sql . $sql2))
 			{
-				$iaArticle->wrapValues($data);
 				$iaView->assign('most_recent_articles', $data);
 			}
 		}
@@ -120,7 +109,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	if ($iaView->blockExists('related_articles'))
 	{
-		$listingData = $iaView->getValues('item');
+		isset($listingData) || $listingData = $iaView->getValues('item');
 		if (isset($listingData['category_id']) && $listingData['category_id'])
 		{
 			$max = (int)$iaDb->one('MAX(`id`) as `max`', null, 'articles');
@@ -129,9 +118,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 				'category_id' => (int)$listingData['category_id'],
 				'limit' => $defaultLimit
 			));
-			if ($data = $iaDb->getAll($sql . $sql2))
+			if ($data = $iaArticle->getByQuery($sql . $sql2))
 			{
-				$iaArticle->wrapValues($data);
 				$iaView->assign('related_articles', $data);
 			}
 		}
@@ -144,14 +132,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		$data = $iaArticle->get(' ORDER BY t1.`date_added` DESC', 0, $iaCore->get('art_per_block_new', 6));
 		$foundRows = $iaArticle->iaDb->foundRows();
 
-		if ($data)
-		{
-			$iaItem = $iaCore->factory('item');
-			$data = $iaItem->updateItemsFavorites($data, $iaArticle->getItemName());
-			$iaView->assign('session_id', session_id());
-
-			$iaArticle->wrapValues($data);
-		}
+		empty($data) || $iaView->assign('session_id', session_id());
 
 		$iaView->assign('new_articles', $data);
 	}

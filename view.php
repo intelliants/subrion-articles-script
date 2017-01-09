@@ -15,9 +15,10 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	}
 
 	$iaField = $iaCore->factory('field');
-
 	$iaArticle = $iaCore->factoryPackage('article', IA_CURRENT_PACKAGE);
-	$article = $iaArticle->getById($articleId, true);
+
+	$article = $iaArticle->getById($articleId);
+
 	if (empty($article) || ($article['status'] == iaCore::STATUS_APPROVAL && $article['member_id'] != iaUsers::getIdentity()->id))
 	{
 		return iaView::errorPage(iaView::ERROR_NOT_FOUND);
@@ -29,7 +30,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	}
 
 	$article['item'] = $iaArticle->getItemName();
-	$article['pictures'] = empty($article['pictures']) ? array() : explode(',', $article['pictures']);
 
 	$iaArticle->incrementViewsCounter($article['id']);
 
@@ -80,6 +80,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 					unset($author['adsense_id']);
 				}
 			}
+
 			$iaView->assign('author', $author);
 
 			// process default article url

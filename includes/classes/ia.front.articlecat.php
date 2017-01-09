@@ -61,43 +61,27 @@ class iaArticlecat extends abstractPublishingPackageFront
 	/**
 	 * Returns article categories
 	 *
-	 * @param string $aClause additional WHERE clause
-	 * @param integer $aStart[optional] starting position
-	 * @param integer $aLimit[optional] number of categories to return
-	 * @param integer $aIdParent[optional] parent category id
+	 * @param string $where additional WHERE clause
+	 * @param integer $start[optional] starting position
+	 * @param integer $limit[optional] number of categories to return
+	 * @param integer $parentId[optional] parent category id
 	 *
 	 * @return array
 	 */
-	public function get($conditions = false, $aStart = 0, $aLimit = 0, $parentId = 0, $sorting = false)
+	public function get($where = null, $start = 0, $limit = 0, $parentId = 0, $sorting = false)
 	{
 		$fields = "SQL_CALC_FOUND_ROWS `id`, `title`, `level`, `title_alias`, `child`, `icon`, `nofollow`, `num_all_articles` 'num'";
-		$statement = "`status` = 'active' AND `parent_id` != 0 " . ($parentId > 0 ? "AND `parent_id`='{$parentId}' " : '');
-		if ($conditions)
-		{
-			$statement .= ' ' . $conditions;
-		}
-		$statement .= ' ORDER BY ';
-		if ($sorting)
-		{
-			$statement .= $sorting;
-		}
-		else
-		{
-			$statement .= $this->iaCore->get('articles_categs_sort', 'by title') == 'by title' ? '`title`' : '`order`';
-		}
+		$stmt = "`status` = 'active' AND `parent_id` != 0 " . ($parentId > 0 ? "AND `parent_id`='{$parentId}' " : '');
+		$where && $stmt.= ' ' . $where;
+		$stmt.= ' ORDER BY ';
+		$stmt.= $sorting
+			? $sorting
+			: ($this->iaCore->get('articles_categs_sort', 'by title') == 'by title' ? '`title`' : '`order`');
 
-		$result = $this->iaDb->all($fields, $statement, $aStart, $aLimit, self::getTable());
+		$result = $this->iaDb->all($fields, $stmt, $start, $limit, self::getTable());
 
-		empty($result) || $this->_wrapValues($result);
+		$this->_processValues($result);
 
 		return $result;
-	}
-
-	protected function _wrapValues(&$entries)
-	{
-		foreach ($entries as &$entry)
-		{
-			empty($entry['icon']) || $entry['icon'] = unserialize($entry['icon']);
-		}
 	}
 }

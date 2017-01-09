@@ -154,14 +154,15 @@ class iaArticle extends abstractPublishingPackageFront
 			. ' LIMIT ' . $start . ', ' . $limit;
 
 		$articles = $this->iaDb->getAll($sql);
-		$this->wrapValues($articles);
+
+		$this->_processValues($articles);
 
 		return $articles;
 	}
 
 	public function getArticleBy($where, $order = '', $displayInactive = false, $decorateValues = true)
 	{
-		$accountId = iaUsers::hasIdentity() ? iaUsers::getIdentity()->id : false;
+		$accountId = iaUsers::hasIdentity() ? iaUsers::getIdentity()->id : 0;
 
 		$fields = array(
 			'SQL_CALC_FOUND_ROWS art.*',
@@ -192,30 +193,16 @@ class iaArticle extends abstractPublishingPackageFront
 		$sql .= $order ? 'ORDER BY ' . $order : '';
 		$sql .= ' LIMIT 1';
 
-		if ($article = $this->iaDb->getRow($sql))
-		{
-			$result = array($article);
-			if ($result && $decorateValues)
-			{
-				$this->wrapValues($result);
-			}
-			$article = array_shift($result);
-		}
+		$article = $this->iaDb->getRow($sql);
+
+		$decorateValues && $this->_processValues($article, true);
 
 		return $article;
 	}
 
-	/**
-	 * Returns article by given id
-	 *
-	 * @param int id article id
-	 * @param boolean $displayInactive[optional] article filter, true - display inactive articles
-	 *
-	 * @return array
-	 */
-	public final function getById($id, $displayInactive = false, $decorateValues = true)
+	public function getById($id, $decorate = true)
 	{
-		return $this->getArticleBy("art.`id` = '{$id}'", '', $displayInactive, $decorateValues);
+		return $this->getArticleBy('art.`id` = ' . (int)$id . ' ', '', false, $decorate);
 	}
 
 	public function getPreviousArticle($date, $categoryId)
@@ -417,22 +404,12 @@ class iaArticle extends abstractPublishingPackageFront
 		);
 	}
 
-	public function wrapValues(array &$rows)
+	public function getByQuery($sql)
 	{
-		if (is_array($rows) && $rows)
-		{
-			foreach ($rows as &$row)
-			{
-				empty($row['image']) || $this->_unwrapImages($row['image']);
-			}
-		}
-	}
+		$rows = $this->iaDb->getAll($sql);
 
-	private function _unwrapImages(&$value)
-	{
-		if (isset($value[1]) && ':' == $value[1])
-		{
-			$value = unserialize($value);
-		}
+		$this->_processValues($rows);
+
+		return $rows;
 	}
 }

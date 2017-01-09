@@ -73,7 +73,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		}
 		else
 		{
-			$article = $iaArticle->getById($id, false, false);
+			$article = $iaArticle->getById($id);
+
 			if (empty($article))
 			{
 				return iaView::errorPage(iaView::ERROR_NOT_FOUND);

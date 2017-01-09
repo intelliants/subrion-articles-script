@@ -2,12 +2,7 @@
 	<div class="ia-item-author p-a clearfix">
 		<a class="pull-left m-r" href="{ia_url type='url' item='members' data=$author}">
 			{if $author.avatar}
-				{$avatar = $author.avatar|unserialize}
-				{if $avatar}
-					{printImage imgfile=$avatar.path width=80 class='img-circle' title=$author.fullname|default:$author.username}
-				{else}
-					<img src="{$img}no-avatar.png" class="img-circle" width="80" alt="{$author.username}">
-				{/if}
+				{printImage imgfile=$author.avatar.path width=80 class='img-circle' title=$author.fullname|default:$author.username}
 			{else}
 				<img src="{$img}no-avatar.png" class="img-circle" width="80" alt="{$author.username}">
 			{/if}
@@ -15,7 +10,7 @@
 		<div class="media-body">
 			<h4 class="media-heading"><a href="{ia_url type='url' item='members' data=$author}">{$author.fullname}</a></h4>
 			{if !empty($author.biography)}
-				<p class="text-fade-50">{$author.biography}</p>
+				<p class="text-fade-50">{$author.biography|escape:'html'|nl2br}</p>
 			{/if}
 			<ul class="list-inline">
 				<li>{lang key='articles'}: {$author.articles_num|string_format:'%d'} <a href="{$author.rss}" title="{lang key='rss'}"><i class="fa fa-rss"></i></a></li>

@@ -28,8 +28,6 @@
 		<div class="ia-item-view__section">
 			<h3>{lang key='field_gallery'}</h3>
 			{ia_add_media files='fotorama'}
-			{$gal = unserialize($item.gallery)}
-
 			<div class="ia-item-view__gallery">
 				<div class="fotorama" 
 					 data-nav="thumbs"
@@ -37,7 +35,7 @@
 					 data-ratio="800/400"
 					 data-allowfullscreen="true"
 					 data-fit="cover">
-					{foreach $gal as $entry}
+					{foreach $item.gallery as $entry}
 						<a class="ia-item-view__gallery__item" href="{printImage imgfile=$entry.path url=true fullimage=true}">{printImage imgfile=$entry.path title=$entry.title}</a>
 					{/foreach}
 				</div>
@@ -54,7 +52,7 @@
 	{/if}
 
 	{if $sections}
-		{include file='item-view-tabs.tpl' isView=true exceptions=array('title', 'body', 'url', 'url_description', 'gallery')}
+		{include 'item-view-tabs.tpl' isView=true exceptions=['title', 'body', 'url', 'url_description', 'gallery']}
 	{/if}
 
 	<!-- simple sharing buttons -->
@@ -105,7 +103,6 @@
 $(function() {
 	$('.js-delete-article').on('click', function(e) {
 		e.preventDefault();
-
 		intelli.confirm(_t('do_you_really_want_to_delete_article'), { url: $(this).attr('href') });
 	});
 });
