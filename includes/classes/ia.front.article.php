@@ -12,7 +12,7 @@ class iaArticle extends abstractPublishingPackageFront
 	public $coreSearchEnabled = true;
 	public $coreSearchOptions = array(
 		'tableAlias' => 't1',
-		'regularSearchStatements' => array("t1.`title` LIKE '%:query%' OR t1.`body` LIKE '%:query%'"),
+		'regularSearchFields' => array('title', 'body'),
 		'customColumns' => array('keywords', 'c', 'sc')
 	);
 
