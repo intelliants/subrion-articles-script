@@ -102,7 +102,6 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 		}
 
 		$this->getHelper()->recount($entryId, $entryData, $previousData);
-		// $this->_iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN)->recount($entryId, $entryData, $previousData);
 	}
 
 	protected function _setDefaultValues(array &$entry)

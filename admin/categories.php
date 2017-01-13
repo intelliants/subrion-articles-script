@@ -17,6 +17,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	private $_rootCategory;
 
+
 	public function init()
 	{
 		$this->_rootCategory = $this->getHelper()->getRoot();
@@ -208,7 +209,8 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 		$parent = $this->_iaDb->row(array('id', 'title', 'title_alias', 'parents', 'child'), iaDb::convertIds($entryData['parent_id']));
 
-		$entryData['title_alias'] = end(explode(IA_URL_DELIMITER, trim($entryData['title_alias'], IA_URL_DELIMITER)));
+		$array = explode(IA_URL_DELIMITER, trim($entryData['title_alias'], IA_URL_DELIMITER));
+		$entryData['title_alias'] = end($array);
 
 		$iaView->assign('parent', $parent);
 		$iaView->assign('statuses', $this->getHelper()->getStatuses());

@@ -117,18 +117,18 @@ class iaArticle extends abstractPublishingPackageAdmin
 
 	public function rebuildArticleAliases($id)
 	{
-		$this->_iaDb->setTable(self::getTable());
+		$this->iaDb->setTable(self::getTable());
 
 		$article = $this->iaDb->row('id, title', iaDb::convertIds($id));
 		$alias = iaSanitize::alias($article['title']);
-		$this->_iaDb->update(array('title_alias' => $alias), iaDb::convertIds($article['id']));
+		$this->iaDb->update(array('title_alias' => $alias), iaDb::convertIds($article['id']));
 
-		$this->_iaDb->resetTable();
+		$this->iaDb->resetTable();
 	}
 
 	protected function _editCounter($categId, $action)
 	{
-		$iaArticlecat = $this->iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
+		$this->iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
 
 		$pattern = 'UPDATE `:table` SET `num_articles` = '
 			. 'IF(`id` = :catId, `num_articles` :action 1, `num_articles`), '
@@ -143,9 +143,9 @@ class iaArticle extends abstractPublishingPackageAdmin
 		return $this->iaDb->query($sql);
 	}
 
-	public function recount($entryId, array $newData, array $oldData)
+	public function recount($entryId, array $newData, $oldData)
 	{
-		if (!isset($newData['status']))
+		if (!isset($newData['status']) || !isset($oldData['status']))
 		{
 			return;
 		}

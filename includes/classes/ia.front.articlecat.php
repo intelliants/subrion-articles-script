@@ -29,21 +29,18 @@ class iaArticlecat extends abstractPublishingPackageFront
 		return $this->iaDb->all($fields, $aWhere, null, null, self::getTable());
 	}
 
-	public function url($action, $params)
+	public function url($action, array $data)
 	{
-		$data = array(
+		$params = array(
 			'base' => $this->getInfo('url'),
 			'action' => $action,
-			'alias' => isset($params['title_alias']) ? $params['title_alias'] : ''
+			'alias' => isset($data['title_alias']) ? $data['title_alias'] : ''
 		);
-		$data['alias'] = isset($params['category_alias']) ? $params['category_alias'] : $params['title_alias'];
+		$params['alias'] = isset($data['category_alias']) ? $data['category_alias'] : $data['title_alias'];
 
-		if (!isset($this->_urlPatterns[$action]))
-		{
-			$action = 'default';
-		}
+		isset($this->_urlPatterns[$action]) || $action = 'default';
 
-		return iaDb::printf($this->_urlPatterns[$action], $data);
+		return iaDb::printf($this->_urlPatterns[$action], $params);
 	}
 
 	/**

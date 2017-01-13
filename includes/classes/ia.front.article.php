@@ -25,7 +25,7 @@ class iaArticle extends abstractPublishingPackageFront
 	protected $_validProtocols = array('http://', 'https://');
 
 
-	public function url($action, $data)
+	public function url($action, array $data)
 	{
 		$data['base'] = $this->getInfo('url');
 		$data['action'] = $action;
@@ -230,7 +230,7 @@ class iaArticle extends abstractPublishingPackageFront
 		return parent::insert($itemData);
 	}
 
-	public function updateCounters($itemId, array $itemData, $action)
+	public function updateCounters($itemId, array $itemData, $action, $previousData = null)
 	{
 		if (iaCore::STATUS_ACTIVE == $itemData['status'] && in_array($action, array(iaCore::ACTION_DELETE, iaCore::ACTION_ADD)))
 		{
