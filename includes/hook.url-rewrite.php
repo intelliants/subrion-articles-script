@@ -113,7 +113,8 @@ if ($accessGranted)
 		array_unshift($iaCore->requestPath, 'article');
 
 		$pageName = $iaCore->factory('page', iaCore::FRONT)->getUrlByName('view_article', false);
-		$pageName = array_shift(explode(IA_URL_DELIMITER, $pageName));
+		$pageName = explode(IA_URL_DELIMITER, $pageName);
+		$pageName = array_shift($pageName);
 
 		$iaView->name($pageName);
 	}

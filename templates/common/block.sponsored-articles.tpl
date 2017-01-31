@@ -2,10 +2,9 @@
 	<div class="ia-items sponsored-articles">
 		{foreach $sponsored_articles as $article}
 			<div class="ia-item ia-item--border-bottom">
-				{$imgthumb = $article.image}
-				{if $imgthumb}
+				{if $article.image}
 					<a class="center-block m-b" href="{ia_url type='url' item='articles' data=$article}">
-						{printImage imgfile=$imgthumb.path title=$article.title class='img-responsive'}
+						{ia_image file=$article.image title=$article.title class='img-responsive'}
 					</a>
 				{/if}
 

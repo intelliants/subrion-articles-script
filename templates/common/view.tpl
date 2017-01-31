@@ -17,8 +17,8 @@
 	</div>
 
 	{if $item.image}
-		<a class="ia-item-view__image center-block m-b" href="{printImage imgfile=$item.image.path url=true fullimage=true}" rel="ia_lightbox[{$item.title}]">
-			{printImage imgfile=$item.image.path class='img-responsive' fullimage=true alt=$item.title|escape:'html'}
+		<a class="ia-item-view__image center-block m-b" href="{ia_image file=$item.image url=true large=true}" rel="ia_lightbox[{$item.title}]">
+			{ia_image file=$item.image class='img-responsive' large=true alt=$item.title}
 		</a>
 	{/if}
 
@@ -36,7 +36,7 @@
 					 data-allowfullscreen="true"
 					 data-fit="cover">
 					{foreach $item.gallery as $entry}
-						<a class="ia-item-view__gallery__item" href="{printImage imgfile=$entry.path url=true fullimage=true}">{printImage imgfile=$entry.path title=$entry.title}</a>
+						<a class="ia-item-view__gallery__item" href="{ia_image file=$entry url=true large=true}">{ia_image file=$entry title=$entry.title}</a>
 					{/foreach}
 				</div>
 			</div>
@@ -45,7 +45,7 @@
 
 	{if $item.url && $item.url != 'http://'}
 		<div class="ia-item-view__section">
-			<h3>{lang key='field_url'}</h3>
+			<h3>{lang key='field_articles_url'}</h3>
 			<a href="{$item.url}" target="_blank">{$item.url}</a><br>
 			{$item.url_description}
 		</div>
@@ -61,7 +61,7 @@
 		<li><a href="https://twitter.com/intent/tweet?source={$smarty.const.IA_SELF|escape:'url'}&text={$item.title}:{$smarty.const.IA_SELF|escape:'url'}" target="_blank" title="Tweet"><i class="fa fa-twitter-square fa-2x"></i></a></li>
 		<li><a href="https://plus.google.com/share?url={$smarty.const.IA_SELF|escape:'url'}" target="_blank" title="Share on Google+"><i class="fa fa-google-plus-square fa-2x"></i></a></li>
 		{if $item.image}
-			<li><a href="http://pinterest.com/pin/create/button/?url={$smarty.const.IA_SELF|escape:'url'}&media={printImage imgfile=$item.image.path url=true fullimage=true}&description={$item.body|strip_tags|truncate:250:'...'}" target="_blank" title="Pin it"><i class="fa fa-pinterest-square fa-2x"></i></a></li>
+			<li><a href="http://pinterest.com/pin/create/button/?url={$smarty.const.IA_SELF|escape:'url'}&media={ia_image file=$item.image url=true large=true}&description={$item.body|strip_tags|truncate:250:'...'}" target="_blank" title="Pin it"><i class="fa fa-pinterest-square fa-2x"></i></a></li>
 		{/if}
 		<li><a href="mailto:?subject={$item.title}&body={$item.body|strip_tags|truncate:250:'...'}:{$smarty.const.IA_SELF|escape:'url'}" target="_blank" title="Email"><i class="fa fa-envelope-square fa-2x"></i></a></li>
 	</ul>
@@ -70,12 +70,12 @@
 		<ul class="pager">
 			{if !empty($item.prev_article)}
 				<li class="pull-left text-small">
-					<a href="{ia_url item='articles' data=$item.prev_article type='url'}" title="{$item.prev_article.title}">&larr; {lang key='previous_article'}</a>
+					<a href="{ia_url item='articles' data=$item.prev_article type='url'}" title="{$item.prev_article.title|escape:'html'}">&larr; {lang key='previous_article'}</a>
 				</li>
 			{/if}
 			{if !empty($item.next_article)}
 				<li class="pull-right text-small">
-					<a href="{ia_url item='articles' data=$item.next_article type='url'}" title="{$item.next_article.title}">{lang key='next_article'} &rarr;</a>
+					<a href="{ia_url item='articles' data=$item.next_article type='url'}" title="{$item.next_article.title|escape:'html'}">{lang key='next_article'} &rarr;</a>
 				</li>
 			{/if}
 		</ul>
