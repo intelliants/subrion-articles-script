@@ -14,7 +14,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 	{
 		$result = [];
 
-		$stmt = '`parent_id` != 0 AND `status` = :status ORDER BY `title`';
+		$stmt = '`parent_id` != -1 AND `status` = :status ORDER BY `title`';
 		$this->iaDb->bind($stmt, ['status' => iaCore::STATUS_ACTIVE]);
 
 		if ($entries = $this->iaDb->onefield('title_alias', $stmt, null, null, self::getTable()))
@@ -28,6 +28,29 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 		}
 
 		return $result;
+	}
+
+
+	public function get($columns, $where, $order = '', $start = null, $limit = null)
+	{
+		$sql = <<<SQL
+SELECT :columns, p.`title_:lang` `parent_title`
+	FROM `:table_categories` c 
+LEFT JOIN `:table_categories` p ON (c.`parent_id` = p.`id`) 
+WHERE :where :order 
+LIMIT :start, :limit
+SQL;
+		$sql = iaDb::printf($sql, [
+			'lang' => $this->iaCore->language['iso'],
+			'table_categories' => iaArticlecat::getTable(true),
+			'columns' => $columns,
+			'where' => $where,
+			'order' => $order,
+			'start' => $start,
+			'limit' => $limit
+		]);
+
+		return $this->iaDb->getAll($sql);
 	}
 
 	public function getRoot()
@@ -147,7 +170,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 	{
 		$parentId = $this->iaDb->one('parent_id', iaDb::convertIds($cId));
 
-		if ($parentId != 0)
+		if ($parentId != -1)
 		{
 			$parents[] = $parentId;
 
@@ -207,7 +230,6 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 	{
 		$this->iaDb->update(['child' => '', 'parents' => ''], iaDb::EMPTY_CONDITION, self::getTable());
 	}
-
 
 	public function clearArticlesNum()
 	{

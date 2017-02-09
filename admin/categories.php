@@ -7,7 +7,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected $_helperName = 'articlecat';
 
-	protected $_gridColumns = ['title', 'title_alias', 'num_articles', 'num_all_articles', 'locked', 'level', 'order', 'date_added', 'date_modified', 'status'];
+	protected $_gridColumns = ['parent_id', 'title', 'title_alias', 'num_articles', 'num_all_articles', 'locked', 'level', 'order', 'date_added', 'date_modified', 'status'];
 	protected $_gridFilters = ['status' => self::EQUAL, 'title' => self::LIKE];
 	protected $_gridQueryMainTableAlias = 'c';
 
@@ -97,25 +97,9 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 		return parent::_gridRead($params);
 	}
 
-	protected function _gridQuery($columns, $where, $order, $start, $limit)
+	public function _gridQuery($columns, $where, $order, $start, $limit)
 	{
-		$sql =
-			'SELECT :fields ' .
-			'FROM `:prefix:table` c ' .
-			'LEFT JOIN `:prefix:table` p ON (c.`parent_id` = p.`id`) ' .
-			'WHERE :where :order ' .
-			'LIMIT :start, :limit';
-		$sql = iaDb::printf($sql, [
-			'prefix' => $this->_iaDb->prefix,
-			'table' => $this->getTable(),
-			'fields' => $columns,
-			'where' => $where,
-			'order' => $order,
-			'start' => $start,
-			'limit' => $limit
-		]);
-
-		return $this->_iaDb->getAll($sql);
+		return $this->getHelper()->get($columns, $where, $order, $start, $limit);
 	}
 
 	protected function _entryAdd(array $entryData)
