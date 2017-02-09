@@ -433,8 +433,8 @@ CREATE TABLE `{prefix}articles_categories` (
 		</sql>
 		<sql stage="end">
 			<![CDATA[
-INSERT INTO `{prefix}articles_categories` (`id`, `parent_id`, `status`, `title_{lang}`, `title_alias`, `level`, `parents`, `child`, `order`) VALUES
-(1, -1, 'active', 'ROOT', '', 0, '1', '1', 0);
+INSERT INTO `{prefix}articles_categories` (`id`, `parent_id`, `status`, `title_{lang}`, `title_alias`, `level`, `parents`, `child`, `order`, `locked`) VALUES
+(1, -1, 'active', 'ROOT', '', 0, '1', '1', 0, 1);
 			]]>
 		</sql>
 		<sql stage="end">

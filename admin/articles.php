@@ -7,7 +7,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected $_helperName = 'article';
 
-	protected $_gridColumns = ['id', 'title', 'date_added', 'date_modified', 'summary'];//, a.`status`, a.`category_id`, a.`member_id`, 1 `update`, 1 `delete`, c.`title` `category_title`, c.`title_alias` `category_alias`, c.`level` `category_level`, IF(m.`fullname` != '', m.`fullname`, IFNULL(m.`username`, '')) `member`, m.`email` ";
+	protected $_gridColumns = ['title', 'title_alias', 'body', 'date_added', 'date_modified', 'sticky', 'status'];
 	protected $_gridFilters = ['status' => self::EQUAL, 'title' => self::LIKE];
 	protected $_gridQueryMainTableAlias = 'a';
 
@@ -17,6 +17,13 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	private $_validUrlProtocols = ['http://', 'https://'];
 
+	private $_iaArticlecat;
+
+
+	public function init()
+	{
+		$this->_iaArticlecat = $this->_iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
+	}
 
 	protected function _modifyGridParams(&$conditions, &$values, array $params)
 	{
@@ -30,30 +37,9 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 		}
 	}
 
-	protected function _gridQuery($columns, $where, $order, $start, $limit)
+	public function _gridQuery($columns, $where, $order, $start, $limit)
 	{
-		$iaArticlecat = $this->_iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
-
-		$sql =
-			'SELECT :columns ' .
-			'FROM `:prefix:table_articles` a ' .
-			'LEFT JOIN `:prefix:table_categories` c ON (a.`category_id` = c.`id`) ' .
-			'LEFT JOIN `:prefix:table_members` m ON (a.`member_id` = m.`id`) ' .
-			'WHERE :where :order ' .
-			'LIMIT :start, :limit';
-		$sql = iaDb::printf($sql, [
-			'prefix' => $this->_iaDb->prefix,
-			'table_articles' => $this->getTable(),
-			'table_categories' => $iaArticlecat::getTable(),
-			'table_members' => iaUsers::getTable(),
-			'columns' => $columns,
-			'where' => $where,
-			'order' => $order,
-			'start' => $start,
-			'limit' => $limit
-		]);
-
-		return $this->_iaDb->getAll($sql);
+		return $this->getHelper()->get($columns, $where, $order, $start, $limit);
 	}
 
 	protected function _entryAdd(array $entryData)
@@ -144,8 +130,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 		}
 
 		// category
-		$iaArticleCat = $this->_iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
-		$parent = $iaArticleCat->getById($entryData['category_id']);
+		$parent = $this->_iaArticlecat->getById($entryData['category_id']);
 
 		$entryData['parents'] = $parent['parents'];
 

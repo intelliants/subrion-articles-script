@@ -204,3 +204,4 @@ INSERT INTO `{prefix}articles_categories` (`id`,`parent_id`,`title_{lang}`,`titl
 (203,21,'Article Writing','Writing-Speaking/Article-Writing/',2,'203,21,1','203'),
 (204,21,'Book Reviews','Writing-Speaking/Book-Reviews/',2,'204,21,1','204');
 UPDATE `{prefix}articles_categories` SET `status` = 'active';
+UPDATE `{prefix}articles_categories` SET `locked` = 1 WHERE `parent_id` = -1;

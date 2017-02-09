@@ -12,40 +12,18 @@ class iaArticle extends abstractPublishingPackageAdmin
 	public $dashboardStatistics = ['icon' => 'news'];
 
 
-	public function sendMail($action, $email, $data)
-	{
-		if ($this->iaCore->get($action) && $email)
-		{
-			$iaMailer = $this->iaCore->factory('mailer');
-
-			$iaMailer->loadTemplate($action);
-			$iaMailer->addAddress($email);
-			$iaMailer->setReplacements([
-				'title' => $data['title'],
-				'reason' => isset($data['reason']) ? $data['reason'] : '',
-				'view_url' => IA_URL . 'article/' . $data['category_alias'] . $data['id'] . '-' . $data['title_alias'] . '.html',
-				'edit_url' => IA_PACKAGE_URL . 'edit/' . $data['id'] . '/'
-			]);
-
-			return $iaMailer->send();
-		}
-
-		return false;
-	}
-
 	public function getSitemapEntries()
 	{
 		$result = [];
 
-		$this->iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
-
-		$sql =
-			'SELECT a.`id`, a.`title_alias`, c.`title_alias` `category_alias` ' .
-			'FROM `:table` a ' .
-			'LEFT JOIN `:table_categories` c ON (c.`id` = a.`category_id`) ' .
-			"WHERE a.`status` = ':status'";
+		$sql = <<<SQL
+SELECT a.`id`, a.`title_alias`, c.`title_alias` `category_alias` 
+	FROM `:table_articles` a 
+LEFT JOIN `:table_categories` c ON (c.`id` = a.`category_id`) 
+WHERE a.`status` = ':status'
+SQL;
 		$sql = iaDb::printf($sql, [
-			'table' => self::getTable(true),
+			'table_articles' => self::getTable(true),
 			'table_categories' => iaArticlecat::getTable(true),
 			'status' => iaCore::STATUS_ACTIVE
 		]);
@@ -63,56 +41,31 @@ class iaArticle extends abstractPublishingPackageAdmin
 		return $result;
 	}
 
-	public function getDashboardStatistics($defaultProcessing = true)
+
+	public function get($columns, $where, $order = '', $start = null, $limit = null)
 	{
-		$statuses = $this->iaDb->keyvalue('`status`, COUNT(*)', '1 = 1 GROUP BY `status`', self::getTable());
-		$total = 0;
+		$sql = <<<SQL
+SELECT :columns, c.`title_:lang` `category_title`, c.`title_alias` `category_alias`, m.`fullname` `member` 
+	FROM `:prefix:table_articles` a 
+LEFT JOIN `:prefix:table_categories` c ON (a.`category_id` = c.`id`) 
+LEFT JOIN `:prefix:table_members` m ON (a.`member_id` = m.`id`) 
+WHERE :where :order
+LIMIT :start, :limit
+SQL;
+		$sql = iaDb::printf($sql, [
+			'lang' => $this->iaCore->language['iso'],
+			'prefix' => $this->iaDb->prefix,
+			'table_articles' => $this->getTable(),
+			'table_categories' => iaArticlecat::getTable(),
+			'table_members' => iaUsers::getTable(),
+			'columns' => $columns,
+			'where' => $where,
+			'order' => $order,
+			'start' => $start,
+			'limit' => $limit
+		]);
 
-		$listingStatuses = $this->getStatuses();
-		$listingStatuses = array_diff($listingStatuses, [self::STATUS_HIDDEN]);
-		foreach ($listingStatuses as $status)
-		{
-			isset($statuses[$status]) || $statuses[$status] = 0;
-			$total += $statuses[$status];
-		}
-
-		if ($defaultProcessing)
-		{
-			$data = [];
-			$max = 0;
-			$weekDay = getdate();
-			$weekDay = $weekDay['wday'];
-			$rows = $this->iaDb->all('DAYOFWEEK(DATE(`date_added`)) `day`, `status`, `date_added`', 'DATE(`date_added`) BETWEEN DATE(DATE_SUB(NOW(), INTERVAL ' . $weekDay . ' DAY)) AND DATE(NOW())', null, null, self::getTable());
-
-			foreach ($listingStatuses as $status) $data[$status] = [];
-			foreach ($rows as $row)
-			{
-				isset($data[$row['status']][$row['day']]) || $data[$row['status']][$row['day']] = 0;
-				$data[$row['status']][$row['day']]++;
-			}
-			foreach ($data as $key => &$days)
-			{
-				$i = null;
-				for ($i = 1; $i < 8; $i++)
-				{
-					isset($days[$i]) || $days[$i] = 0;
-					$max = max($max, $days[$i]);
-				}
-				ksort($days, SORT_NUMERIC);
-				$days = implode(',', $days);
-				$stArray[] = $key;
-			}
-		}
-
-		return array_merge([
-			'_format' => 'package',
-			'data' => $defaultProcessing
-				? ['array' => implode('|', $data), 'max' => $max, 'statuses' => implode('|', $stArray)]
-				: implode(',', $statuses),
-			'rows' => $statuses,
-			'item' => $this->getItemName(),
-			'total' => number_format($total)
-		], $this->dashboardStatistics);
+		return $this->iaDb->getAll($sql);
 	}
 
 	public function rebuildArticleAliases($id)
@@ -128,13 +81,12 @@ class iaArticle extends abstractPublishingPackageAdmin
 
 	protected function _editCounter($categId, $action)
 	{
-		$this->iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
-
-		$pattern = 'UPDATE `:table` SET `num_articles` = '
-			. 'IF(`id` = :catId, `num_articles` :action 1, `num_articles`), '
-			. '`num_all_articles` = `num_all_articles` :action 1 '
-			. 'WHERE FIND_IN_SET(:catId, `child`)';
-		$sql = iaDb::printf($pattern, [
+		$sql = <<<SQL
+UPDATE `:table` SET `num_articles` = IF(`id` = :catId, `num_articles` :action 1, `num_articles`), 
+	`num_all_articles` = `num_all_articles` :action 1 
+WHERE FIND_IN_SET(:catId, `child`)
+SQL;
+		$sql = iaDb::printf($sql, [
 			'table' => iaArticlecat::getTable(true),
 			'action' => $action,
 			'catId' => $categId
@@ -173,5 +125,26 @@ class iaArticle extends abstractPublishingPackageAdmin
 	public function getCount()
 	{
 		return $this->iaDb->one(iaDb::STMT_COUNT_ROWS, null, self::getTable());
+	}
+
+	public function sendMail($action, $email, $data)
+	{
+		if ($this->iaCore->get($action) && $email)
+		{
+			$iaMailer = $this->iaCore->factory('mailer');
+
+			$iaMailer->loadTemplate($action);
+			$iaMailer->addAddress($email);
+			$iaMailer->setReplacements([
+				'title' => $data['title'],
+				'reason' => isset($data['reason']) ? $data['reason'] : '',
+				'view_url' => IA_URL . 'article/' . $data['category_alias'] . $data['id'] . '-' . $data['title_alias'] . '.html',
+				'edit_url' => IA_PACKAGE_URL . 'edit/' . $data['id'] . '/'
+			]);
+
+			return $iaMailer->send();
+		}
+
+		return false;
 	}
 }
