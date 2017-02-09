@@ -63,11 +63,11 @@ class iaCommon extends abstractCore
 	 */
 	public function getCategoriesTree($selected = false)
 	{
-		$fields = array('id', 'parent_id', 'title', 'level', 'locked', 'title_alias');
+		$fields = ['id', 'parent_id', 'title', 'level', 'locked', 'title_alias'];
 		$stmt = '`status` = :status AND `locked` = 0 ';
 		$order = 'ORDER BY `' . ('by title' == $this->iaCore->get('articles_categs_sort', 'by title') ? 'title' : 'order') . '`';
 
-		$this->iaDb->bind($stmt, array('status' => iaCore::STATUS_ACTIVE));
+		$this->iaDb->bind($stmt, ['status' => iaCore::STATUS_ACTIVE]);
 
 		$rows = $this->iaDb->all($fields, $stmt . $order, null, null, self::getTable());
 

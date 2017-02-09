@@ -4,8 +4,8 @@
 function articles_search($aQuery, $aFields, $aStart, $aLimit, &$aNumAll, $aWhere = '', $cond = 'AND')
 {
 	$iaCore = iaCore::instance();
-	$output = array();
-	$match = array();
+	$output = [];
+	$match = [];
 
 	if ($aQuery && empty($aFields))
 	{
@@ -57,7 +57,7 @@ function articles_search($aQuery, $aFields, $aStart, $aLimit, &$aNumAll, $aWhere
 
 	$articles = $match
 		? $iaArticle->get(' AND (' . implode(' ' . $cond . ' ', $match) . ')', $aStart, $aLimit)
-		: array();
+		: [];
 	$aNumAll += $iaCore->iaDb->foundRows();
 
 	empty($articles) || $iaArticle->wrapValues($articles);
@@ -87,7 +87,7 @@ function articles_search($aQuery, $aFields, $aStart, $aLimit, &$aNumAll, $aWhere
 function articlecats_search($aQuery, $aFields, $aStart, $aLimit, &$aNumAll)
 {
 	$iaCore = iaCore::instance();
-	$output = array();
+	$output = [];
 	$where = "`title` LIKE '%$aQuery%' OR `description` LIKE '%$aQuery%'";
 	$cats = $iaCore->iaDb->all(iaDb::STMT_CALC_FOUND_ROWS . ' `title`, `title_alias`', $where, $aStart, $aLimit, 'articles_categories');
 	$aNumAll += $iaCore->iaDb->foundRows();

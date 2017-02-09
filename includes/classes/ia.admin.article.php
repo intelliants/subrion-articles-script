@@ -7,9 +7,9 @@ class iaArticle extends abstractPublishingPackageAdmin
 
 	protected $_itemName = 'articles';
 
-	protected $_statuses = array(iaCore::STATUS_ACTIVE, iaCore::STATUS_APPROVAL, iaCore::STATUS_DRAFT, self::STATUS_REJECTED, self::STATUS_HIDDEN, self::STATUS_SUSPENDED, self::STATUS_PENDING);
+	protected $_statuses = [iaCore::STATUS_ACTIVE, iaCore::STATUS_APPROVAL, iaCore::STATUS_DRAFT, self::STATUS_REJECTED, self::STATUS_HIDDEN, self::STATUS_SUSPENDED, self::STATUS_PENDING];
 
-	public $dashboardStatistics = array('icon' => 'news');
+	public $dashboardStatistics = ['icon' => 'news'];
 
 
 	public function sendMail($action, $email, $data)
@@ -20,12 +20,12 @@ class iaArticle extends abstractPublishingPackageAdmin
 
 			$iaMailer->loadTemplate($action);
 			$iaMailer->addAddress($email);
-			$iaMailer->setReplacements(array(
+			$iaMailer->setReplacements([
 				'title' => $data['title'],
 				'reason' => isset($data['reason']) ? $data['reason'] : '',
 				'view_url' => IA_URL . 'article/' . $data['category_alias'] . $data['id'] . '-' . $data['title_alias'] . '.html',
 				'edit_url' => IA_PACKAGE_URL . 'edit/' . $data['id'] . '/'
-			));
+			]);
 
 			return $iaMailer->send();
 		}
@@ -35,7 +35,7 @@ class iaArticle extends abstractPublishingPackageAdmin
 
 	public function getSitemapEntries()
 	{
-		$result = array();
+		$result = [];
 
 		$this->iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
 
@@ -44,11 +44,11 @@ class iaArticle extends abstractPublishingPackageAdmin
 			'FROM `:table` a ' .
 			'LEFT JOIN `:table_categories` c ON (c.`id` = a.`category_id`) ' .
 			"WHERE a.`status` = ':status'";
-		$sql = iaDb::printf($sql, array(
+		$sql = iaDb::printf($sql, [
 			'table' => self::getTable(true),
 			'table_categories' => iaArticlecat::getTable(true),
 			'status' => iaCore::STATUS_ACTIVE
-		));
+		]);
 
 		if ($entries = $this->iaDb->getAll($sql))
 		{
@@ -69,7 +69,7 @@ class iaArticle extends abstractPublishingPackageAdmin
 		$total = 0;
 
 		$listingStatuses = $this->getStatuses();
-		$listingStatuses = array_diff($listingStatuses, array(self::STATUS_HIDDEN));
+		$listingStatuses = array_diff($listingStatuses, [self::STATUS_HIDDEN]);
 		foreach ($listingStatuses as $status)
 		{
 			isset($statuses[$status]) || $statuses[$status] = 0;
@@ -78,13 +78,13 @@ class iaArticle extends abstractPublishingPackageAdmin
 
 		if ($defaultProcessing)
 		{
-			$data = array();
+			$data = [];
 			$max = 0;
 			$weekDay = getdate();
 			$weekDay = $weekDay['wday'];
 			$rows = $this->iaDb->all('DAYOFWEEK(DATE(`date_added`)) `day`, `status`, `date_added`', 'DATE(`date_added`) BETWEEN DATE(DATE_SUB(NOW(), INTERVAL ' . $weekDay . ' DAY)) AND DATE(NOW())', null, null, self::getTable());
 
-			foreach ($listingStatuses as $status) $data[$status] = array();
+			foreach ($listingStatuses as $status) $data[$status] = [];
 			foreach ($rows as $row)
 			{
 				isset($data[$row['status']][$row['day']]) || $data[$row['status']][$row['day']] = 0;
@@ -104,15 +104,15 @@ class iaArticle extends abstractPublishingPackageAdmin
 			}
 		}
 
-		return array_merge(array(
+		return array_merge([
 			'_format' => 'package',
 			'data' => $defaultProcessing
-				? array('array' => implode('|', $data), 'max' => $max, 'statuses' => implode('|', $stArray))
+				? ['array' => implode('|', $data), 'max' => $max, 'statuses' => implode('|', $stArray)]
 				: implode(',', $statuses),
 			'rows' => $statuses,
 			'item' => $this->getItemName(),
 			'total' => number_format($total)
-		), $this->dashboardStatistics);
+		], $this->dashboardStatistics);
 	}
 
 	public function rebuildArticleAliases($id)
@@ -121,7 +121,7 @@ class iaArticle extends abstractPublishingPackageAdmin
 
 		$article = $this->iaDb->row('id, title', iaDb::convertIds($id));
 		$alias = iaSanitize::alias($article['title']);
-		$this->iaDb->update(array('title_alias' => $alias), iaDb::convertIds($article['id']));
+		$this->iaDb->update(['title_alias' => $alias], iaDb::convertIds($article['id']));
 
 		$this->iaDb->resetTable();
 	}
@@ -134,11 +134,11 @@ class iaArticle extends abstractPublishingPackageAdmin
 			. 'IF(`id` = :catId, `num_articles` :action 1, `num_articles`), '
 			. '`num_all_articles` = `num_all_articles` :action 1 '
 			. 'WHERE FIND_IN_SET(:catId, `child`)';
-		$sql = iaDb::printf($pattern, array(
+		$sql = iaDb::printf($pattern, [
 			'table' => iaArticlecat::getTable(true),
 			'action' => $action,
 			'catId' => $categId
-		));
+		]);
 
 		return $this->iaDb->query($sql);
 	}

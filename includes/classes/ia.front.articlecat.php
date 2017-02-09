@@ -9,9 +9,9 @@ class iaArticlecat extends abstractPublishingPackageFront
 
 	protected $_rootId;
 
-	private $_urlPatterns = array(
+	private $_urlPatterns = [
 		'default' => ':base:alias'
-	);
+	];
 
 
 	public function getRootId()
@@ -31,11 +31,11 @@ class iaArticlecat extends abstractPublishingPackageFront
 
 	public function url($action, array $data)
 	{
-		$params = array(
+		$params = [
 			'base' => $this->getInfo('url'),
 			'action' => $action,
 			'alias' => isset($data['title_alias']) ? $data['title_alias'] : ''
-		);
+		];
 		$params['alias'] = isset($data['category_alias']) ? $data['category_alias'] : $data['title_alias'];
 
 		isset($this->_urlPatterns[$action]) || $action = 'default';

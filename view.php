@@ -33,13 +33,13 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	$iaArticle->incrementViewsCounter($article['id']);
 
-	$iaCore->startHook('phpViewListingBeforeStart', array(
+	$iaCore->startHook('phpViewListingBeforeStart', [
 		'listing' => $articleId,
 		'item' => $article['item'],
 		'title' => $article['title'],
 		'url' => $iaArticle->url('view', $article),
 		'desc' => $article['summary']
-	));
+	]);
 
 	// get account information
 	if ($article['member_id'])
@@ -50,27 +50,27 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 			if (iaUsers::hasIdentity() && $article['member_id'] == iaUsers::getIdentity()->id)
 			{
-				$iaItem->setItemTools(array(
+				$iaItem->setItemTools([
 					'id' => 'action-edit',
 					'title' => iaLanguage::get('edit_article'),
-					'attributes' => array(
+					'attributes' => [
 						'href' => $iaArticle->url(iaCore::ACTION_EDIT, $article)
-					)
-				));
-				$iaItem->setItemTools(array(
+					]
+				]);
+				$iaItem->setItemTools([
 					'id' => 'action-delete',
 					'title' => iaLanguage::get('delete_article'),
-					'attributes' => array(
+					'attributes' => [
 						'href' => $iaArticle->url(iaCore::ACTION_DELETE, $article),
 						'class' => 'js-delete-article'
-					)
-				));
+					]
+				]);
 			}
 
 			if ($iaView->blockExists('author_info'))
 			{
 				$author['rss'] = IA_URL . $iaDb->one('`alias`', "`name` = 'rss_articles'", 'pages') . 'author' . IA_URL_DELIMITER . $author['username'] . '.' . iaCore::EXTENSION_XML;
-				$author['articles_num'] = $iaDb->one_bind(iaDb::STMT_COUNT_ROWS, '`member_id` = :user AND `status` = :status', array('status' => iaCore::STATUS_ACTIVE, 'user' => (int)$article['member_id']), iaArticle::getTable());
+				$author['articles_num'] = $iaDb->one_bind(iaDb::STMT_COUNT_ROWS, '`member_id` = :user AND `status` = :status', ['status' => iaCore::STATUS_ACTIVE, 'user' => (int)$article['member_id']], iaArticle::getTable());
 			}
 
 			if (isset($author['adsense_id']))
@@ -102,7 +102,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		{
 			$iaArticleCat = $iaCore->factoryPackage('articlecat', IA_CURRENT_PACKAGE);
 			// build breadcrumb
-			$parents = $iaDb->all(array('title', 'title_alias'),
+			$parents = $iaDb->all(['title', 'title_alias'],
 				"`id` IN ({$article['category_parents']}) AND `parent_id` != 0 ORDER BY `level`",
 				null, null, iaArticlecat::getTable());
 			foreach ($parents as $p)
@@ -121,7 +121,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	}
 
 	$iaItem = $iaCore->factory('item');
-	$article = array_shift($iaItem->updateItemsFavorites(array($article), $iaArticle->getItemName()));
+	$article = array_shift($iaItem->updateItemsFavorites([$article], $iaArticle->getItemName()));
 
 	// get next & previous articles
 	$article['prev_article'] = $iaArticle->getPreviousArticle($article['date_added'], $article['category_id']);
@@ -130,7 +130,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	// get more author articles
 	if ($iaView->blockExists('author_articles') && $article['member_id'])
 	{
-		$authorArticles = array();
+		$authorArticles = [];
 		$where = 'AND `t1`.`member_id` = ' . $article['member_id'] . ' AND t1.`id` != ' . $articleId;
 
 		$authorArticles = $iaArticle->get($where, 0, $iaCore->get('art_perpage_block', 5));
@@ -139,7 +139,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	if ($iaCore->get('articles_source_link'))
 	{
-		$article['body'] .= iaLanguage::getf('article_source_url', array('url' => $iaArticle->url('view', $article)));
+		$article['body'] .= iaLanguage::getf('article_source_url', ['url' => $iaArticle->url('view', $article)]);
 	}
 
 	$sections = $iaField->getTabs($iaArticle->getItemName(), $article);

@@ -7,13 +7,13 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected $_helperName = 'articlecat';
 
-	protected $_gridColumns = array('title', 'title_alias', 'num_articles', 'num_all_articles', 'level', 'order', 'date_added', 'date_modified', 'status');
-	protected $_gridFilters = array('status' => self::EQUAL, 'title' => self::LIKE);
+	protected $_gridColumns = ['title', 'title_alias', 'num_articles', 'num_all_articles', 'locked', 'level', 'order', 'date_added', 'date_modified', 'status'];
+	protected $_gridFilters = ['status' => self::EQUAL, 'title' => self::LIKE];
 	protected $_gridQueryMainTableAlias = 'c';
 
 	protected $_phraseAddSuccess = 'article_category_added';
 
-	protected $_activityLog = array('item' => 'category');
+	protected $_activityLog = ['item' => 'category'];
 
 	private $_root;
 
@@ -58,7 +58,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 					break;
 
 				case 'repair_articlecats':
-					$rows = $this->_iaDb->all(array(iaDb::ID_COLUMN_SELECTION), '', (int)$_POST['start'], (int)$_POST['limit']);
+					$rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], '', (int)$_POST['start'], (int)$_POST['limit']);
 
 					foreach ($rows as $row)
 					{
@@ -68,7 +68,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 					break;
 
 				case 'rebuild_articlecats_paths':
-					$rows = $this->_iaDb->all(array(iaDb::ID_COLUMN_SELECTION), iaDb::convertIds(0, 'parent_id', false), (int)$_POST['start'], (int)$_POST['limit']);
+					$rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], iaDb::convertIds(0, 'parent_id', false), (int)$_POST['start'], (int)$_POST['limit']);
 					foreach ($rows as $row)
 					{
 						$this->getHelper()->rebuildAliases($row['id']);
@@ -83,7 +83,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 				// Rebuld Article Paths
 				case 'rebuild_article_paths':
-					$rows = $this->_iaDb->all(array(iaDb::ID_COLUMN_SELECTION), '', (int)$_POST['start'], (int)$_POST['limit'], iaArticle::getTable());
+					$rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], '', (int)$_POST['start'], (int)$_POST['limit'], iaArticle::getTable());
 
 					foreach ($rows as $row)
 					{
@@ -105,7 +105,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 			'LEFT JOIN `:prefix:table` p ON (c.`parent_id` = p.`id`) ' .
 			'WHERE :where :order ' .
 			'LIMIT :start, :limit';
-		$sql = iaDb::printf($sql, array(
+		$sql = iaDb::printf($sql, [
 			'prefix' => $this->_iaDb->prefix,
 			'table' => $this->getTable(),
 			'fields' => $columns,
@@ -113,7 +113,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 			'order' => $order,
 			'start' => $start,
 			'limit' => $limit
-		));
+		]);
 
 		return $this->_iaDb->getAll($sql);
 	}
@@ -161,14 +161,14 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected function _setDefaultValues(array &$entry)
 	{
-		$entry = array(
+		$entry = [
 			'parent_id' => $this->_root['id'],
 			'title_alias' => '',
 			'locked' => false,
 			'nofollow' => false,
 			'priority' => false,
 			'status' => iaCore::STATUS_ACTIVE
-		);
+		];
 	}
 
 	protected function _preSaveEntry(array &$entry, array $data, $action)
@@ -185,7 +185,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 			$entry['title_alias'] = empty($data['title_alias']) ? $data['title'] : $data['title_alias'];
 			$entry['title_alias'] = iaSanitize::alias($entry['title_alias']);
 
-			if ($this->_iaDb->exists('`title` = :title AND `parent_id` = :parent_id AND `id` != :id', array('title' => $entry['title'], 'parent_id' => $entry['parent_id'], 'id' => $this->getEntryId())))
+			if ($this->_iaDb->exists('`title` = :title AND `parent_id` = :parent_id AND `id` != :id', ['title' => $entry['title'], 'parent_id' => $entry['parent_id'], 'id' => $this->getEntryId()]))
 			{
 				$this->addMessage('specified_category_title_exists');
 			}
@@ -229,11 +229,11 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 	protected function _correctAlias($newAlias, $previousAlias)
 	{
 		$stmtWhere = '`title_alias` LIKE :alias';
-		$this->_iaDb->bind($stmtWhere, array('alias' => $previousAlias . '%'));
+		$this->_iaDb->bind($stmtWhere, ['alias' => $previousAlias . '%']);
 
 		$stmtReplace = sprintf("REPLACE(`title_alias`, '%s', '%s')", $previousAlias, $newAlias);
 
-		$this->_iaDb->update(null, $stmtWhere, array('title_alias' => $stmtReplace), self::getTable());
+		$this->_iaDb->update(null, $stmtWhere, ['title_alias' => $stmtReplace], self::getTable());
 	}
 
 	protected function _getJsonAlias(array $data)
@@ -244,6 +244,6 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 		$alias.= $this->_iaDb->one('title_alias', iaDb::convertIds($categoryId));
 		$alias.= iaSanitize::alias($data['title']) . IA_URL_DELIMITER;
 
-		return array('data' => $alias);
+		return ['data' => $alias];
 	}
 }

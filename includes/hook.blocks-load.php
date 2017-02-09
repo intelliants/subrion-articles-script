@@ -78,11 +78,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		$listingData = $iaView->getValues('item');
 		if (isset($listingData['category_id']) && $listingData['category_id'])
 		{
-			$sql2 = iaDb::printf(' AND a.`id` != :id AND a.`category_id` = :category_id ORDER BY a.`views_num` DESC LIMIT :limit', array(
+			$sql2 = iaDb::printf(' AND a.`id` != :id AND a.`category_id` = :category_id ORDER BY a.`views_num` DESC LIMIT :limit', [
 				'id' => (int)$listingData['id'],
 				'category_id' => (int)$listingData['category_id'],
 				'limit' => $defaultLimit
-			));
+			]);
 			if ($data = $iaArticle->getByQuery($sql . $sql2))
 			{
 				$iaView->assign('most_viewed_articles', $data);
@@ -95,11 +95,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		isset($listingData) || $listingData = $iaView->getValues('item');
 		if (isset($listingData['category_id']) && $listingData['category_id'])
 		{
-			$sql2 = iaDb::printf(' AND a.`id` != :id AND a.`category_id` = :category_id ORDER BY a.`date_added` DESC LIMIT :limit', array(
+			$sql2 = iaDb::printf(' AND a.`id` != :id AND a.`category_id` = :category_id ORDER BY a.`date_added` DESC LIMIT :limit', [
 				'id' => (int)$listingData['id'],
 				'category_id' => (int)$listingData['category_id'],
 				'limit' => $defaultLimit
-			));
+			]);
 			if ($data = $iaArticle->getByQuery($sql . $sql2))
 			{
 				$iaView->assign('most_recent_articles', $data);
@@ -113,11 +113,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		if (isset($listingData['category_id']) && $listingData['category_id'])
 		{
 			$max = (int)$iaDb->one('MAX(`id`) as `max`', null, 'articles');
-			$sql2 = iaDb::printf(' AND a.`id` != :id AND a.`category_id` = :category_id ' . $iaCore->iaDb->orderByRand($max, 'a.`id`') . ' ORDER BY RAND() LIMIT :limit', array(
+			$sql2 = iaDb::printf(' AND a.`id` != :id AND a.`category_id` = :category_id ' . $iaCore->iaDb->orderByRand($max, 'a.`id`') . ' ORDER BY RAND() LIMIT :limit', [
 				'id' => (int)$listingData['id'],
 				'category_id' => (int)$listingData['category_id'],
 				'limit' => $defaultLimit
-			));
+			]);
 			if ($data = $iaArticle->getByQuery($sql . $sql2))
 			{
 				$iaView->assign('related_articles', $data);
@@ -125,7 +125,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		}
 	}
 
-	iaLanguage::set('no_articles2', array('url' => $iaCore->packagesData['publishing']['url'] . 'add/'));
+	iaLanguage::set('no_articles2', ['url' => $iaCore->packagesData['publishing']['url'] . 'add/']);
 
 	if ($iaView->blockExists('new_articles'))
 	{
@@ -163,17 +163,17 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	if ($iaView->blockExists('articles_archive'))
 	{
-		$data = array();
+		$data = [];
 		if ($array = $iaDb->all('DISTINCT(MONTH(`date_added`)) `month`, YEAR(`date_added`) `year`', "`status` = 'active' GROUP BY `date_added` ORDER BY `date_added` DESC", 0, 6, $iaArticle::getTable()))
 		{
 			$url = $iaCore->packagesData['publishing']['url'] . 'date' . IA_URL_DELIMITER;
 			foreach ($array as $date)
 			{
-				$data[] = array(
+				$data[] = [
 					'url' => $url . $date['year'] . IA_URL_DELIMITER . $date['month'] . IA_URL_DELIMITER,
 					'month' => $date['month'],
 					'year' => $date['year']
-				);
+				];
 			}
 		}
 
@@ -184,7 +184,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		$iaArticlecat = $iaCore->factoryPackage('articlecat', $iaArticle->getPackageName());
 
-		$categories = $iaDb->all(array('id', 'title'), "`status` = 'active' AND `level` = 1 ORDER BY `title`", null, null, $iaArticlecat::getTable());
+		$categories = $iaDb->all(['id', 'title'], "`status` = 'active' AND `level` = 1 ORDER BY `title`", null, null, $iaArticlecat::getTable());
 
 		if (!empty($categories))
 		{

@@ -7,15 +7,15 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 
 	protected $_itemName = 'articlecats';
 
-	public $dashboardStatistics = array('icon' => 'folder', 'url' => 'publishing/categories/');
+	public $dashboardStatistics = ['icon' => 'folder', 'url' => 'publishing/categories/'];
 
 
 	public function getSitemapEntries()
 	{
-		$result = array();
+		$result = [];
 
 		$stmt = '`parent_id` != 0 AND `status` = :status ORDER BY `title`';
-		$this->iaDb->bind($stmt, array('status' => iaCore::STATUS_ACTIVE));
+		$this->iaDb->bind($stmt, ['status' => iaCore::STATUS_ACTIVE]);
 
 		if ($entries = $this->iaDb->onefield('title_alias', $stmt, null, null, self::getTable()))
 		{
@@ -42,20 +42,20 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 		$category = $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds($id));
 
 		// update parents
-		$parents = array();
+		$parents = [];
 		$parents = $this->_getParents($category['id'], $parents);
 		$parents[] = $category['id'];
 		$level = count($parents) - 1;
 
-		$children = array();
+		$children = [];
 		$children[] = $category['id'];
 		$children = $this->_getChildren($category['id'], $children);
 
-		$entry = array(
+		$entry = [
 			'parents' => implode(',', $parents),
 			'level' => $level,
 			'child' => implode(',', $children)
-		);
+		];
 
 		$this->iaDb->update($entry, iaDb::convertIds($category['id']));
 
@@ -80,7 +80,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 			}
 			else
 			{
-				$parent = $this->iaDb->row(array('id', 'parent_id', 'title'), "`id` = '{$pid}'");
+				$parent = $this->iaDb->row(['id', 'parent_id', 'title'], "`id` = '{$pid}'");
 
 				$cache[$pid] = $parent;
 			}
@@ -97,7 +97,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 
 		$category = $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds($id));
 		$path = $this->_getPathForRebuild($category['title'], $category['parent_id']);
-		$this->iaDb->update(array('title_alias' => $path), iaDb::convertIds($category['id']));
+		$this->iaDb->update(['title_alias' => $path], iaDb::convertIds($category['id']));
 
 		$this->iaDb->resetTable();
 	}
@@ -109,7 +109,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 	{
 		$this->iaDb->setTable(self::getTable());
 
-		$categories = $this->iaDb->all(array('id', 'parent_id', 'child'), '1 ORDER BY `level` DESC', $start, $limit);
+		$categories = $this->iaDb->all(['id', 'parent_id', 'child'], '1 ORDER BY `level` DESC', $start, $limit);
 
 		foreach ($categories as $cat)
 		{
@@ -134,7 +134,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 
 				$num_all_articles += $_num_articles;
 
-				$this->iaDb->update(array('num_articles' => $_num_articles, 'num_all_articles' => $num_all_articles), iaDb::convertIds($_id));
+				$this->iaDb->update(['num_articles' => $_num_articles, 'num_all_articles' => $num_all_articles], iaDb::convertIds($_id));
 			}
 		}
 
@@ -143,7 +143,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 		return true;
 	}
 
-	protected function _getParents($cId, $parents = array(), $update = true)
+	protected function _getParents($cId, $parents = [], $update = true)
 	{
 		$parentId = $this->iaDb->one('parent_id', iaDb::convertIds($cId));
 
@@ -154,7 +154,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 			if ($update)
 			{
 				$childrenIds = $this->iaDb->one('child', iaDb::convertIds($parentId));
-				$childrenIds = $childrenIds ? explode(',', $childrenIds) : array();
+				$childrenIds = $childrenIds ? explode(',', $childrenIds) : [];
 
 				if (!in_array($cId, $childrenIds))
 				{
@@ -169,7 +169,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 					}
 				}
 
-				$this->iaDb->update(array('child' => implode(',', $childrenIds)), '`id` = ' . $parentId);
+				$this->iaDb->update(['child' => implode(',', $childrenIds)], '`id` = ' . $parentId);
 			}
 
 			$parents = $this->_getParents($parentId, $parents, $update);
@@ -178,7 +178,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 		return $parents;
 	}
 
-	protected function _getChildren($cId, $children = array(), $update = false)
+	protected function _getChildren($cId, $children = [], $update = false)
 	{
 		if ($childrenIds = $this->iaDb->onefield(iaDb::ID_COLUMN_SELECTION, '`parent_id` = ' . $cId))
 		{
@@ -189,11 +189,11 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 				if ($update)
 				{
 					$parentIds = $this->iaDb->one('parents', '`id` = ' . $cId, self::getTable());
-					$parentIds = $parentIds ? explode(',', $parentIds) : array();
+					$parentIds = $parentIds ? explode(',', $parentIds) : [];
 
 					$parentIds[] = $childId;
 
-					$this->iaDb->update(array('parents' => implode(',', $parentIds)), '`id` = ' . $childId);
+					$this->iaDb->update(['parents' => implode(',', $parentIds)], '`id` = ' . $childId);
 				}
 
 				$children = $this->_getChildren($childId, $children, $update);
@@ -205,13 +205,13 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 
 	public function dropRelations()
 	{
-		$this->iaDb->update(array('child' => '', 'parents' => ''), iaDb::EMPTY_CONDITION, self::getTable());
+		$this->iaDb->update(['child' => '', 'parents' => ''], iaDb::EMPTY_CONDITION, self::getTable());
 	}
 
 
 	public function clearArticlesNum()
 	{
-		$this->iaDb->update(array('num_articles' => 0, 'num_all_articles' => 0), iaDb::EMPTY_CONDITION, self::getTable());
+		$this->iaDb->update(['num_articles' => 0, 'num_all_articles' => 0], iaDb::EMPTY_CONDITION, self::getTable());
 	}
 
 	public function getCount()

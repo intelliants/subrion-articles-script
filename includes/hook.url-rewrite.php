@@ -35,14 +35,14 @@ if ($accessGranted)
 
 	// check for category to avoid filtering articles that start from a digit
 	$categoryPath = implode(IA_URL_DELIMITER, $iaView->url) . IA_URL_DELIMITER;
-	if ($iaDb->exists('`status` = :status AND `title_alias` = :path', array('status' => 'active', 'path' => $categoryPath), 'articles_categories'))
+	if ($iaDb->exists('`status` = :status AND `title_alias` = :path', ['status' => 'active', 'path' => $categoryPath], 'articles_categories'))
 	{
-		$isPageExist = $iaDb->exists('`status` = :status AND `alias` = :path', array('status' => 'active', 'path' => $categoryPath), 'pages');
+		$isPageExist = $iaDb->exists('`status` = :status AND `alias` = :path', ['status' => 'active', 'path' => $categoryPath], 'pages');
 		if (!$isPageExist)
 		{
 			if ($isDefaultPackage)
 			{
-				if ($pageUrl = $iaDb->one_bind('alias', '`name` = :page AND `status` = :status', array('page' => 'publishing_home', 'status' => iaCore::STATUS_ACTIVE), 'pages'))
+				if ($pageUrl = $iaDb->one_bind('alias', '`name` = :page AND `status` = :status', ['page' => 'publishing_home', 'status' => iaCore::STATUS_ACTIVE], 'pages'))
 				{
 					$pageUrl = array_shift(explode(IA_URL_DELIMITER, trim($pageUrl, IA_URL_DELIMITER)));
 					$pageUrl = ('publishing_home' == $iaCore->get('home_page')) ? $pageUrl . '_home' : $pageUrl;
@@ -59,7 +59,7 @@ if ($accessGranted)
 	}
 	else
 	{
-		if ($articleData = $iaDb->row(array('id', 'category_id', 'title_alias'), iaDb::convertIds($url), 'articles'))
+		if ($articleData = $iaDb->row(['id', 'category_id', 'title_alias'], iaDb::convertIds($url), 'articles'))
 		{
 			if ($articleData['title_alias'])
 			{
@@ -76,7 +76,7 @@ if ($accessGranted)
 	{
 		if ($iaCore->get('articles_url_validation'))
 		{
-			$category = $iaDb->row_bind(array('title', 'title_alias'), '`status` = :status AND `id` = :id', array('status' => iaCore::STATUS_ACTIVE, 'id' => $articleData['category_id']), 'articles_categories');
+			$category = $iaDb->row_bind(['title', 'title_alias'], '`status` = :status AND `id` = :id', ['status' => iaCore::STATUS_ACTIVE, 'id' => $articleData['category_id']], 'articles_categories');
 
 			if (empty($category['title']) || empty($iaView->url))
 			{

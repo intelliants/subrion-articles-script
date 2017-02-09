@@ -8,21 +8,21 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 	protected $_helperName = 'article';
 
 	protected $_gridColumns = ['id', 'title', 'date_added', 'date_modified', 'summary'];//, a.`status`, a.`category_id`, a.`member_id`, 1 `update`, 1 `delete`, c.`title` `category_title`, c.`title_alias` `category_alias`, c.`level` `category_level`, IF(m.`fullname` != '', m.`fullname`, IFNULL(m.`username`, '')) `member`, m.`email` ";
-	protected $_gridFilters = array('status' => self::EQUAL, 'title' => self::LIKE);
+	protected $_gridFilters = ['status' => self::EQUAL, 'title' => self::LIKE];
 	protected $_gridQueryMainTableAlias = 'a';
 
 	protected $_phraseAddSuccess = 'article_added';
 
 	protected $_activityLog = true;
 
-	private $_validUrlProtocols = array('http://', 'https://');
+	private $_validUrlProtocols = ['http://', 'https://'];
 
 
 	protected function _modifyGridParams(&$conditions, &$values, array $params)
 	{
 		if (!empty($params['member']))
 		{
-			$stmt = iaDb::printf("`fullname` LIKE ':member%' OR  `username` LIKE ':member' ", array('member' => iaSanitize::sql($params['member'])));
+			$stmt = iaDb::printf("`fullname` LIKE ':member%' OR  `username` LIKE ':member' ", ['member' => iaSanitize::sql($params['member'])]);
 			$memberId = $this->_iaDb->one(iaDb::ID_COLUMN_SELECTION, $stmt, iaUsers::getTable());
 
 			$conditions[] = 'a.`member_id` = :member_id';
@@ -41,7 +41,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 			'LEFT JOIN `:prefix:table_members` m ON (a.`member_id` = m.`id`) ' .
 			'WHERE :where :order ' .
 			'LIMIT :start, :limit';
-		$sql = iaDb::printf($sql, array(
+		$sql = iaDb::printf($sql, [
 			'prefix' => $this->_iaDb->prefix,
 			'table_articles' => $this->getTable(),
 			'table_categories' => $iaArticlecat::getTable(),
@@ -51,7 +51,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 			'order' => $order,
 			'start' => $start,
 			'limit' => $limit
-		));
+		]);
 
 		return $this->_iaDb->getAll($sql);
 	}
@@ -86,7 +86,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 		if (iaCore::ACTION_EDIT == $action)
 		{
 			// notify owner on status change
-			if (isset($entryData['status']) && in_array($entryData['status'], array(iaArticle::STATUS_SUSPENDED, iaArticle::STATUS_REJECTED, iaCore::STATUS_ACTIVE)))
+			if (isset($entryData['status']) && in_array($entryData['status'], [iaArticle::STATUS_SUSPENDED, iaArticle::STATUS_REJECTED, iaCore::STATUS_ACTIVE]))
 			{
 				$entry = $this->getById($entryId);
 				$owner = $this->_iaCore->factory('users')->getInfo($entry['member_id']);
@@ -106,7 +106,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected function _setDefaultValues(array &$entry)
 	{
-		$entry = array(
+		$entry = [
 			'member_id' => iaUsers::getIdentity()->id,
 			'category_id' => 0,
 			'featured' => false,
@@ -114,7 +114,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 			'status' => iaCore::STATUS_ACTIVE,
 			'sticky' => false,
 			'url' => ''
-		);
+		];
 	}
 
 	protected function _preSaveEntry(array &$entry, array $data, $action)
@@ -173,7 +173,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 		$alias = IA_PACKAGE_URL . $alias . $id . '-' . iaSanitize::alias($title) . '.html';
 
-		return array('data' => $alias);
+		return ['data' => $alias];
 	}
 
 	private function _processUrl($url)

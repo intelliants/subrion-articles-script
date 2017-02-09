@@ -10,15 +10,15 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType())
 	$where = "`parent_id` = $categoryId && `status` = 'active'";
 	$where .= " ORDER BY `title`";
 
-	$data = array();
-	$rows = $iaDb->all(array('id', 'title', 'title_alias', 'locked', 'child'), $where, null, null, 'articles_categories');
+	$data = [];
+	$rows = $iaDb->all(['id', 'title', 'title_alias', 'locked', 'child'], $where, null, null, 'articles_categories');
 	foreach ($rows as &$row)
 	{
-		$data[] = array(
+		$data[] = [
 			'id' => (int)$row['id'],
 			'text' => $row['title'],
 			'children' => $row['child'] && $row['child'] != $row['id']
-		);
+		];
 	}
 
 	$iaView->assign($data);
@@ -26,22 +26,22 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType())
 
 if (iaView::REQUEST_HTML == $iaView->getRequestType())
 {
-	$pagination = array(
+	$pagination = [
 		'total' => 0,
 		'url' => IA_SELF . '?page={page}',
 		'limit' => $iaCore->get('art_perpage', 10)
-	);
+	];
 	$page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
 	$start = ($page - 1) * $pagination['limit'];
 	$where = '';
 	$order = '';
 
-	$categories = array();
+	$categories = [];
 	$category = null;
 	$rssFeed = null;
-	$articles = array();
+	$articles = [];
 
-	$orders = array('date_added-asc', 'date_added-desc', 'title-asc', 'title-desc', 'views_num-asc', 'views_num-desc');
+	$orders = ['date_added-asc', 'date_added-desc', 'title-asc', 'title-desc', 'views_num-asc', 'views_num-desc'];
 
 	if (!isset($_SESSION['p_order']))
 	{
@@ -118,7 +118,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			if (0 != $category['parent_id'] && $category['parents'])
 			{
 				// build breadcrumb
-				$parents = $iaDb->all(array('title', 'title_alias'),
+				$parents = $iaDb->all(['title', 'title_alias'],
 					"`id` IN({$category['parents']}) AND `parent_id` != 0 ORDER BY `level`",
 					0, 0, 'articles_categories');
 				foreach ($parents as $p)
@@ -164,8 +164,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			{
 				if ($dates = $iaArticle->get('ORDER BY t1.`date_added`'))
 				{
-					$years = array();
-					$months = array();
+					$years = [];
+					$months = [];
 
 					$months['01']['name'] = 'month1';
 					$months['02']['name'] = 'month2';
@@ -184,7 +184,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 					{
 						$fullDate = substr($date['date_added'], 0, strpos($date['date_added'], ' '));
 						$fullDate = explode('-', $fullDate);
-						$years[$fullDate[0]] = array();
+						$years[$fullDate[0]] = [];
 					}
 
 					foreach ($years as $y => $year)
@@ -267,7 +267,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 				$pagination['total'] = $iaDb->foundRows();
 
-				$caption = iaLanguage::getf('articles_by_date', array('year' => $year, 'month' => iaLanguage::get('month' . $month), 'day' => is_numeric($day) ? $day : ''));
+				$caption = iaLanguage::getf('articles_by_date', ['year' => $year, 'month' => iaLanguage::get('month' . $month), 'day' => is_numeric($day) ? $day : '']);
 				$iaView->caption($caption);
 
 				$iaView->assign('curr_year', $year);
@@ -287,7 +287,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		if (isset($category['parent_id']) && $category['parent_id'] != 0 && isset($category['level']) && $category['level'] > 0)
 		{
-			$iaView->setMessages(iaLanguage::getf('no_articles2', array('url' => IA_PACKAGE_URL . 'add/?category=' . $category['id'])), iaView::ALERT);
+			$iaView->setMessages(iaLanguage::getf('no_articles2', ['url' => IA_PACKAGE_URL . 'add/?category=' . $category['id']]), iaView::ALERT);
 		}
 	}
 	elseif (!('date_articles' == $iaView->name() && !isset($iaCore->requestPath[1])))
@@ -299,19 +299,19 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	if ($iaAcl->isAccessible('add_article', iaCore::ACTION_ADD))
 	{
-		$pageActions[] = array(
+		$pageActions[] = [
 			'icon' => 'plus-square',
 			'title' => iaLanguage::get('add_article'),
 			'url' => IA_PACKAGE_URL . 'add/' . (is_array($category) ? '?category=' . $category['id'] : '')
-		);
+		];
 	}
 
-	$pageActions[] = array(
+	$pageActions[] = [
 		'icon' => 'rss',
 		'title' => null,
 		'url' => IA_PACKAGE_URL . 'rss/' . $rssFeed,
 		'classes' => 'btn-warning'
-	);
+	];
 
 	$iaView->set('actions', $pageActions);
 	$iaView->set('filtersItemName', $iaArticle->getItemName());
@@ -330,7 +330,7 @@ if (iaView::REQUEST_XML == $iaView->getRequestType())
 
 	if (isset($iaCore->requestPath[0]) && $iaCore->requestPath[0] == 'author' && isset($iaCore->requestPath[1]))
 	{
-		if ($memberInfo = $iaDb->row_bind(array('fullname', 'id'), '`username` = :user AND `status` = :status', array('user' => $iaCore->requestPath[1], 'status' => iaCore::STATUS_ACTIVE), iaUsers::getTable()))
+		if ($memberInfo = $iaDb->row_bind(['fullname', 'id'], '`username` = :user AND `status` = :status', ['user' => $iaCore->requestPath[1], 'status' => iaCore::STATUS_ACTIVE], iaUsers::getTable()))
 		{
 			$stmt = 'AND t1.`member_id` = ' . $memberInfo['id'] . $stmt;
 
@@ -352,23 +352,23 @@ if (iaView::REQUEST_XML == $iaView->getRequestType())
 		$articles = $iaArticle->get($stmt, 0, $limit);
 	}
 
-	$output = array(
+	$output = [
 		'title' => $iaCore->get('site'),
 		'description' => '',
 		'url' => IA_URL,
-		'item' => array()
-	);
+		'item' => []
+	];
 
 	foreach ($articles as $article)
 	{
-		$output['item'][] = array(
+		$output['item'][] = [
 			'title' => $article['title'],
 			'guid' => $iaArticle->url('view', $article),
 			'link' => $iaArticle->url('view', $article),
 			'pubDate' => date('D, d M Y H:i:s T', strtotime($article['date_added'])),
 			'description' => iaSanitize::tags($article['summary']),
 			'category' => isset($category) ? $category : $article['category_title']
-		);
+		];
 	}
 
 	$iaView->assign('channel', $output);

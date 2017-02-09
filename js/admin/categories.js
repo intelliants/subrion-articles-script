@@ -15,6 +15,15 @@ Ext.onReady(function()
 						: '<a href="' + window.location.href + 'edit/' + record.data.parent_id + '/">' + value + '</a>'
 				}, width: 1},
 				{name: 'title_alias', title: _t('title_alias'), width: 1},
+				{name: 'locked', title: _t('locked'), width: 60, align: intelli.gridHelper.constants.ALIGN_CENTER, renderer: intelli.gridHelper.renderer.check, editor: Ext.create('Ext.form.ComboBox',
+				{
+					typeAhead: false,
+					editable: false,
+					lazyRender: true,
+					store: Ext.create('Ext.data.SimpleStore', {fields: ['value','title'], data: [[0, _t('no')],[1, _t('yes')]]}),
+					displayField: 'title',
+					valueField: 'value'
+				})},
 				{name: 'num_articles', title: _t('num_articles'), width: 40},
 				{name: 'num_all_articles', title: _t('all'), width: 40},
 				{name: 'order', title: _t('order'), width: 50, editor: 'number'},

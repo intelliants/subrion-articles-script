@@ -7,22 +7,22 @@ class iaArticle extends abstractPublishingPackageFront
 
 	protected $_itemName = 'articles';
 
-	protected $_statuses = array(iaCore::STATUS_ACTIVE, iaCore::STATUS_APPROVAL, self::STATUS_REJECTED, self::STATUS_HIDDEN, self::STATUS_SUSPENDED, self::STATUS_DRAFT, self::STATUS_PENDING);
+	protected $_statuses = [iaCore::STATUS_ACTIVE, iaCore::STATUS_APPROVAL, self::STATUS_REJECTED, self::STATUS_HIDDEN, self::STATUS_SUSPENDED, self::STATUS_DRAFT, self::STATUS_PENDING];
 
 	public $coreSearchEnabled = true;
-	public $coreSearchOptions = array(
+	public $coreSearchOptions = [
 		'tableAlias' => 't1',
-		'regularSearchFields' => array('title', 'body'),
-		'customColumns' => array('keywords', 'c', 'sc')
-	);
+		'regularSearchFields' => ['title', 'body'],
+		'customColumns' => ['keywords', 'c', 'sc']
+	];
 
-	private $_urlPatterns = array(
+	private $_urlPatterns = [
 		'default' => ':base:action/:id/',
 		'view' => ':base:category_alias:id-:title_alias.html',
 		'my' => 'profile/articles/'
-	);
+	];
 
-	protected $_validProtocols = array('http://', 'https://');
+	protected $_validProtocols = ['http://', 'https://'];
 
 
 	public function url($action, array $data)
@@ -54,7 +54,7 @@ class iaArticle extends abstractPublishingPackageFront
 			$url = $this->url(iaCore::ACTION_EDIT, $params['item']);
 		}
 
-		return array($url, '');
+		return [$url, ''];
 	}
 
 	// called at search pages
@@ -63,7 +63,7 @@ class iaArticle extends abstractPublishingPackageFront
 		$stmt = $stmt ? ('AND ' . $stmt . $order) : null;
 		$rows = $this->get($stmt, $start, $limit);
 
-		return array($this->iaDb->foundRows(), $rows);
+		return [$this->iaDb->foundRows(), $rows];
 	}
 
 	public function coreSearchTranslateColumn($column, $value)
@@ -71,13 +71,13 @@ class iaArticle extends abstractPublishingPackageFront
 		switch ($column)
 		{
 			case 'keywords':
-				$fields = array('title', 'description');
+				$fields = ['title', 'description'];
 				$value = "'%" . iaSanitize::sql($value) . "%'";
 
-				$result = array();
+				$result = [];
 				foreach ($fields as $fieldName)
 				{
-					$result[] = array('col' => ':column', 'cond' => 'LIKE', 'val' => $value, 'field' => $fieldName);
+					$result[] = ['col' => ':column', 'cond' => 'LIKE', 'val' => $value, 'field' => $fieldName];
 				}
 
 				return $result;
@@ -87,10 +87,10 @@ class iaArticle extends abstractPublishingPackageFront
 
 				$sql = sprintf('SELECT `id` FROM `%s` WHERE `parent_id` = %d', $iaArticlecat::getTable(true), $value);
 
-				return array('col' => ':column', 'cond' => 'IN', 'val' => '(' . $sql . ')', 'field' => 'category_id');
+				return ['col' => ':column', 'cond' => 'IN', 'val' => '(' . $sql . ')', 'field' => 'category_id'];
 
 			case 'sc':
-				return array('col' => ':column', 'cond' => '=', 'val' => (int)$value, 'field' => 'category_id');
+				return ['col' => ':column', 'cond' => '=', 'val' => (int)$value, 'field' => 'category_id'];
 		}
 	}
 
@@ -124,7 +124,7 @@ class iaArticle extends abstractPublishingPackageFront
 		{
 			$limit = 1000;
 		}
-		$fields = array(
+		$fields = [
 			't1.*',
 			't2.`title` `category_title`',
 			't2.`title_alias` `category_alias`',
@@ -133,7 +133,7 @@ class iaArticle extends abstractPublishingPackageFront
 			't2.`locked` `category_locked`',
 			't3.`username` `account_username`',
 			'IF(\'\' != t3.`fullname`, t3.`fullname`, t3.`username`) `account_fullname`',
-		);
+		];
 
 		if ($joinTransactions)
 		{
@@ -164,7 +164,7 @@ class iaArticle extends abstractPublishingPackageFront
 	{
 		$accountId = iaUsers::hasIdentity() ? iaUsers::getIdentity()->id : 0;
 
-		$fields = array(
+		$fields = [
 			'SQL_CALC_FOUND_ROWS art.*',
 			'cat.`title` `category_title`',
 			'cat.`title_alias` `category_alias`',
@@ -172,7 +172,7 @@ class iaArticle extends abstractPublishingPackageFront
 			'cat.`parents` `category_parents`',
 			'acc.`username` `account_username`',
 			'IF(\'\' != acc.`fullname`, acc.`fullname`, acc.`username`) `account_fullname`',
-		);
+		];
 
 		$sql = 'SELECT ' . implode(', ', $fields)
 				. 'FROM ' . self::getTable(true) . ' art '
@@ -232,7 +232,7 @@ class iaArticle extends abstractPublishingPackageFront
 
 	public function updateCounters($itemId, array $itemData, $action, $previousData = null)
 	{
-		if (iaCore::STATUS_ACTIVE == $itemData['status'] && in_array($action, array(iaCore::ACTION_DELETE, iaCore::ACTION_ADD)))
+		if (iaCore::STATUS_ACTIVE == $itemData['status'] && in_array($action, [iaCore::ACTION_DELETE, iaCore::ACTION_ADD]))
 		{
 			$factor = ($action == iaCore::ACTION_DELETE) ? -1 : 1;
 			$this->_updateCategoryCounter($itemData['category_id'], $factor);
@@ -247,10 +247,10 @@ class iaArticle extends abstractPublishingPackageFront
 			$iaMailer = $this->iaCore->factory('mailer');
 
 			$iaMailer->loadTemplate('article_notif');
-			$iaMailer->setReplacements(array(
+			$iaMailer->setReplacements([
 				'title' => $articleData['title'],
 				'url' => IA_ADMIN_URL . 'publishing/articles/edit/' . $articleData['id'] . '/'
-			));
+			]);
 
 			return $iaMailer->sendToAdministrators();
 		}
@@ -266,12 +266,12 @@ class iaArticle extends abstractPublishingPackageFront
 	{
 		$this->iaCore->factory('util');
 
-		$data = array(
+		$data = [
 			'status' => self::STATUS_HIDDEN,
 			'ip' => iaUtil::getIp(),
 			'member_id' => iaUsers::hasIdentity() ? iaUsers::getIdentity()->id : 0,
 			'session' => iaUsers::hasIdentity() ? '' : session_id()
-		);
+		];
 
 		$result = ($article = $this->_getIncompleteArticle($data['member_id'], $data['session']))
 			? $article['id']
@@ -396,12 +396,12 @@ class iaArticle extends abstractPublishingPackageFront
 	public function fetchMemberListings($memberId, $start, $limit)
 	{
 		$stmt = 'AND t1.`member_id` = :member ORDER BY `t1`.`date_added` DESC';
-		$this->iaDb->bind($stmt, array('member' => (int)$memberId));
+		$this->iaDb->bind($stmt, ['member' => (int)$memberId]);
 
-		return array(
+		return [
 			'items' => $this->get($stmt, $start, $limit),
 			'total_number' => $this->iaDb->foundRows()
-		);
+		];
 	}
 
 	public function getByQuery($sql)

@@ -5,7 +5,7 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType())
 {
 	$iaArticlecat = $iaCore->factoryPackage('articlecat', IA_CURRENT_PACKAGE);
 
-	$entriesNum = $iaDb->one_bind(iaDb::STMT_COUNT_ROWS, '`status` = :status', array('status' => iaCore::STATUS_ACTIVE), iaArticlecat::getTable());
+	$entriesNum = $iaDb->one_bind(iaDb::STMT_COUNT_ROWS, '`status` = :status', ['status' => iaCore::STATUS_ACTIVE], iaArticlecat::getTable());
 	$dynamicLoadMode = ($entriesNum > 500);
 
 	$parentId = $iaArticlecat->getRootId();
@@ -15,22 +15,22 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType())
 		empty($_GET['id']) || $parentId = (int)$_GET['id'];
 		$clause = '`parent_id` = :parent AND `status` = :status ORDER BY `title`';
 
-		$iaDb->bind($clause, array('parent' => $parentId, 'status' => iaCore::STATUS_ACTIVE));
+		$iaDb->bind($clause, ['parent' => $parentId, 'status' => iaCore::STATUS_ACTIVE]);
 	}
 	else
 	{
 		$clause = '`parent_id` != 0 AND `status` = :status ORDER BY `title`';
 
-		$iaDb->bind($clause, array('status' => iaCore::STATUS_ACTIVE));
+		$iaDb->bind($clause, ['status' => iaCore::STATUS_ACTIVE]);
 	}
 
-	$categories = $iaArticlecat->all($clause, array('id', 'parent_id', 'title', 'locked', 'child'));
-	$output = array();
+	$categories = $iaArticlecat->all($clause, ['id', 'parent_id', 'title', 'locked', 'child']);
+	$output = [];
 
 	foreach ($categories as $row)
 	{
-		$entry = array('id' => $row['id'], 'text' => $row['title']);
-		empty($row['locked']) || $entry['state'] = array('disabled' => true);
+		$entry = ['id' => $row['id'], 'text' => $row['title']];
+		empty($row['locked']) || $entry['state'] = ['disabled' => true];
 
 		$dynamicLoadMode
 			? $entry['children'] = $row['child'] && $row['child'] != $row['id']
@@ -46,14 +46,14 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 {
 	if (!$iaCore->get('articles_add_guest', true) && !iaUsers::hasIdentity())
 	{
-		return iaView::accessDenied(iaLanguage::getf('article_add_no_auth', array('base_url' => IA_URL)));
+		return iaView::accessDenied(iaLanguage::getf('article_add_no_auth', ['base_url' => IA_URL]));
 	}
 
 	$iaField = $iaCore->factory('field');
 	$iaUtil = $iaCore->factory('util');
 	$iaArticle = $iaCore->factoryPackage('article', IA_CURRENT_PACKAGE);
 
-	$itemData = array();
+	$itemData = [];
 
 	$id = 0;
 	if (isset($iaCore->requestPath[0]) && is_numeric($iaCore->requestPath[0]))
@@ -61,9 +61,9 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		$id = (int)$iaCore->requestPath[0];
 	}
 
-	$article = array(
+	$article = [
 		'category_id' => isset($_GET['category']) ? (int)$_GET['category'] : 0
-	);
+	];
 
 	if (iaCore::ACTION_EDIT == $pageAction)
 	{
@@ -91,10 +91,10 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		$result = $iaArticle->delete($id);
 		if ($result)
 		{
-			$iaCore->factory('log')->write(iaLog::ACTION_DELETE, array('item' => 'article', 'name' => $article['title'], 'id' => $id));
+			$iaCore->factory('log')->write(iaLog::ACTION_DELETE, ['item' => 'article', 'name' => $article['title'], 'id' => $id]);
 		}
 
-		iaUtil::redirect(iaLanguage::get('thanks'), iaLanguage::get('art_deleted'), $iaArticle->url('my', array()));
+		iaUtil::redirect(iaLanguage::get('thanks'), iaLanguage::get('art_deleted'), $iaArticle->url('my', []));
 	}
 
 
@@ -104,7 +104,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	// Save article
 	if (isset($_POST['data-article']) || isset($_POST['draft']))
 	{
-		$messages = array();
+		$messages = [];
 		$error = false;
 
 		list($itemData, $error, $messages) = $iaField->parsePost($iaArticle->getItemName(), $article);
@@ -124,7 +124,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		if (empty($itemData['category_id']))
 		{
 			$error = true;
-			$messages[] = iaLanguage::getf('field_is_not_selected', array('field' => iaLanguage::get('category')));
+			$messages[] = iaLanguage::getf('field_is_not_selected', ['field' => iaLanguage::get('category')]);
 		}
 		else
 		{
@@ -140,13 +140,13 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		// limitation enabled
 		if ($linksLimit = (int)$iaCore->get('article_max_links'))
 		{
-			$matches = array();
+			$matches = [];
 			$count = preg_match_all('/<a[^>]*>(.*?)<\/a>/', $itemData['body'], $matches);
 
 			if ($count > $linksLimit)
 			{
 				$error = true;
-				$messages[] = iaLanguage::getf('error_links_limit_reached', array('allowed' => $linksLimit, 'found' => $count));
+				$messages[] = iaLanguage::getf('error_links_limit_reached', ['allowed' => $linksLimit, 'found' => $count]);
 			}
 		}
 
@@ -184,17 +184,17 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 			$result = $iaArticle->update($itemData, $id);
 
-			$iaCore->startHook('phpAddItemAfterAll', array(
+			$iaCore->startHook('phpAddItemAfterAll', [
 				'type' => iaCore::FRONT,
 				'listing' => $id,
 				'item' => $iaArticle->getItemName(),
 				'data' => $itemData,
 				'old' => $article
-			));
+			]);
 
 			if ($result && iaCore::ACTION_ADD == $pageAction)
 			{
-				$iaCore->factory('log')->write(iaLog::ACTION_CREATE, array('item' => 'article', 'name' => $itemData['title'], 'id' => $id));
+				$iaCore->factory('log')->write(iaLog::ACTION_CREATE, ['item' => 'article', 'name' => $itemData['title'], 'id' => $id]);
 			}
 
 			$iaArticle->sendMail($id);
@@ -211,7 +211,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 				{
 					$url = $iaPlan->prePayment($iaArticle->getItemName(), $result, $plan['id'], $url);
 
-					$iaArticle->update(array('status' => iaArticle::STATUS_PENDING), $id);
+					$iaArticle->update(['status' => iaArticle::STATUS_PENDING], $id);
 
 					iaUtil::redirect(iaLanguage::get('redirect'), $messages, $url);
 				}
@@ -234,26 +234,26 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		if (isset($_POST['title']))
 		{
-			$article = array(
+			$article = [
 				'title' => $_POST['title'],
 				'body' => $_POST['body'],
 				'category_id' => $_POST['tree_id'],
 				'url' => $_POST['url'],
 				'url_description' => $_POST['url_description']
-			);
+			];
 		}
 		elseif (empty($article))
 		{
 			$url = iaUsers::getIdentity()->articles_url;
 			$url || $url = 'http://';
 
-			$article = array(
+			$article = [
 				'title' => '',
 				'body' => '',
 				'category_id' => empty($_GET['category']) ? 0 : (int)$_GET['category_id'],
 				'url' => $url,
 				'url_description' => iaUsers::getIdentity()->articles_url_description
-			);
+			];
 		}
 		if (empty($article['image']))
 		{
