@@ -26,7 +26,7 @@
 
 	{if !empty($item.gallery)}
 		<div class="ia-item-view__section">
-			<h3>{lang key='field_gallery'}</h3>
+			<h3>{lang key='field_articles_gallery'}</h3>
 			{ia_add_media files='fotorama'}
 			<div class="ia-item-view__gallery">
 				<div class="fotorama" 

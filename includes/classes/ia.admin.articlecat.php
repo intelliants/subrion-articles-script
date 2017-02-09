@@ -7,6 +7,8 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 
 	protected $_itemName = 'articlecats';
 
+	public $dashboardStatistics = array('icon' => 'folder', 'url' => 'publishing/categories/');
+
 
 	public function getSitemapEntries()
 	{

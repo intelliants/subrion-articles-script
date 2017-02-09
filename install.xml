@@ -24,13 +24,12 @@
 	</packageitems>
 
 	<actions>
-		<action name="articles_list" url="publishing/articles/" icon="list" pages="publishing_stats,articles:add,articles:edit">Articles</action>
-		<action name="articles_add" url="publishing/articles/add/" icon="plus" pages="articles,articles:edit">Add Article</action>
-		<action name="article_categories_list" url="publishing/categories/" icon="list" pages="publishing_stats,categories:add,categories:edit">Categories</action>
-		<action name="article_categories_add" url="publishing/categories/add/" icon="folder-plus" pages="categories,categories:edit">Add Category</action>
-		<action name="articles_field_add" url="fields/add/?item=articles" icon="plus-alt" pages="articles_fields">Add Field</action>
-		<action name="dashboard_articles_list" url="publishing/articles/" icon="edit" type="dashboard">Edit Articles</action>
-		<action name="dashboard_articles_add" url="publishing/articles/add/" icon="newspaper" type="dashboard">Add Article</action>
+		<action name="articles" url="publishing/articles/" icon="list" pages="publishing_stats,articles:add,articles:edit"><![CDATA[]]></action>
+		<action name="add_article" url="publishing/articles/add/" icon="plus" pages="articles,articles:edit"><![CDATA[]]></action>
+		<action name="articlecats" url="publishing/categories/" icon="list" pages="publishing_stats,categories:add,categories:edit"><![CDATA[]]></action>
+		<action name="add_category" url="publishing/categories/add/" icon="folder-plus" pages="categories,categories:edit"><![CDATA[]]></action>
+		<action name="dashboard_articles_list" url="publishing/articles/" icon="edit" type="dashboard"><![CDATA[]]></action>
+		<action name="dashboard_articles_add" url="publishing/articles/add/" icon="newspaper" type="dashboard"><![CDATA[]]></action>
 	</actions>
 
 	<groups>
@@ -42,8 +41,6 @@
 		<page group="publishing" menus="menu">Management</page>
 		<page group="publishing" name="articles" url="publishing/articles/" filename="articles" menus="menu">Articles</page>
 		<page group="publishing" name="categories" url="publishing/categories/" filename="categories" menus="menu">Categories</page>
-		<page group="publishing" menus="menu">Extended</page>
-		<page group="publishing" name="articles_fields" menus="menu" url="fields/articles/" filename="fields">Article Fields</page>
 	</adminpages>
 
 	<pages>
@@ -194,16 +191,16 @@
 		<field name="title" item="articles" type="text" group="general" length="200"
 			required="1" editable="0" searchable="1" link_to="1"
 			required_checks="if(!empty($_POST['title'])){$iaCore = iaCore::instance();if (3 &gt; utf8_strlen($_POST['title']) || $iaCore-&gt;get('max_title') &lt; utf8_strlen($_POST['title'])){	$error = true;	$messages[] = iaLanguage::get('title_incorrect');}}"
-			page="edit_article,add_article,view_article,favorites,publishing_home,rss_articles">Title</field>
+			page="edit_article,add_article,view_article,favorites,publishing_home,rss_articles" multilingual="1">Title</field>
 		<field name="summary" item="articles" group="general" type="textarea" editable="0"
 			actions="if (empty($_POST['summary'])){	$item['summary'] = iaSanitize::snippet($_POST['body'], $iaCore-&gt;get('snip_len'));}"
-			page="publishing_home,view_member">Article Summary</field>
+			page="publishing_home,view_member" multilingual="1">Summary</field>
 		<field name="body" item="articles" group="general" type="textarea" editor="1" editable="0" searchable="1" required="1"
 			required_checks="if(!empty($_POST['body'])){$iaCore = iaCore::instance();$l = utf8_strlen(html_entity_decode(str_replace(array('\\r','\\n'), '*', iaSanitize::tags($_POST['body']))));list($min, $max) = explode(',', $iaCore-&gt;get('article_length'));if ($l &lt; $min || $l &gt; $max){ $error = true; $messages[] = iaLanguage::getf('body_length_error', array('min' =&gt; $min, 'max' =&gt; $max));}}"
-			page="edit_article,add_article,view_article,rss_articles">Article Body</field>
+			page="edit_article,add_article,view_article,rss_articles" multilingual="1">Body</field>
 		<field name="meta_description" item="articles" group="general" type="textarea"
-			adminonly="1" length="" editable="0">Meta-Description</field>
-		<field name="meta_keywords" item="articles" group="general" type="text" length="70" adminonly="1" editable="0">Meta-Keywords</field>
+			adminonly="1" length="" editable="0" multilingual="1">Meta-Description</field>
+		<field name="meta_keywords" item="articles" group="general" type="text" length="70" adminonly="1" editable="0" multilingual="1">Meta-Keywords</field>
 		<field name="image" item="articles" group="general" type="image" width="800" height="800" thumb_width="300" thumb_height="300"
 			editable="0" page="edit_article,add_article,favorites,publishing_home">Image</field>
 		<field name="gallery" item="articles" group="general" type="pictures"
@@ -216,16 +213,14 @@
 			page="edit_article,add_article,view_article,favorites,publishing_home">URL Description</field>
 
 		<field name="title" item="articlecats" group="general" type="text" length="70" required="1"
-			searchable="1" page="publishing_home">Title</field>
+			searchable="1" page="publishing_home" multilingual="1">Title</field>
 		<field name="description" item="articlecats" group="general" type="textarea" editor="1" length=""
-			searchable="1" page="publishing_home">Category Description</field>
+			searchable="1" page="publishing_home" multilingual="1">Description</field>
 		<field name="meta_description" item="articlecats" group="general" type="textarea"
-			adminonly="1" length="">Meta-Description</field>
+			adminonly="1" length="" multilingual="1">Meta-Description</field>
 		<field name="meta_keywords" item="articlecats" group="general" type="text"
-			length="70" adminonly="1">Meta-Keywords</field>
-		<field name="icon" item="articlecats" group="general" type="image"
-			width="16" height="16" editable="0" adminonly="1" thumb_width="32" thumb_height="32"
-			page="publishing_home" folder_name="publishing_categs_icons">Category Icon</field>
+			length="70" adminonly="1" multilingual="1">Meta-Keywords</field>
+		<field name="icon" item="articlecats" type="iconpicker" group="general" default="fa-folder" adminonly="1" page="publishing_home">Icon</field>
 
 		<field name="adsense_id" item="members" group="members_publishing" type="text" length="23" required="0" page="profile">Google AdSense id</field>
 		<field name="articles_url" item="members" group="articles_link" type="text" length="255" required="0" page="profile"
@@ -242,6 +237,8 @@
 		<phrase category="admin" key="are_you_sure_to_delete_selected_articlecats">Are you sure you wish to delete these article categories? All subcategories will be deleted as well.</phrase>
 		<phrase category="admin" key="are_you_sure_to_delete_selected_article">Are you sure you wish to delete this article?</phrase>
 		<phrase category="admin" key="are_you_sure_to_delete_selected_articles">Are you sure you wish to delete these articles?</phrase>
+		<phrase category="admin" key="dashboard_articles_list">Articles</phrase>
+		<phrase category="admin" key="dashboard_articles_add">Add article</phrase>
 		<phrase category="admin" key="edit_category">Edit Category</phrase>
 		<phrase category="admin" key="level">Level</phrase>
 		<phrase category="admin" key="num_articles">Count</phrase>
@@ -387,8 +384,6 @@ if (in_array($_GET['type'], array('repair_articlecats', 'rebuild_articlecats_pat
 CREATE TABLE `{prefix}articles` (
 	`id` mediumint(8) unsigned NOT NULL auto_increment,
 	`member_id` int(11) unsigned NOT NULL,
-	`title` tinytext NOT NULL,
-	`body` text NOT NULL,
 	`title_alias` tinytext NOT NULL,
 	`category_id` mediumint(8) unsigned NOT NULL,
 	`status` enum('approval','active','rejected','hidden','suspended','draft','pending') NOT NULL default 'approval',
@@ -410,8 +405,7 @@ CREATE TABLE `{prefix}articles` (
 	PRIMARY KEY (`id`),
 	KEY `STATUS` (`status`),
 	KEY `DATE` (`date_added`),
-	KEY `VIEWS` (`views_num`),
-	FULLTEXT KEY `TEXT` (`title`,`body`)
+	KEY `VIEWS` (`views_num`)
 ) {mysql_version};
 			]]>
 		</sql>
@@ -420,8 +414,9 @@ CREATE TABLE `{prefix}articles` (
 CREATE TABLE `{prefix}articles_categories` (
 	`id` mediumint(8) unsigned NOT NULL auto_increment,
 	`parent_id` mediumint(8) unsigned NOT NULL,
-	`title` varchar(70) NOT NULL,
 	`title_alias` tinytext NOT NULL,
+	`date_added` date,
+	`date_modified` date,
 	`status` enum('inactive', 'active') NOT NULL default 'inactive',
 	`locked` tinyint(1) unsigned NOT NULL,
 	`nofollow` tinyint(1) unsigned NOT NULL,
@@ -436,13 +431,18 @@ CREATE TABLE `{prefix}articles_categories` (
 ) {mysql_version};
 			]]>
 		</sql>
-		<sql>
+		<sql stage="end">
 			<![CDATA[
-INSERT INTO `{prefix}articles_categories` (`id`, `status`, `title`, `title_alias`, `level`, `parents`, `child`, `order`) VALUES
+INSERT INTO `{prefix}articles_categories` (`id`, `status`, `title_{lang}`, `title_alias`, `level`, `parents`, `child`, `order`) VALUES
 (1, 'active', 'ROOT', '', 0, '1', '1', 0);
 			]]>
 		</sql>
-		<sql>
+		<sql stage="end">
+			<![CDATA[
+ALTER TABLE `{prefix}articles` ADD FULLTEXT (`title_{lang}`, `body_{lang}`);
+			]]>
+		</sql>
+		<sql stage="end">
 			<![CDATA[
 ALTER TABLE `{prefix}members` ADD `articles_url` tinytext NOT NULL, ADD `articles_url_description` text NOT NULL;
 			]]>

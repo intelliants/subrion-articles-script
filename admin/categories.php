@@ -207,7 +207,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 	{
 		parent::_assignValues($iaView, $entryData);
 
-		$parent = $this->_iaDb->row(array('id', 'title', 'title_alias', 'parents', 'child'), iaDb::convertIds($entryData['parent_id']));
+		$parent = $this->getHelper()->getById($entryData['parent_id']);
 
 		$array = explode(IA_URL_DELIMITER, trim($entryData['title_alias'], IA_URL_DELIMITER));
 		$entryData['title_alias'] = end($array);
