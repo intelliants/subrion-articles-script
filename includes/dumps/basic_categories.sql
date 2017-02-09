@@ -23,5 +23,5 @@ INSERT INTO `{prefix}articles_categories` (`id`,`parent_id`,`title_{lang}`,`titl
 (21,1,'Photography','Photography/',1,'21,1','21',20),
 (22,1,'Software','Software/',1,'22,1','22',21),
 (23,1,'Home Improvement','Home-Improvement/',1,'23,1','23',22);
-UPDATE `{prefix}articles_categories` SET `status` = 'active';
 UPDATE `{prefix}articles_categories` SET `locked` = 1 WHERE `parent_id` = -1;
+UPDATE `{prefix}articles_categories` SET `status` = 'active',`date_added` = NOW(),`date_modified` = NOW();
