@@ -7,7 +7,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected $_helperName = 'article';
 
-	protected $_gridColumns = "a.`id`, a.`title`, a.`date_added`, a.`date_modified`, a.`summary`, a.`status`, a.`category_id`, a.`member_id`, 1 `update`, 1 `delete`, c.`title` `category_title`, c.`title_alias` `category_alias`, c.`level` `category_level`, IF(m.`fullname` != '', m.`fullname`, IFNULL(m.`username`, '')) `member`, m.`email` ";
+	protected $_gridColumns = ['id', 'title', 'date_added', 'date_modified', 'summary'];//, a.`status`, a.`category_id`, a.`member_id`, 1 `update`, 1 `delete`, c.`title` `category_title`, c.`title_alias` `category_alias`, c.`level` `category_level`, IF(m.`fullname` != '', m.`fullname`, IFNULL(m.`username`, '')) `member`, m.`email` ";
 	protected $_gridFilters = array('status' => self::EQUAL, 'title' => self::LIKE);
 	protected $_gridQueryMainTableAlias = 'a';
 

@@ -7,7 +7,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected $_helperName = 'articlecat';
 
-	protected $_gridColumns = 'c.`id`, c.`title`, c.`title_alias` `alias`, c.`num_articles`, c.`num_all_articles`, c.`order`, c.`status`, c.`description`, c.`parent_id`, c.`level`, p.`title` `parent_title`, p.`id` `parent_id`, 1 `update`, IF(c.`parent_id` != 0, 1, 0) `delete`';
+	protected $_gridColumns = array('title', 'title_alias', 'num_articles', 'num_all_articles', 'level', 'order', 'date_added', 'date_modified', 'status');
 	protected $_gridFilters = array('status' => self::EQUAL, 'title' => self::LIKE);
 	protected $_gridQueryMainTableAlias = 'c';
 
@@ -15,12 +15,12 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected $_activityLog = array('item' => 'category');
 
-	private $_rootCategory;
+	private $_root;
 
 
 	public function init()
 	{
-		$this->_rootCategory = $this->getHelper()->getRoot();
+		$this->_root = $this->getHelper()->getRoot();
 	}
 
 	protected function _gridRead($params)
@@ -120,14 +120,17 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected function _entryAdd(array $entryData)
 	{
-		$entryData['order'] = $this->_iaDb->getMaxOrder() + 1;
+		$entryData['date_added'] = date(iaDb::DATE_FORMAT);
+		$entryData['date_modified'] = date(iaDb::DATE_FORMAT);
 
 		return parent::_entryAdd($entryData);
 	}
 
 	protected function _entryUpdate(array $entryData, $entryId)
 	{
-		if (0 == $entryData['parent_id']) // makes impossible to change the alias for the root
+		$entryData['date_modified'] = date(iaDb::DATE_FORMAT);
+
+		if ($this->_root['parent_id'] == $entryData['parent_id']) // makes impossible to change the alias for the root
 		{
 			unset($entryData['title_alias']);
 		}
@@ -137,16 +140,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected function _entryDelete($entryId)
 	{
-		$row = $this->getById($entryId);
-		$result = parent::_entryDelete($entryId);
-
-		if ($result && $row)
-		{
-			// remove subcategories as well
-			$this->_iaDb->delete(iaDb::convertIds(explode(',', $row['child']), 'parent_id'));
-		}
-
-		return $result;
+		return ($this->_root['id'] == $entryId) ? false : (bool)$this->getHelper()->delete($entryId);
 	}
 
 	public function updateCounters($entryId, array $entryData, $action, $previousData = null)
@@ -168,7 +162,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 	protected function _setDefaultValues(array &$entry)
 	{
 		$entry = array(
-			'parent_id' => $this->_rootCategory['id'],
+			'parent_id' => $this->_root['id'],
 			'title_alias' => '',
 			'locked' => false,
 			'nofollow' => false,
@@ -186,7 +180,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 		$entry['priority'] = (int)$data['priority'];
 		$entry['parent_id'] = (int)$data['tree_id'];
 
-		if ($entry['parent_id'] != $this->_rootCategory['parent_id'])
+		if ($entry['parent_id'] != $this->_root['parent_id'])
 		{
 			$entry['title_alias'] = empty($data['title_alias']) ? $data['title'] : $data['title_alias'];
 			$entry['title_alias'] = iaSanitize::alias($entry['title_alias']);
@@ -244,7 +238,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected function _getJsonAlias(array $data)
 	{
-		$categoryId = isset($data['category']) ? (int)$data['category'] : $this->_rootCategory['id'];
+		$categoryId = isset($data['category']) ? (int)$data['category'] : $this->_root['id'];
 
 		$alias = IA_PACKAGE_URL;
 		$alias.= $this->_iaDb->one('title_alias', iaDb::convertIds($categoryId));

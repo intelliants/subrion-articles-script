@@ -413,7 +413,7 @@ CREATE TABLE `{prefix}articles` (
 			<![CDATA[
 CREATE TABLE `{prefix}articles_categories` (
 	`id` mediumint(8) unsigned NOT NULL auto_increment,
-	`parent_id` mediumint(8) unsigned NOT NULL,
+	`parent_id` mediumint(8) NOT NULL,
 	`title_alias` tinytext NOT NULL,
 	`date_added` date,
 	`date_modified` date,
@@ -433,8 +433,8 @@ CREATE TABLE `{prefix}articles_categories` (
 		</sql>
 		<sql stage="end">
 			<![CDATA[
-INSERT INTO `{prefix}articles_categories` (`id`, `status`, `title_{lang}`, `title_alias`, `level`, `parents`, `child`, `order`) VALUES
-(1, 'active', 'ROOT', '', 0, '1', '1', 0);
+INSERT INTO `{prefix}articles_categories` (`id`, `parent_id`, `status`, `title_{lang}`, `title_alias`, `level`, `parents`, `child`, `order`) VALUES
+(1, -1, 'active', 'ROOT', '', 0, '1', '1', 0);
 			]]>
 		</sql>
 		<sql stage="end">

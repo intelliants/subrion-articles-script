@@ -14,7 +14,7 @@ Ext.onReady(function()
 						? value
 						: '<a href="' + window.location.href + 'edit/' + record.data.parent_id + '/">' + value + '</a>'
 				}, width: 1},
-				{name: 'alias', title: _t('title_alias'), width: 1},
+				{name: 'title_alias', title: _t('title_alias'), width: 1},
 				{name: 'num_articles', title: _t('num_articles'), width: 40},
 				{name: 'num_all_articles', title: _t('all'), width: 40},
 				{name: 'order', title: _t('order'), width: 50, editor: 'number'},

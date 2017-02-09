@@ -32,7 +32,7 @@ class iaArticlecat extends abstractPublishingPackageAdmin
 
 	public function getRoot()
 	{
-		return $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds(0, 'parent_id'), self::getTable());
+		return $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds(-1, 'parent_id'), self::getTable());
 	}
 
 	public function rebuildRelations($id)

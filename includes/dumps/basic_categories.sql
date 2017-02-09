@@ -1,6 +1,6 @@
 TRUNCATE TABLE `{prefix}articles_categories`;
-INSERT INTO `{prefix}articles_categories` (`id`,`parent_id`,`title`,`title_alias`,`level`,`parents`,`child`,`order`) VALUES
-(1,0,'ROOT','',0,'1','2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,1',0),
+INSERT INTO `{prefix}articles_categories` (`id`,`parent_id`,`title_{lang}`,`title_alias`,`level`,`parents`,`child`,`order`) VALUES
+(1,-1,'ROOT','',0,'1','2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,1',0),
 (2,1,'Arts & Entertainment','Arts-and-Entertainment/',1,'2,1','2',1),
 (3,1,'Business','Business/',1,'3,1','3',2),
 (4,1,'Communications','Communications/',1,'4,1','4',3),
