@@ -27,6 +27,8 @@ Ext.onReady(function()
 				{name: 'num_articles', title: _t('num_articles'), width: 40},
 				{name: 'num_all_articles', title: _t('all'), width: 40},
 				{name: 'order', title: _t('order'), width: 50, editor: 'number'},
+				{name: 'date_added', title: _t('date_added'), width: 100, hidden: true},
+				{name: 'date_modified', title: _t('date_modified'), width: 100, hidden: true},
 				'status',
 				'update',
 				'delete'
