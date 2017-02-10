@@ -12,6 +12,13 @@ class iaArticle extends abstractPublishingPackageAdmin
 	public $dashboardStatistics = ['icon' => 'news'];
 
 
+	public function init()
+	{
+		iaCore::instance()->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
+
+		parent::init();
+	}
+
 	public function getSitemapEntries()
 	{
 		$result = [];
