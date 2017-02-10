@@ -7,7 +7,7 @@ $isDefaultPackage = (bool)($iaCore->get('default_package') == $package);
 $isCompactUrlMode = (bool)$iaCore->get('articles_compact_url');
 $isCategory = true;
 $isArticle = false;
-$extras = $iaCore->getExtras($package);
+$extras = $iaCore->getModules($package);
 
 if ($iaCore->checkDomain() && $isDefaultPackage)
 {
@@ -122,11 +122,11 @@ if ($accessGranted)
 	// do not rewrite page name for non-default packages
 	if ($this->checkDomain() && $isDefaultPackage)
 	{
-		if ($plugins = $iaDb->onefield('name', "`status` = 'active'", 0, 0, 'extras'))
+		if ($plugins = $iaDb->onefield('name', "`status` = 'active'", 0, 0, 'module'))
 		{
 			foreach ($plugins as $key => $pluginName)
 			{
-				$plugins[$key] = $iaCore->getExtras($pluginName);
+				$plugins[$key] = $iaCore->getModules($pluginName);
 				if (isset($iaCore->requestPath[0]) && (($iaCore->requestPath[0] . IA_URL_DELIMITER) == $plugins[$key]['url']))
 				{
 					$iaView->name($iaCore->requestPath[0]);
