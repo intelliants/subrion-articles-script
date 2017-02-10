@@ -15,7 +15,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	}
 
 	$iaField = $iaCore->factory('field');
-	$iaArticle = $iaCore->factoryPackage('article', IA_CURRENT_PACKAGE);
+	$iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
 
 	$article = $iaArticle->getById($articleId);
 
@@ -100,7 +100,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		if (0 != $article['category_parent'] && $article['category_parents'])
 		{
-			$iaArticleCat = $iaCore->factoryPackage('articlecat', IA_CURRENT_PACKAGE);
+			$iaArticleCat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
 			// build breadcrumb
 			$parents = $iaDb->all(['title', 'title_alias'],
 				"`id` IN ({$article['category_parents']}) AND `parent_id` != 0 ORDER BY `level`",

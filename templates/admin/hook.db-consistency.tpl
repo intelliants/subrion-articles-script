@@ -42,4 +42,4 @@
 		</div>
 	</div>
 </div>
-{ia_print_js files='_IA_URL_packages/publishing/js/admin/consistency'}
+{ia_print_js files='_IA_URL_modules/publishing/js/admin/consistency'}

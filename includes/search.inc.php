@@ -53,7 +53,7 @@ function articles_search($aQuery, $aFields, $aStart, $aLimit, &$aNumAll, $aWhere
 		}
 	}
 
-	$iaArticle = $iaCore->factoryPackage('article', 'publishing');
+	$iaArticle = $iaCore->factoryModule('article', 'publishing');
 
 	$articles = $match
 		? $iaArticle->get(' AND (' . implode(' ' . $cond . ' ', $match) . ')', $aStart, $aLimit)
@@ -72,7 +72,7 @@ function articles_search($aQuery, $aFields, $aStart, $aLimit, &$aNumAll, $aWhere
 	$resourceName = 'list-articles.tpl';
 	$resourceName = is_file(IA_FRONT_TEMPLATES . $iaCore->get('tmpl') . IA_DS . 'packages' . IA_DS . 'publishing' . IA_DS . $resourceName)
 		? IA_FRONT_TEMPLATES . $iaCore->get('tmpl') . IA_DS . 'packages' . IA_DS . 'publishing' . IA_DS . $resourceName
-		: IA_PACKAGES . 'publishing/templates/common/' . $resourceName;
+		: IA_MODULES . 'publishing/templates/common/' . $resourceName;
 
 	$iaSmarty->assignGlobal('img', IA_TPL_URL . 'img/');
 	foreach ($articles as $art)

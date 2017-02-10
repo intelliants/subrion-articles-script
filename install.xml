@@ -328,8 +328,8 @@
 	</blocks>
 
 	<hooks>
-		<hook name="init" page_type="front" filename="packages/publishing/includes/hook.url-rewrite.php"><![CDATA[]]></hook>
-		<hook name="phpCoreBeforePageDisplay" page_type="front" filename="packages/publishing/includes/hook.blocks-load.php"><![CDATA[]]></hook>
+		<hook name="init" page_type="front" filename="modules/publishing/includes/hook.url-rewrite.php"><![CDATA[]]></hook>
+		<hook name="phpCoreBeforePageDisplay" page_type="front" filename="modules/publishing/includes/hook.blocks-load.php"><![CDATA[]]></hook>
 		<hook name="smartyFrontFiltersBeforeFields" type="smarty" page_type="front" filename="search.filters"><![CDATA[]]></hook>
 		<hook name="populateCommonStatisticsBlock" page_type="front">
 			<![CDATA[
@@ -348,8 +348,8 @@ $statistics['publishing'] = array(
 		</hook>
 		<hook name="smartyFrontAfterHeadSection" page_type="front" type="smarty">
 			<![CDATA[
-{if defined('IA_CURRENT_PACKAGE') && 'publishing' == $smarty.const.IA_CURRENT_PACKAGE}
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="{$smarty.const.IA_PACKAGE_URL}rss/{if isset($rss_feed)}{$rss_feed}{else}latest.xml{/if}">
+{if defined('IA_CURRENT_MODULE') && 'publishing' == $smarty.const.IA_CURRENT_MODULE}
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="{$smarty.const.IA_MODULE_URL}rss/{if isset($rss_feed)}{$rss_feed}{else}latest.xml{/if}">
 {/if}
 			]]>
 		</hook>
@@ -358,7 +358,7 @@ $statistics['publishing'] = array(
 			<![CDATA[
 if (in_array($_GET['type'], array('repair_articlecats', 'rebuild_articlecats_paths', 'repair_articlecats_num')))
 {
-	$iaArticleCategory = $iaCore->factoryPackage('articlecat', 'publishing', iaCore::ADMIN);
+	$iaArticleCategory = $iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN);
 
 	switch ($_GET['type'])
 	{

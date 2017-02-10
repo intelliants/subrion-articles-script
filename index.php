@@ -1,7 +1,7 @@
 <?php
 //##copyright##
 
-$iaArticle = $iaCore->factoryPackage('article', IA_CURRENT_PACKAGE);
+$iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
 
 if (iaView::REQUEST_JSON == $iaView->getRequestType())
 {
@@ -95,7 +95,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			break;
 
 		case 'publishing_home':
-			$iaArticlecat = $iaCore->factoryPackage('articlecat', IA_CURRENT_PACKAGE);
+			$iaArticlecat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
 
 			// get current category
 			$category = $iaArticlecat->getCategory("`title_alias` = '" . (count($iaCore->requestPath) > 0 ? iaSanitize::sql(implode('/', $iaCore->requestPath)) . '/' : '') . "'");
@@ -136,7 +136,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			$articles = $iaArticle->get($where . $order, $start, $pagination['limit']);
 
 			$pagination['total'] = $iaDb->foundRows();
-			$pagination['template'] = IA_PACKAGE_URL . $category['title_alias'] . '?page={page}';
+			$pagination['template'] = IA_MODULE_URL . $category['title_alias'] . '?page={page}';
 
 			$iaView->set('description', $category['meta_description']);
 			$iaView->set('keywords', $category['meta_keywords']);
@@ -242,7 +242,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 				if ($year > 1980 && $year < 2200 && $month >= 1 && $month <= 12)
 				{
-					iaBreadcrumb::add($year, IA_PACKAGE_URL . $baseUrl . $year . IA_URL_DELIMITER);
+					iaBreadcrumb::add($year, IA_MODULE_URL . $baseUrl . $year . IA_URL_DELIMITER);
 
 					if (isset($iaCore->requestPath[2]) && is_numeric($iaCore->requestPath[1]))
 					{
@@ -251,7 +251,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 						{
 							$stmt .= ' AND DAY(t1.`date_added`) = ' . $day;
 
-							iaBreadcrumb::add(iaLanguage::get('month' . $month), IA_PACKAGE_URL . $baseUrl . $year . IA_URL_DELIMITER . $month . IA_URL_DELIMITER);
+							iaBreadcrumb::add(iaLanguage::get('month' . $month), IA_MODULE_URL . $baseUrl . $year . IA_URL_DELIMITER . $month . IA_URL_DELIMITER);
 							iaBreadcrumb::replaceEnd($day, IA_SELF);
 						}
 					}
@@ -287,7 +287,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		if (isset($category['parent_id']) && $category['parent_id'] != 0 && isset($category['level']) && $category['level'] > 0)
 		{
-			$iaView->setMessages(iaLanguage::getf('no_articles2', ['url' => IA_PACKAGE_URL . 'add/?category=' . $category['id']]), iaView::ALERT);
+			$iaView->setMessages(iaLanguage::getf('no_articles2', ['url' => IA_MODULE_URL . 'add/?category=' . $category['id']]), iaView::ALERT);
 		}
 	}
 	elseif (!('date_articles' == $iaView->name() && !isset($iaCore->requestPath[1])))
@@ -302,14 +302,14 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		$pageActions[] = [
 			'icon' => 'plus-square',
 			'title' => iaLanguage::get('add_article'),
-			'url' => IA_PACKAGE_URL . 'add/' . (is_array($category) ? '?category=' . $category['id'] : '')
+			'url' => IA_MODULE_URL . 'add/' . (is_array($category) ? '?category=' . $category['id'] : '')
 		];
 	}
 
 	$pageActions[] = [
 		'icon' => 'rss',
 		'title' => null,
-		'url' => IA_PACKAGE_URL . 'rss/' . $rssFeed,
+		'url' => IA_MODULE_URL . 'rss/' . $rssFeed,
 		'classes' => 'btn-warning'
 	];
 

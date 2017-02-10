@@ -3,7 +3,7 @@
 
 if (iaView::REQUEST_JSON == $iaView->getRequestType())
 {
-	$iaArticlecat = $iaCore->factoryPackage('articlecat', IA_CURRENT_PACKAGE);
+	$iaArticlecat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
 
 	$entriesNum = $iaDb->one_bind(iaDb::STMT_COUNT_ROWS, '`status` = :status', ['status' => iaCore::STATUS_ACTIVE], iaArticlecat::getTable());
 	$dynamicLoadMode = ($entriesNum > 500);
@@ -51,7 +51,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	$iaField = $iaCore->factory('field');
 	$iaUtil = $iaCore->factory('util');
-	$iaArticle = $iaCore->factoryPackage('article', IA_CURRENT_PACKAGE);
+	$iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
 
 	$itemData = [];
 
@@ -265,13 +265,13 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	if ($iaCore->get('articles_categories_selector') == 'Handy javascript tree')
 	{
-		$category = $iaCore->factoryPackage('articlecat', IA_CURRENT_PACKAGE)->getCategory(iaDb::convertIds($article['category_id']));
+		$category = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE)->getCategory(iaDb::convertIds($article['category_id']));
 
 		$iaView->assign('category', $category);
 	}
 	else
 	{
-		$categoryOptions = $iaCore->factoryPackage('common', IA_CURRENT_PACKAGE, iaCore::FRONT)
+		$categoryOptions = $iaCore->factoryModule('common', IA_CURRENT_MODULE, iaCore::FRONT)
 			->getCategoriesTree($article['category_id']);
 
 		$iaView->assign('categories', $categoryOptions);

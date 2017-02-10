@@ -31,4 +31,4 @@
 	{include file='field-type-content-fieldset.tpl' isSystem=true}
 </form>
 {ia_hooker name='smartyAdminSubmitItemBeforeFooter'}
-{ia_add_media files='js:_IA_URL_packages/publishing/js/jquery.sisyphus.min, js:_IA_URL_packages/publishing/js/admin/articles'}
+{ia_add_media files='js:_IA_URL_modules/publishing/js/jquery.sisyphus.min, js:_IA_URL_modules/publishing/js/admin/articles'}

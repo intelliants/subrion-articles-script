@@ -14,7 +14,7 @@ class iaArticle extends abstractPublishingPackageAdmin
 
 	public function init()
 	{
-		iaCore::instance()->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
+		iaCore::instance()->factoryModule('articlecat', $this->getPackageName(), iaCore::ADMIN);
 
 		parent::init();
 	}
@@ -146,7 +146,7 @@ SQL;
 				'title' => $data['title'],
 				'reason' => isset($data['reason']) ? $data['reason'] : '',
 				'view_url' => IA_URL . 'article/' . $data['category_alias'] . $data['id'] . '-' . $data['title_alias'] . '.html',
-				'edit_url' => IA_PACKAGE_URL . 'edit/' . $data['id'] . '/'
+				'edit_url' => IA_MODULE_URL . 'edit/' . $data['id'] . '/'
 			]);
 
 			return $iaMailer->send();

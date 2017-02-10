@@ -11,7 +11,7 @@
 	{ia_add_js}
 	intelli.categories_source_url = intelli.config.packages.publishing.url + 'add/read.json?a=tree{if isset($admin) && $admin}&h=1{/if}';
 	{/ia_add_js}
-	{ia_add_media files='jstree, js:_IA_URL_packages/publishing/js/categories-tree'}
+	{ia_add_media files='jstree, js:_IA_URL_modules/publishing/js/categories-tree'}
 	{ia_add_js order='1'}
 		intelli.categories = [{if !empty($category.parents)}{$category.parents}, {/if}{if isset($category.id)}{$category.id},{else}{$root_cat.id},{/if}0];
 		intelli.categories_parent = {$item.category_id};

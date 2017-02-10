@@ -25,7 +25,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected function _gridRead($params)
 	{
-		$iaArticle = $this->_iaCore->factoryPackage('article', $this->getPackageName(), iaCore::ADMIN);
+		$iaArticle = $this->_iaCore->factoryModule('article', $this->getPackageName(), iaCore::ADMIN);
 
 		if (isset($_POST['action']))
 		{
@@ -224,7 +224,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 	{
 		$categoryId = isset($data['category']) ? (int)$data['category'] : $this->_root['id'];
 
-		$alias = IA_PACKAGE_URL;
+		$alias = IA_MODULE_URL;
 		$alias.= $this->_iaDb->one('title_alias', iaDb::convertIds($categoryId));
 		$alias.= iaSanitize::alias($data['title']) . IA_URL_DELIMITER;
 

@@ -22,7 +22,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	public function init()
 	{
-		$this->_iaArticlecat = $this->_iaCore->factoryPackage('articlecat', $this->getPackageName(), iaCore::ADMIN);
+		$this->_iaArticlecat = $this->_iaCore->factoryModule('articlecat', $this->getPackageName(), iaCore::ADMIN);
 	}
 
 	protected function _modifyGridParams(&$conditions, &$values, array $params)
@@ -156,7 +156,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 			$alias = 'article' . IA_URL_DELIMITER . $alias;
 		}
 
-		$alias = IA_PACKAGE_URL . $alias . $id . '-' . iaSanitize::alias($title) . '.html';
+		$alias = IA_MODULE_URL . $alias . $id . '-' . iaSanitize::alias($title) . '.html';
 
 		return ['data' => $alias];
 	}

@@ -83,7 +83,7 @@ class iaArticle extends abstractPublishingPackageFront
 				return $result;
 
 			case 'c':
-				$iaArticlecat = $this->iaCore->factoryPackage('articlecat', $this->getPackageName());
+				$iaArticlecat = $this->iaCore->factoryModule('articlecat', $this->getPackageName());
 
 				$sql = sprintf('SELECT `id` FROM `%s` WHERE `parent_id` = %d', $iaArticlecat::getTable(true), $value);
 

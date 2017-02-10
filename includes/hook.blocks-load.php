@@ -14,7 +14,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	$defaultLimit = (int)$iaCore->get('art_per_block', 5);
 
-	$iaArticle = $iaCore->factoryPackage('article', 'publishing');
+	$iaArticle = $iaCore->factoryModule('article', 'publishing');
 
 	if ($iaView->blockExists('random_articles'))
 	{
@@ -139,7 +139,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	if ($iaView->blockExists('top_categories'))
 	{
-		$data = $iaCore->factoryPackage('articlecat', 'publishing')
+		$data = $iaCore->factoryModule('articlecat', 'publishing')
 			->get($iaCore->get('art_view_category', true) ? '' : ' AND `num_all_articles` > 0', 0, $iaCore->get('article_top_categories', 12), 1, '`num_all_articles` DESC, `title` ASC');
 		if ($data)
 		{
@@ -149,7 +149,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	if ($iaView->blockExists('priority_categories'))
 	{
-		$data = $iaCore->factoryPackage('articlecat', 'publishing')->get(' && `priority` = 1 ' . ($iaCore->get('art_view_category', true) ? '' : ' && `num_all_articles` > 0'), 0, $iaCore->get('article_top_categories', 12), 1, '`title` ASC');
+		$data = $iaCore->factoryModule('articlecat', 'publishing')->get(' && `priority` = 1 ' . ($iaCore->get('art_view_category', true) ? '' : ' && `num_all_articles` > 0'), 0, $iaCore->get('article_top_categories', 12), 1, '`title` ASC');
 		if ($data)
 		{
 			foreach ($data as $key => $value)
@@ -182,7 +182,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	if ($iaView->blockExists('filters') && $iaArticle->getItemName() == $iaView->get('filtersItemName'))
 	{
-		$iaArticlecat = $iaCore->factoryPackage('articlecat', $iaArticle->getPackageName());
+		$iaArticlecat = $iaCore->factoryModule('articlecat', $iaArticle->getPackageName());
 
 		$categories = $iaDb->all(['id', 'title'], "`status` = 'active' AND `level` = 1 ORDER BY `title`", null, null, $iaArticlecat::getTable());
 

@@ -34,7 +34,7 @@
 
 	{include 'item-view-tabs.tpl'}
 </form>
-{ia_add_media files='js:_IA_URL_packages/publishing/js/jquery.sisyphus.min'}
+{ia_add_media files='js:_IA_URL_modules/publishing/js/jquery.sisyphus.min'}
 {ia_add_js}
 $(function()
 {
