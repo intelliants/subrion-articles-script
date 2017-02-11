@@ -122,7 +122,7 @@ if ($accessGranted)
 	// do not rewrite page name for non-default packages
 	if ($this->checkDomain() && $isDefaultPackage)
 	{
-		if ($plugins = $iaDb->onefield('name', "`status` = 'active'", 0, 0, 'module'))
+		if ($plugins = $iaDb->onefield('name', "`status` = 'active'", 0, 0, 'modules'))
 		{
 			foreach ($plugins as $key => $pluginName)
 			{

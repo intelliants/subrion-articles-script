@@ -328,8 +328,8 @@
 	</blocks>
 
 	<hooks>
-		<hook name="init" page_type="front" filename="modules/publishing/includes/hook.url-rewrite.php"><![CDATA[]]></hook>
-		<hook name="phpCoreBeforePageDisplay" page_type="front" filename="modules/publishing/includes/hook.blocks-load.php"><![CDATA[]]></hook>
+		<hook name="init" page_type="front" filename="hook.url-rewrite"><![CDATA[]]></hook>
+		<hook name="phpCoreBeforePageDisplay" page_type="front" filename="hook.blocks-load"><![CDATA[]]></hook>
 		<hook name="smartyFrontFiltersBeforeFields" type="smarty" page_type="front" filename="search.filters"><![CDATA[]]></hook>
 		<hook name="populateCommonStatisticsBlock" page_type="front">
 			<![CDATA[

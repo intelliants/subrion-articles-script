@@ -69,6 +69,15 @@ Ext.onReady(function()
 
 		intelli.categories.init();
 	}
+	else
+	{
+		$('#field_title').keyup(function()
+		{
+			$('#field-title-alias').show();
+		});
+
+		$('#field_title, #input-alias').blur(intelli.fillUrlBox).blur();
+	}
 });
 
 intelli.titleCache = '';
@@ -100,35 +109,3 @@ intelli.fillUrlBox = function()
 
 	intelli.titleCache = cache;
 };
-
-
-$(function()
-{
-	$('#field_title').keyup(function()
-	{
-		$('#field-title-alias').show();
-	});
-
-	$('#field_title, #input-alias').blur(intelli.fillUrlBox).blur();
-
-	// auto save for publishing
-	$('#main-form').sisyphus(
-	{
-		onRestore: function()
-		{
-			if (typeof CKEDITOR != 'undefined')
-			{
-				CKEDITOR.instances.description.setData($('textarea[name="description"]').val());
-			}
-		},
-		onSave: function()
-		{
-			if (typeof CKEDITOR != 'undefined')
-			{
-				$('textarea[name="description"]').val(CKEDITOR.instances.description.getData());
-			}
-		},
-		timeout: 15,
-		excludeFields: $('input:file, input:hidden, input:disabled')
-	});
-});

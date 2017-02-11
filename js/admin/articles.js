@@ -124,12 +124,4 @@ $(function()
 	});
 
 	$('#field_title, #field_title_alias').blur(intelli.fillUrlBox).blur();
-
-	$('#main-form').sisyphus(
-	{
-		onRestore: function(){ CKEDITOR.instances.body.setData($('textarea[name="body"]').val()); },
-		onSave: function(){ $('textarea[name="body"]').val(CKEDITOR.instances.body.getData()); },
-		timeout: 30,
-		excludeFields: $('input:file, input:hidden')
-	});
 });
