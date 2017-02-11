@@ -67,7 +67,7 @@ function articles_search($aQuery, $aFields, $aStart, $aLimit, &$aNumAll, $aWhere
 	$iaSmarty->assign('config', $iaCore->getConfig());
 	$iaSmarty->assign('member', iaUsers::getIdentity(true));
 	$iaSmarty->assign('page', $iaCore->iaView->getParams());
-	$iaSmarty->assign('packages', $iaCore->packagesData);
+	$iaSmarty->assign('packages', $iaCore->modulesData);
 
 	$resourceName = 'list-articles.tpl';
 	$resourceName = is_file(IA_FRONT_TEMPLATES . $iaCore->get('tmpl') . IA_DS . 'packages' . IA_DS . 'publishing' . IA_DS . $resourceName)
@@ -94,7 +94,7 @@ function articlecats_search($aQuery, $aFields, $aStart, $aLimit, &$aNumAll)
 
 	foreach ($cats as $c)
 	{
-		$output[] = sprintf('<p><a href="%s">%s</a></p>', $iaCore->packagesData['publishing']['url'] . $c['title_alias'], $c['title']);
+		$output[] = sprintf('<p><a href="%s">%s</a></p>', $iaCore->modulesData['publishing']['url'] . $c['title_alias'], $c['title']);
 	}
 
 	return $output;

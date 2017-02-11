@@ -18,10 +18,10 @@
 		<screenshot name="5.jpg">Admin Panel: Add Article page</screenshot>
 	</screenshots>
 
-	<packageitems>
+	<items>
 		<item pages="favorites,view_member" main="view_article,add_article,edit_article">articles</item>
 		<item payable="0" table_name="articles_categories">articlecats</item>
-	</packageitems>
+	</items>
 
 	<actions>
 		<action name="articles" url="publishing/articles/" icon="list" pages="publishing_stats,articles:add,articles:edit"><![CDATA[]]></action>

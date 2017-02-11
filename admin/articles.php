@@ -1,9 +1,10 @@
 <?php
 //##copyright##
 
-class iaBackendController extends iaAbstractControllerPackageBackend
+class iaBackendController extends iaAbstractControllerModuleBackend
 {
 	protected $_name = 'articles';
+	protected $_itemName = 'articles';
 
 	protected $_helperName = 'article';
 
@@ -22,7 +23,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	public function init()
 	{
-		$this->_iaArticlecat = $this->_iaCore->factoryModule('articlecat', $this->getPackageName(), iaCore::ADMIN);
+		$this->_iaArticlecat = $this->_iaCore->factoryModule('articlecat', $this->getModuleName(), iaCore::ADMIN);
 	}
 
 	protected function _modifyGridParams(&$conditions, &$values, array $params)

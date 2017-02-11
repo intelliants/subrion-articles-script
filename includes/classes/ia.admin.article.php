@@ -1,7 +1,7 @@
 <?php
 //##copyright##
 
-class iaArticle extends abstractPublishingPackageAdmin
+class iaArticle extends abstractPublishingModuleAdmin
 {
 	protected static $_table = 'articles';
 
@@ -14,7 +14,7 @@ class iaArticle extends abstractPublishingPackageAdmin
 
 	public function init()
 	{
-		iaCore::instance()->factoryModule('articlecat', $this->getPackageName(), iaCore::ADMIN);
+		iaCore::instance()->factoryModule('articlecat', $this->getModuleName(), iaCore::ADMIN);
 
 		parent::init();
 	}

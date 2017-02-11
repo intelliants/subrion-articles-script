@@ -1,9 +1,10 @@
 <?php
 //##copyright##
 
-class iaBackendController extends iaAbstractControllerPackageBackend
+class iaBackendController extends iaAbstractControllerModuleBackend
 {
 	protected $_name = 'categories';
+	protected $_itemName = 'articlecats';
 
 	protected $_helperName = 'articlecat';
 
@@ -25,7 +26,7 @@ class iaBackendController extends iaAbstractControllerPackageBackend
 
 	protected function _gridRead($params)
 	{
-		$iaArticle = $this->_iaCore->factoryModule('article', $this->getPackageName(), iaCore::ADMIN);
+		$iaArticle = $this->_iaCore->factoryModule('article', $this->getModuleName(), iaCore::ADMIN);
 
 		if (isset($_POST['action']))
 		{

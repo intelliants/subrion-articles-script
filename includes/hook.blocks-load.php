@@ -125,7 +125,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		}
 	}
 
-	iaLanguage::set('no_articles2', ['url' => $iaCore->packagesData['publishing']['url'] . 'add/']);
+	iaLanguage::set('no_articles2', ['url' => $iaCore->modulesData['publishing']['url'] . 'add/']);
 
 	if ($iaView->blockExists('new_articles'))
 	{
@@ -166,7 +166,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		$data = [];
 		if ($array = $iaDb->all('DISTINCT(MONTH(`date_added`)) `month`, YEAR(`date_added`) `year`', "`status` = 'active' GROUP BY `date_added` ORDER BY `date_added` DESC", 0, 6, $iaArticle::getTable()))
 		{
-			$url = $iaCore->packagesData['publishing']['url'] . 'date' . IA_URL_DELIMITER;
+			$url = $iaCore->modulesData['publishing']['url'] . 'date' . IA_URL_DELIMITER;
 			foreach ($array as $date)
 			{
 				$data[] = [
@@ -182,7 +182,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 	if ($iaView->blockExists('filters') && $iaArticle->getItemName() == $iaView->get('filtersItemName'))
 	{
-		$iaArticlecat = $iaCore->factoryModule('articlecat', $iaArticle->getPackageName());
+		$iaArticlecat = $iaCore->factoryModule('articlecat', $iaArticle->getModuleName());
 
 		$categories = $iaDb->all(['id', 'title'], "`status` = 'active' AND `level` = 1 ORDER BY `title`", null, null, $iaArticlecat::getTable());
 
