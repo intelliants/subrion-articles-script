@@ -18,7 +18,7 @@ abstract class abstractPublishingModuleAdmin extends abstractModuleAdmin impleme
 	protected $_moduleName = 'publishing';
 }
 
-abstract class abstractPublishingPackageFront extends abstractModuleFront implements iaPublishingModule
+abstract class abstractPublishingModuleFront extends abstractModuleFront implements iaPublishingModule
 {
 	protected $_moduleName = 'publishing';
 }

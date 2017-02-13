@@ -1,7 +1,7 @@
 <?php
 //##copyright##
 
-class iaArticle extends abstractPublishingPackageFront
+class iaArticle extends abstractPublishingModuleFront
 {
 	protected static $_table = 'articles';
 

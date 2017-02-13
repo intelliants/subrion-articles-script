@@ -1,7 +1,7 @@
 <?php
 //##copyright##
 
-class iaArticlecat extends abstractPublishingPackageFront
+class iaArticlecat extends abstractPublishingModuleFront
 {
 	protected static $_table = 'articles_categories';
 
