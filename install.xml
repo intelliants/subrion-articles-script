@@ -4,9 +4,9 @@
 	<summary>This package is intended to publish articles on your Subrion CMS powered website</summary>
 	<author>Intelliants LLC</author>
 	<contributor>Intelliants LLC</contributor>
-	<version>4.0.1</version>
-	<date>2016-02-04</date>
-	<compatibility>4.0.4</compatibility>
+	<version>4.1.0</version>
+	<date>2016-02-14</date>
+	<compatibility>4.1.0</compatibility>
 	<url>articles</url>
 
 	<screenshots>
@@ -189,9 +189,9 @@
 
 	<fields>
 		<field name="title" item="articles" type="text" group="general" length="200"
-			required="1" editable="0" searchable="1" link_to="1"
+			required="1" editable="0" searchable="1" link_to="1" multilingual="1"
 			required_checks="if(!empty($_POST['title'])){$iaCore = iaCore::instance();if (3 &gt; utf8_strlen($_POST['title']) || $iaCore-&gt;get('max_title') &lt; utf8_strlen($_POST['title'])){	$error = true;	$messages[] = iaLanguage::get('title_incorrect');}}"
-			page="edit_article,add_article,view_article,favorites,publishing_home,rss_articles" multilingual="1">Title</field>
+			page="edit_article,add_article,view_article,favorites,publishing_home,rss_articles">Title</field>
 		<field name="summary" item="articles" group="general" type="textarea" editable="0"
 			actions="if (empty($_POST['summary'])){	$item['summary'] = iaSanitize::snippet($_POST['body'], $iaCore-&gt;get('snip_len'));}"
 			page="publishing_home,view_member" multilingual="1">Summary</field>
@@ -214,12 +214,12 @@
 
 		<field name="title" item="articlecats" group="general" type="text" length="70" required="1"
 			searchable="1" page="publishing_home" multilingual="1">Title</field>
-		<field name="description" item="articlecats" group="general" type="textarea" editor="1" length=""
+		<field name="description" item="articlecats" group="general" type="textarea" editor="1"
 			searchable="1" page="publishing_home" multilingual="1">Description</field>
 		<field name="meta_description" item="articlecats" group="general" type="textarea"
-			adminonly="1" length="" multilingual="1">Meta-Description</field>
+			adminonly="1" multilingual="1">Meta-Description</field>
 		<field name="meta_keywords" item="articlecats" group="general" type="text"
-			length="70" adminonly="1" multilingual="1">Meta-Keywords</field>
+			length="100" adminonly="1" multilingual="1">Meta-Keywords</field>
 		<field name="icon" item="articlecats" type="iconpicker" group="general" default="fa-folder" adminonly="1" page="publishing_home">Icon</field>
 
 		<field name="adsense_id" item="members" group="members_publishing" type="text" length="23" required="0" page="profile">Google AdSense id</field>

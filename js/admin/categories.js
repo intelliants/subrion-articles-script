@@ -2,7 +2,7 @@ Ext.onReady(function()
 {
 	if (Ext.get('js-grid-placeholder'))
 	{
-		intelli.categories = new IntelliGrid(
+		var grid = new IntelliGrid(
 		{
 			columns:[
 				'selection',
@@ -41,7 +41,7 @@ Ext.onReady(function()
 			}
 		}, false);
 
-		intelli.categories.toolbar = new Ext.Toolbar({items:[
+		grid.toolbar = new Ext.Toolbar({items:[
 		{
 			emptyText: _t('title'),
 			listeners: intelli.gridHelper.listener.specialKey,
@@ -53,30 +53,30 @@ Ext.onReady(function()
 			editable: false,
 			emptyText: _t('status'),
 			name: 'status',
-			store: intelli.categories.stores.statuses,
+			store: grid.stores.statuses,
 			typeAhead: true,
 			valueField: 'value',
 			width: 100,
 			xtype: 'combo'
 		}, {
-			handler: function(){intelli.gridHelper.search(intelli.categories);},
+			handler: function(){intelli.gridHelper.search(grid);},
 			id: 'fltBtn',
 			text: '<i class="i-search"></i> ' + _t('search')
 		}, {
-			handler: function(){intelli.gridHelper.search(intelli.categories, true);},
+			handler: function(){intelli.gridHelper.search(grid, true);},
 			text: '<i class="i-close"></i> ' + _t('reset')
 		}]});
 
-		intelli.categories.init();
+		grid.init();
 	}
 	else
 	{
-		$('#field_title').keyup(function()
+		$('#field_articlecats_title').keyup(function()
 		{
 			$('#field-title-alias').show();
 		});
 
-		$('#field_title, #input-alias').blur(intelli.fillUrlBox).blur();
+		$('#field_articlecats_title, #input-alias').blur(intelli.fillUrlBox).blur();
 	}
 });
 
@@ -84,7 +84,7 @@ intelli.titleCache = '';
 intelli.fillUrlBox = function()
 {
 	var alias = $('#input-alias').val();
-	var title = ('' == alias ? $('#field_title').val() : alias);
+	var title = ('' == alias ? $('#field_articlecats_title').val() : alias);
 	var category = $('#input-tree').val();
 	var cache = title + '%%' + category;
 

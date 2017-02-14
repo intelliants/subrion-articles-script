@@ -3,8 +3,8 @@
 
 if (iaView::REQUEST_HTML == $iaView->getRequestType())
 {
-	$sql  = "SELECT a.`id`, a.`title`, a.`title_alias`, a.`nofollow`, a.`date_added`, a.`views_num`, a.`summary`, a.`image`,";
-	$sql .= " cat.`title_alias` `category_alias`, cat.`title` `category_title`, cat.`nofollow`, ";
+	$sql  = "SELECT a.`id`, a.`title_{$iaView->language}`, a.`title_alias`, a.`nofollow`, a.`date_added`, a.`views_num`, a.`summary_{$iaView->language}`, a.`image`,";
+	$sql .= " cat.`title_alias` `category_alias`, cat.`title_{$iaView->language}` `category_title`, cat.`nofollow`, ";
 	$sql .= 'IF(\'\' != acc.`fullname`, acc.`fullname`, acc.`username`) as `account_fullname` ';
 	$sql .= "FROM `{$iaDb->prefix}articles` AS a ";
 	$sql .= "LEFT JOIN `{$iaDb->prefix}articles_categories` AS cat ON a.`category_id`=cat.`id` ";

@@ -3,7 +3,7 @@
 	<input type="hidden" id="js-entry-id" value="{$id|default:''}">
 
 	{capture name='general' append='fieldset_before'}
-		{include 'tree.tpl' url="{$smarty.const.IA_ADMIN_URL}publishing/categories/tree.json"}
+		{include 'tree.tpl' url="{$smarty.const.IA_ADMIN_URL}publishing/categories/tree.json?noroot"}
 	{/capture}
 
 	{capture name='title' append='field_after'}

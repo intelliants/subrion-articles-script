@@ -2,7 +2,8 @@ Ext.onReady(function()
 {
 	if (Ext.get('js-grid-placeholder'))
 	{
-		intelli.articles = {
+		var grid = new IntelliGrid(
+		{
 			columns:[
 				'selection',
 				'expander',
@@ -33,16 +34,9 @@ Ext.onReady(function()
 				delete_multiple: _t('are_you_sure_to_delete_selected_articles'),
 				delete_single: _t('are_you_sure_to_delete_selected_article')
 			}
-		};
+		}, false);
 
-		var searchParam = intelli.urlVal('status');
-		if (searchParam)
-		{
-			intelli.articles.storeParams = {status: searchParam};
-		}
-
-		intelli.articles = new IntelliGrid(intelli.articles, false);
-		intelli.articles.toolbar = new Ext.Toolbar({items:[
+		grid.toolbar = new Ext.Toolbar({items:[
 		{
 			emptyText: _t('title'),
 			id: 'fltTitle',
@@ -62,26 +56,21 @@ Ext.onReady(function()
 			emptyText: _t('status'),
 			id: 'fltStatus',
 			name: 'status',
-			store: intelli.articles.stores.statuses,
+			store: grid.stores.statuses,
 			typeAhead: true,
 			valueField: 'value',
 			width: 100,
 			xtype: 'combo'
 		},{
-			handler: function(){intelli.gridHelper.search(intelli.articles);},
+			handler: function(){intelli.gridHelper.search(grid);},
 			id: 'fltBtn',
 			text: '<i class="i-search"></i> ' + _t('search')
 		},{
-			handler: function(){intelli.gridHelper.search(intelli.articles, true);},
+			handler: function(){intelli.gridHelper.search(grid, true);},
 			text: '<i class="i-close"></i> ' + _t('reset')
 		}]});
 
-		if (searchParam)
-		{
-			Ext.getCmp('fltStatus').setValue(searchParam);
-		}
-
-		intelli.articles.init();
+		grid.init();
 	}
 });
 
@@ -89,7 +78,7 @@ intelli.titleCache = '';
 intelli.fillUrlBox = function()
 {
 	var alias = $('#input-alias').val();
-	var title = ('' == alias ? $('#field_title').val() : alias);
+	var title = ('' == alias ? $('#field_articles_title').val() : alias);
 	var category = $('#input-tree').val();
 	var cache = title + '%%' + category;
 	var id = $('#js-entry-id').val();
@@ -118,10 +107,10 @@ intelli.fillUrlBox = function()
 
 $(function()
 {
-	$('#field_title').keyup(function()
+	$('#field_articles_title').keyup(function()
 	{
 		$('#field-title-alias').show();
 	});
 
-	$('#field_title, #field_title_alias').blur(intelli.fillUrlBox).blur();
+	$('#field_articles_title, #input-alias').blur(intelli.fillUrlBox).blur();
 });

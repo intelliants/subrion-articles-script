@@ -126,7 +126,7 @@ class iaArticle extends abstractPublishingModuleFront
 		}
 		$fields = [
 			't1.*',
-			't2.`title` `category_title`',
+			't2.`title_' . $this->iaView->language . '` `category_title`',
 			't2.`title_alias` `category_alias`',
 			't2.`parent_id` `category_parent`',
 			't2.`parents` `category_parents`',
