@@ -4,7 +4,7 @@
 			<div class="ia-item ia-item--border-bottom">
 				{if $article.image}
 					<a class="center-block m-b" href="{ia_url type='url' item='articles' data=$article}">
-						{ia_image file=$article.image title=$article.title class='img-responsive'}
+						{ia_image file=$article.image type='thumbnail' title=$article.title class='img-responsive'}
 					</a>
 				{/if}
 

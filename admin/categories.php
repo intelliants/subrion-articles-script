@@ -167,7 +167,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
 		if ($entry['parent_id'] != $this->_root['parent_id'])
 		{
-			$entry['title_alias'] = empty($data['title_alias']) ? $data['title'] : $data['title_alias'];
+			$entry['title_alias'] = empty($data['title_alias']) ? $data['title'][$this->_iaCore->language['iso']] : $data['title_alias'];
 			$entry['title_alias'] = iaSanitize::alias($entry['title_alias']);
 
 			if ($this->_iaDb->exists('`title` = :title AND `parent_id` = :parent_id AND `id` != :id', ['title' => $entry['title'], 'parent_id' => $entry['parent_id'], 'id' => $this->getEntryId()]))
@@ -239,10 +239,10 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 		$dynamicLoadMode = ((int)$this->_iaDb->one(iaDb::STMT_COUNT_ROWS) > 150);
 		$noRootMode = isset($data['noroot']) && '' == $data['noroot'];
 
-		$rootId = $noRootMode ? 1 : 0;
+		$rootId = 1;
 		$parentId = isset($data['id']) && is_numeric($data['id'])
 			? (int)$data['id']
-			: $rootId;
+			: ($noRootMode ? $rootId : 0);
 
 		$where = $dynamicLoadMode
 			? '`parent_id` = ' . $parentId
@@ -252,7 +252,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 		// category to be excluded from the list has children of 2 and more levels deeper
 		empty($data['cid']) || $where.= ' AND `id` != ' . (int)$data['cid'] . ' AND `parent_id` != ' . (int)$data['cid'];
 
-		$where.= ' ORDER BY `title`';
+		$where.= ' ORDER BY `' . ($dynamicLoadMode ? 'title' : 'level') . '`';
 
 		$rows = $this->_iaDb->all(['id', 'title' => 'title_' . $this->_iaCore->language['iso'], 'parent_id', 'child'], $where);
 

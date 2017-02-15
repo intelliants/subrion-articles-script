@@ -3,7 +3,7 @@
 	{if $new_articles}
 		<div class="new-articles">
 			{foreach $new_articles as $listing}
-				{include file='extra:publishing/list-articles'}
+				{include 'extra:publishing/list-articles'}
 			{/foreach}
 		</div>
 	{else}

@@ -359,11 +359,11 @@ class iaArticle extends abstractPublishingModuleFront
 				if (iaCore::STATUS_ACTIVE == $article['status'] && iaCore::STATUS_ACTIVE == $status)
 				{
 					$this->_updateCategoryCounter($article['category_id'], -1);
-					$this->_updateCategoryCounter($categoryId, 1);
+					$this->_updateCategoryCounter($categoryId);
 				}
 				elseif (iaCore::STATUS_ACTIVE != $article['status'] && iaCore::STATUS_ACTIVE == $status)
 				{
-					$this->_updateCategoryCounter($categoryId, 1);
+					$this->_updateCategoryCounter($categoryId);
 				}
 				elseif (iaCore::STATUS_ACTIVE == $article['status'] && iaCore::STATUS_ACTIVE != $status)
 				{
@@ -379,7 +379,7 @@ class iaArticle extends abstractPublishingModuleFront
 				}
 				elseif (iaCore::STATUS_ACTIVE != $article['status'] && iaCore::STATUS_ACTIVE == $status)
 				{
-					$this->_updateCategoryCounter($categoryId, 1);
+					$this->_updateCategoryCounter($categoryId);
 				}
 			}
 		}
@@ -395,7 +395,7 @@ class iaArticle extends abstractPublishingModuleFront
 	 *
 	 * @return void
 	 */
-	public function _updateCategoryCounter($parentCategoryId, $factor)
+	public function _updateCategoryCounter($parentCategoryId, $factor = 1)
 	{
 		$sql  = "UPDATE `{$this->iaDb->prefix}articles_categories` ";
 		$sql .= "SET `num_articles`=IF(`id`=$parentCategoryId, `num_articles`+{$factor}, `num_articles`) ";

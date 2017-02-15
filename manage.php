@@ -188,8 +188,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 			$iaArticle->sendMail($id);
 
-			$messages[] = iaLanguage::get($iaCore->get('article_auto_approval') ? 'art_added' : 'art_approval');
-
 			$result = $iaArticle->getById($id);
 			$url = $iaArticle->url('view', $result);
 
@@ -206,7 +204,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 				}
 			}
 
-			$iaView->setMessages($messages, iaView::SUCCESS);
+			$iaView->setMessages(iaLanguage::get($iaCore->get('article_auto_approval') ? 'art_added' : 'art_approval'), iaView::SUCCESS);
 
 			iaUtil::go_to($url);
 		}
@@ -217,7 +215,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 		$iaView->assign('item', $itemData);
 
-		$iaView->setMessages($messages, $messages ? iaView::ERROR : iaView::SUCCESS);
+		$iaView->setMessages($messages);
 	}
 	else
 	{
