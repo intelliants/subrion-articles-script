@@ -166,7 +166,7 @@ class iaArticle extends abstractPublishingModuleFront
 
 		$fields = [
 			'SQL_CALC_FOUND_ROWS art.*',
-			'cat.`title` `category_title`',
+			'cat.`title_' . $this->iaView->language . '` `category_title`',
 			'cat.`title_alias` `category_alias`',
 			'cat.`parent_id` `category_parent`',
 			'cat.`parents` `category_parents`',
@@ -300,14 +300,26 @@ class iaArticle extends abstractPublishingModuleFront
 
 	public function update(array $entryData, $id)
 	{
+		$this->iaCore->factory('util');
+
 		// get the previous data
 		$article = $this->getById($id, true);
+		$langCode = $this->iaCore->language['iso'];
 
 		// If URL field is empty, fill it
-		if (empty($article['title_alias']) && empty($entryData['title_alias']) && $entryData['title'])
+		if (empty($article['title_alias']) && empty($entryData['title_alias']) && $entryData['title_' . $langCode])
 		{
-			$entryData['title_alias'] = $entryData['title'];
-			$entryData['title_alias'] = iaSanitize::alias($entryData['title_alias']);
+			$entryData['title_alias'] = iaSanitize::alias($entryData['title_' . $langCode]);
+		}
+
+		if (empty($entryData['meta_keywords_' . $langCode]) && $entryData['body_' . $langCode])
+		{
+			$entryData['meta_keywords_' . $langCode] = iaUtil::getMetaKeywords($entryData['body_' . $langCode]);
+		}
+
+		if (empty($entryData['meta_description_' . $langCode]) && !empty($entryData['summary_' . $langCode]))
+		{
+			$entryData['meta_description_' . $langCode] = substr(str_replace(PHP_EOL, '', iaSanitize::tags($entryData['summary_' . $langCode])), 0, 255);
 		}
 
 		if (in_array($entryData['url'], $this->_validProtocols))
@@ -332,7 +344,7 @@ class iaArticle extends abstractPublishingModuleFront
 		}
 
 		$entryData['date_modified'] = date(iaDb::DATETIME_FORMAT);
-		$entryData['ip'] = $this->iaCore->factory('util')->getIp();
+		$entryData['ip'] = iaUtil::getIp();
 
 		$result = parent::update($entryData, $id);
 

@@ -118,7 +118,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			if (0 != $category['parent_id'] && $category['parents'])
 			{
 				// build breadcrumb
-				$parents = $iaDb->all(['title', 'title_alias'],
+				$parents = $iaDb->all(['title' => 'title_' . $iaView->language, 'title_alias'],
 					"`id` IN({$category['parents']}) AND `parent_id` != 0 ORDER BY `level`",
 					0, 0, 'articles_categories');
 				foreach ($parents as $p)

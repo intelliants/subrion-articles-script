@@ -188,44 +188,44 @@
 	</fields_groups>
 
 	<fields>
-		<field name="title" item="articles" type="text" group="general" length="200"
+		<field item="articles" name="title" type="text" group="general" length="200"
 			required="1" editable="0" searchable="1" link_to="1" multilingual="1"
-			required_checks="if(!empty($_POST['title'])){$iaCore = iaCore::instance();if (3 &gt; utf8_strlen($_POST['title']) || $iaCore-&gt;get('max_title') &lt; utf8_strlen($_POST['title'])){	$error = true;	$messages[] = iaLanguage::get('title_incorrect');}}"
+			required_checks="if (isset($_POST['title']) &amp;&amp; is_array($_POST['title'])){ $maxLength = (int)iaCore::instance()-&gt;get('max_title'); foreach ($_POST['title'] as $iso =&gt; $value) { if (!empty($value)) { $l = utf8_strlen($value); if ($l &lt; 3 || $l &gt; $maxLength) $errors['title'] = iaLanguage::get('title_incorrect'); } }}"
 			page="edit_article,add_article,view_article,favorites,publishing_home,rss_articles">Title</field>
-		<field name="summary" item="articles" group="general" type="textarea" editable="0"
-			actions="if (empty($_POST['summary'])){	$item['summary'] = iaSanitize::snippet($_POST['body'], $iaCore-&gt;get('snip_len'));}"
+		<field item="articles" name="summary" group="general" type="textarea" editable="0"
 			page="publishing_home,view_member" multilingual="1">Summary</field>
-		<field name="body" item="articles" group="general" type="textarea" editor="1" editable="0" searchable="1" required="1"
-			required_checks="if(!empty($_POST['body'])){$iaCore = iaCore::instance();$l = utf8_strlen(html_entity_decode(str_replace(array('\\r','\\n'), '*', iaSanitize::tags($_POST['body']))));list($min, $max) = explode(',', $iaCore-&gt;get('article_length'));if ($l &lt; $min || $l &gt; $max){ $error = true; $messages[] = iaLanguage::getf('body_length_error', array('min' =&gt; $min, 'max' =&gt; $max));}}"
+		<field item="articles" name="body" group="general" type="textarea" editor="1" editable="0" searchable="1" required="1"
+			required_checks="if (isset($_POST['body']) &amp;&amp; is_array($_POST['body'])){ list($min, $max) = explode(',', iaCore::instance()-&gt;get('article_length'));  foreach ($_POST['body'] as $iso =&gt; $value) { $l = utf8_strlen(html_entity_decode(str_replace(array('\r','\n'), '*', iaSanitize::tags($value)))); if ($l &lt; $min || $l &gt; $max) $errors['body'] = iaLanguage::getf('body_length_error', array('min' =&gt; $min, 'max' =&gt; $max)); }}"
 			page="edit_article,add_article,view_article,rss_articles" multilingual="1">Body</field>
-		<field name="meta_description" item="articles" group="general" type="textarea"
-			adminonly="1" length="" editable="0" multilingual="1">Meta-Description</field>
-		<field name="meta_keywords" item="articles" group="general" type="text" length="70" adminonly="1" editable="0" multilingual="1">Meta-Keywords</field>
-		<field name="image" item="articles" group="general" type="image" width="800" height="800" thumb_width="300" thumb_height="300"
+		<field item="articles" name="meta_description" group="general" type="textarea"
+			adminonly="1" editable="0" multilingual="1">Meta-Description</field>
+		<field item="articles" name="meta_keywords" group="general" type="text" length="70" adminonly="1" editable="0" multilingual="1">Meta-Keywords</field>
+		<field item="articles" name="image" group="general" type="image" width="800" height="800" thumb_width="300" thumb_height="300"
 			editable="0" page="edit_article,add_article,favorites,publishing_home">Image</field>
-		<field name="gallery" item="articles" group="general" type="pictures"
+		<field item="articles" name="gallery" group="general" type="pictures"
 			width="800" height="800" thumb_width="300" thumb_height="300" prefix="articles_" length="5"
 			page="edit_article,add_article,view_article">Pictures</field>
-		<field name="url" item="articles" type="text" group="articles_link" length="255" searchable="1"
+		<field item="articles" name="url" type="text" group="articles_link" length="255" searchable="1"
 			actions="if (!empty($_POST['url']) &amp;&amp; $_POST['url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['url'])) { $error = true; $messages[] = iaLanguage::get('incorrect_article_url'); }"
 			page="edit_article,add_article,view_article,favorites,publishing_home">URL</field>
-		<field name="url_description" item="articles" type="textarea" group="articles_link" length="1024" searchable="1"
+		<field item="articles" name="url_description" type="textarea" group="articles_link" length="1024" searchable="1"
 			page="edit_article,add_article,view_article,favorites,publishing_home">URL Description</field>
 
-		<field name="title" item="articlecats" group="general" type="text" length="70" required="1"
+		<field item="articlecats" name="title" group="general" type="text" length="70" required="1"
 			searchable="1" page="publishing_home" multilingual="1">Title</field>
-		<field name="description" item="articlecats" group="general" type="textarea" editor="1"
+		<field item="articlecats" name="description" group="general" type="textarea" editor="1"
 			searchable="1" page="publishing_home" multilingual="1">Description</field>
-		<field name="meta_description" item="articlecats" group="general" type="textarea"
+		<field item="articlecats" name="meta_description" group="general" type="textarea"
 			adminonly="1" multilingual="1">Meta-Description</field>
-		<field name="meta_keywords" item="articlecats" group="general" type="text"
+		<field item="articlecats" name="meta_keywords" group="general" type="text"
 			length="100" adminonly="1" multilingual="1">Meta-Keywords</field>
-		<field name="icon" item="articlecats" type="iconpicker" group="general" default="fa-folder" adminonly="1" page="publishing_home">Icon</field>
+		<field item="articlecats" name="icon" type="iconpicker" group="general" default="fa-folder"
+			   adminonly="1" page="publishing_home">Icon</field>
 
-		<field name="adsense_id" item="members" group="members_publishing" type="text" length="23" required="0" page="profile">Google AdSense id</field>
-		<field name="articles_url" item="members" group="articles_link" type="text" length="255" required="0" page="profile"
+		<field item="members" name="adsense_id" group="members_publishing" type="text" length="23" page="profile">Google AdSense id</field>
+		<field item="members" name="articles_url" group="articles_link" type="text" length="255" page="profile"
 			actions="if (!empty($_POST['articles_url']) &amp;&amp; $_POST['articles_url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['articles_url'])) { $error = true; $messages[] = iaLanguage::get('error_url');}">Article URL</field>
-		<field name="articles_url_description" item="members" group="articles_link" type="textarea" length="1024" required="0" page="profile">Article URL Description</field>
+		<field item="members" name="articles_url_description" group="articles_link" type="textarea" length="1024" page="profile">Article URL Description</field>
 	</fields>
 
 	<phrases>
@@ -413,7 +413,7 @@ CREATE TABLE `{prefix}articles` (
 			<![CDATA[
 CREATE TABLE `{prefix}articles_categories` (
 	`id` mediumint(8) unsigned NOT NULL auto_increment,
-	`parent_id` mediumint(8) NOT NULL,
+	`parent_id` mediumint(8) unsigned NOT NULL,
 	`title_alias` tinytext NOT NULL,
 	`date_added` date,
 	`date_modified` date,
@@ -434,7 +434,7 @@ CREATE TABLE `{prefix}articles_categories` (
 		<sql stage="end">
 			<![CDATA[
 INSERT INTO `{prefix}articles_categories` (`id`, `parent_id`, `status`, `title_{lang}`, `title_alias`, `level`, `parents`, `child`, `order`, `locked`) VALUES
-(1, -1, 'active', 'ROOT', '', 0, '1', '1', 0, 1);
+(1, 0, 'active', 'ROOT', '', 0, '1', '1', 0, 1);
 			]]>
 		</sql>
 		<sql stage="end">

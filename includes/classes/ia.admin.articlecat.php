@@ -14,7 +14,7 @@ class iaArticlecat extends abstractPublishingModuleAdmin
 	{
 		$result = [];
 
-		$stmt = '`parent_id` != -1 AND `status` = :status ORDER BY `title`';
+		$stmt = '`parent_id` != 0 AND `status` = :status ORDER BY `title`';
 		$this->iaDb->bind($stmt, ['status' => iaCore::STATUS_ACTIVE]);
 
 		if ($entries = $this->iaDb->onefield('title_alias', $stmt, null, null, self::getTable()))
@@ -55,7 +55,7 @@ SQL;
 
 	public function getRoot()
 	{
-		return $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds(-1, 'parent_id'), self::getTable());
+		return $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds(0, 'parent_id'), self::getTable());
 	}
 
 	public function rebuildRelations($id)
@@ -136,7 +136,7 @@ SQL;
 
 		foreach ($categories as $cat)
 		{
-			if (-1 != $cat['parent_id'])
+			if (0 != $cat['parent_id'])
 			{
 				$_id = $cat['id'];
 
@@ -170,7 +170,7 @@ SQL;
 	{
 		$parentId = $this->iaDb->one('parent_id', iaDb::convertIds($cId));
 
-		if ($parentId != -1)
+		if ($parentId != 0)
 		{
 			$parents[] = $parentId;
 

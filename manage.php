@@ -6,25 +6,27 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType())
 	$iaArticlecat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
 
 	$entriesNum = $iaDb->one_bind(iaDb::STMT_COUNT_ROWS, '`status` = :status', ['status' => iaCore::STATUS_ACTIVE], iaArticlecat::getTable());
-	$dynamicLoadMode = ($entriesNum > 500);
+	$dynamicLoadMode = ($entriesNum > 200);
 
 	$parentId = $iaArticlecat->getRootId();
 
 	if ($dynamicLoadMode)
 	{
 		empty($_GET['id']) || $parentId = (int)$_GET['id'];
-		$clause = '`parent_id` = :parent AND `status` = :status ORDER BY `title`';
+		$clause = '`parent_id` = :parent AND `status` = :status';
 
 		$iaDb->bind($clause, ['parent' => $parentId, 'status' => iaCore::STATUS_ACTIVE]);
 	}
 	else
 	{
-		$clause = '`parent_id` != 0 AND `status` = :status ORDER BY `title`';
+		$clause = '`parent_id` != 0 AND `status` = :status';
 
 		$iaDb->bind($clause, ['status' => iaCore::STATUS_ACTIVE]);
 	}
 
-	$categories = $iaArticlecat->all($clause, ['id', 'parent_id', 'title', 'locked', 'child']);
+	$clause.= ' ORDER BY `title_' . $iaView->language . '`';
+
+	$categories = $iaArticlecat->all($clause, ['id', 'parent_id', 'title' => 'title_' . $iaView->language, 'locked', 'child']);
 	$output = [];
 
 	foreach ($categories as $row)
@@ -105,25 +107,18 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	if (isset($_POST['data-article']) || isset($_POST['draft']))
 	{
 		$messages = [];
-		$error = false;
 
-		list($itemData, $error, $messages) = $iaField->parsePost($iaArticle->getItemName(), $article);
+		list($itemData, , $messages) = $iaField->parsePost($iaArticle->getItemName(), $article);
 
 		if (!iaUsers::hasIdentity() && !iaValidate::isCaptchaValid())
 		{
-			$error = true;
 			$messages[] = iaLanguage::get('confirmation_code_incorrect');
 		}
 
-		if (empty($itemData['summary']))
-		{
-			$itemData['summary'] = iaSanitize::snippet($_POST['body'], $iaCore->get('snip_len'));
-		}
-
 		$itemData['category_id'] = (int)$_POST['tree_id'];
+
 		if (empty($itemData['category_id']))
 		{
-			$error = true;
 			$messages[] = iaLanguage::getf('field_is_not_selected', ['field' => iaLanguage::get('category')]);
 		}
 		else
@@ -132,20 +127,22 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 			if ($row && $row['locked'])
 			{
-				$error = true;
 				$messages[] = iaLanguage::get('articles_category_locked');
 			}
+		}
+
+		if (empty($itemData['summary_' . $iaView->language]))
+		{
+			$itemData['summary_' . $iaView->language] = iaSanitize::snippet($_POST['body'][$iaView->language], $iaCore->get('snip_len'));
 		}
 
 		// limitation enabled
 		if ($linksLimit = (int)$iaCore->get('article_max_links'))
 		{
-			$matches = [];
-			$count = preg_match_all('/<a[^>]*>(.*?)<\/a>/', $itemData['body'], $matches);
+			$count = preg_match_all('#<a[^>]*>(.*?)<\/a>#', $itemData['body_' . $iaView->language], $matches);
 
 			if ($count > $linksLimit)
 			{
-				$error = true;
 				$messages[] = iaLanguage::getf('error_links_limit_reached', ['allowed' => $linksLimit, 'found' => $count]);
 			}
 		}
@@ -167,15 +164,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 			$itemData['status'] = iaCore::STATUS_APPROVAL;
 		}
 
-		$itemData['meta_description'] = iaSanitize::tags($itemData['summary']);
-		$itemData['meta_description'] = str_replace(PHP_EOL, '', $itemData['meta_description']);
-
-		if (empty($itemData['meta_keywords']) && $itemData['body'])
-		{
-			$itemData['meta_keywords'] = iaUtil::getMetaKeywords($itemData['body']);
-		}
-
-		if (!$error)
+		if (!$messages)
 		{
 			if (iaCore::ACTION_ADD == $pageAction)
 			{
@@ -228,7 +217,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 
 		$iaView->assign('item', $itemData);
 
-		$iaView->setMessages($messages, $error ? iaView::ERROR : iaView::SUCCESS);
+		$iaView->setMessages($messages, $messages ? iaView::ERROR : iaView::SUCCESS);
 	}
 	else
 	{

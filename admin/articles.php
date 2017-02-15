@@ -108,14 +108,21 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 	{
 		parent::_preSaveEntry($entry, $data, $action);
 
+		$langCode = $this->_iaCore->language['iso'];
+
 		$entry['category_id'] = (int)$data['tree_id'];
 		$entry['sticky'] = (int)$data['sticky'];
-		$entry['title_alias'] = iaSanitize::alias(empty($data['title_alias']) ? $data['title'] : $data['title_alias']);
+		$entry['title_alias'] = iaSanitize::alias(empty($data['title_alias']) ? $data['title'][$langCode] : $data['title_alias']);
 
 		if ($this->_iaCore->get('auto_generate_keywords')
-			&& empty($data['meta_keywords']) && !empty($entry['body']))
+			&& empty($entry['meta_keywords_' . $langCode]) && !empty($data['body'][$langCode]))
 		{
-			$data['meta_keywords'] = iaUtil::getMetaKeywords($entry['body']);
+			$entry['meta_keywords_' . $langCode] = iaUtil::getMetaKeywords($data['body'][$langCode]);
+		}
+
+		if (empty($data['summary'][$langCode]))
+		{
+			$entry['summary_' . $langCode] = iaSanitize::snippet($data['body'][$langCode], $this->_iaCore->get('snip_len'));
 		}
 
 		return !$this->getMessages();

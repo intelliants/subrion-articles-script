@@ -46,13 +46,17 @@ class iaArticlecat extends abstractPublishingModuleFront
 	/**
 	 * Returns category information
 	 *
-	 * @param string $aWhere condition to return category information
+	 * @param string $where condition to return category information
 	 *
 	 * @return array
 	 */
-	public function getCategory($aWhere)
+	public function getCategory($where)
 	{
-		return $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, $aWhere, self::getTable());
+		$row = $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, $where, self::getTable());
+
+		$this->_processValues($row, true);
+
+		return $row;
 	}
 
 	/**
@@ -67,13 +71,14 @@ class iaArticlecat extends abstractPublishingModuleFront
 	 */
 	public function get($where = null, $start = 0, $limit = 0, $parentId = 0, $sorting = false)
 	{
-		$fields = "SQL_CALC_FOUND_ROWS `id`, `title`, `level`, `title_alias`, `child`, `icon`, `nofollow`, `num_all_articles` 'num'";
+		$fields = "SQL_CALC_FOUND_ROWS `id`, `title_{$this->iaView->language}`, `level`, `title_alias`, `child`, `icon`, `nofollow`, `num_all_articles` `num`";
+
 		$stmt = "`status` = 'active' AND `parent_id` != 0 " . ($parentId > 0 ? "AND `parent_id`='{$parentId}' " : '');
 		$where && $stmt.= ' ' . $where;
 		$stmt.= ' ORDER BY ';
 		$stmt.= $sorting
 			? $sorting
-			: ($this->iaCore->get('articles_categs_sort', 'by title') == 'by title' ? '`title`' : '`order`');
+			: ($this->iaCore->get('articles_categs_sort', 'by title') == 'by title' ? '`title_' . $this->iaView->language . '`' : '`order`');
 
 		$result = $this->iaDb->all($fields, $stmt, $start, $limit, self::getTable());
 

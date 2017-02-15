@@ -1,7 +1,7 @@
 <form method="post" enctype="multipart/form-data" class="sap-form form-horizontal">
 	{preventCsrf}
 
-	{if -1 != $item.parent_id}
+	{if 0 != $item.parent_id}
 		{capture name='general' append='fieldset_before'}
 			{include 'tree.tpl' url="{$smarty.const.IA_ADMIN_URL}publishing/categories/tree.json?cid={$id}"}
 		{/capture}
@@ -21,7 +21,7 @@
 	{/if}
 
 	{capture name='systems' append='fieldset_before'}
-		{if -1 != $item.parent_id}
+		{if 0 != $item.parent_id}
 			<div class="row">
 				<label class="col col-lg-2 control-label">{lang key='priority'}</label>
 

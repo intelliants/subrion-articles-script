@@ -140,7 +140,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	if ($iaView->blockExists('top_categories'))
 	{
 		$data = $iaCore->factoryModule('articlecat', 'publishing')
-			->get($iaCore->get('art_view_category', true) ? '' : ' AND `num_all_articles` > 0', 0, $iaCore->get('article_top_categories', 12), 1, '`num_all_articles` DESC, `title` ASC');
+			->get($iaCore->get('art_view_category', true) ? '' : ' AND `num_all_articles` > 0', 0, $iaCore->get('article_top_categories', 12), 1, '`num_all_articles` DESC, `title_' . $iaView->language . '` ASC');
 		if ($data)
 		{
 			$iaView->assign('top_categories', $data);
@@ -184,7 +184,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		$iaArticlecat = $iaCore->factoryModule('articlecat', $iaArticle->getModuleName());
 
-		$categories = $iaDb->all(['id', 'title'], "`status` = 'active' AND `level` = 1 ORDER BY `title`", null, null, $iaArticlecat::getTable());
+		$categories = $iaDb->all(['id', 'title' => 'title_' . $iaView->language],
+			"`status` = 'active' AND `level` = 1 ORDER BY `title`", null, null, $iaArticlecat::getTable());
 
 		if (!empty($categories))
 		{

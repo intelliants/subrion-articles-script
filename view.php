@@ -102,7 +102,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 		{
 			$iaArticleCat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
 			// build breadcrumb
-			$parents = $iaDb->all(['title', 'title_alias'],
+			$parents = $iaDb->all(['title' => 'title_' . $iaView->language, 'title_alias'],
 				"`id` IN ({$article['category_parents']}) AND `parent_id` != 0 ORDER BY `level`",
 				null, null, iaArticlecat::getTable());
 			foreach ($parents as $p)
@@ -119,9 +119,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType())
 	{
 		$iaView->setMessages(iaLanguage::get('article_' . $article['status']), iaView::ALERT);
 	}
-
-	$iaItem = $iaCore->factory('item');
-	$article = array_shift($iaItem->updateItemsFavorites([$article], $iaArticle->getItemName()));
 
 	// get next & previous articles
 	$article['prev_article'] = $iaArticle->getPreviousArticle($article['date_added'], $article['category_id']);

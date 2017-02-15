@@ -2,7 +2,7 @@
 	<div class="ia-item-author p-a clearfix">
 		<a class="pull-left m-r" href="{ia_url type='url' item='members' data=$author}">
 			{if $author.avatar}
-				{ia_image file=$author.avatar.path width=80 class='img-circle' title=$author.fullname|default:$author.username}
+				{ia_image file=$author.avatar type='thumbnail' width=80 class='img-circle' title=$author.fullname}
 			{else}
 				<img src="{$img}no-avatar.png" class="img-circle" width="80" alt="{$author.username}">
 			{/if}

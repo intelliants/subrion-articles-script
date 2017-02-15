@@ -76,9 +76,9 @@ if ($accessGranted)
 	{
 		if ($iaCore->get('articles_url_validation'))
 		{
-			$category = $iaDb->row_bind(['title', 'title_alias'], '`status` = :status AND `id` = :id', ['status' => iaCore::STATUS_ACTIVE, 'id' => $articleData['category_id']], 'articles_categories');
+			$category = $iaDb->row_bind(['title_alias'], '`status` = :status AND `id` = :id', ['status' => iaCore::STATUS_ACTIVE, 'id' => $articleData['category_id']], 'articles_categories');
 
-			if (empty($category['title']) || empty($iaView->url))
+			if (!$category || empty($iaView->url))
 			{
 				return iaView::errorPage(iaView::ERROR_NOT_FOUND);
 			}
@@ -110,6 +110,7 @@ if ($accessGranted)
 				}
 			}
 		}
+
 		array_unshift($iaCore->requestPath, 'article');
 
 		$pageName = $iaCore->factory('page', iaCore::FRONT)->getUrlByName('view_article', false);
