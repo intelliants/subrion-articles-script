@@ -12,13 +12,13 @@
 			{/if}
 			{lang key='on'} {$item.date_added|date_format:$core.config.date_format}
 		</span>
-		<span class="ia-item-view__info__item"><span class="fa fa-folder"></span> <a href="{ia_url item='articlecats' data=$item type='url'}">{$item.category_title}</a></span>
+		<span class="ia-item-view__info__item"><span class="fa fa-folder"></span> <a href="{ia_url item='articlecats' data=$item type='url'}">{$item.category_title|escape:'html'}</a></span>
 		<span class="ia-item-view__info__item"><span class="fa fa-eye"></span> {$item.views_num} {lang key='views'}</span>
 	</div>
 
 	{if $item.image}
-		<a class="ia-item-view__image center-block m-b" href="{ia_image file=$item.image url=true large=true}" rel="ia_lightbox[{$item.title}]">
-			{ia_image file=$item.image class='img-responsive' large=true alt=$item.title}
+		<a class="ia-item-view__image center-block m-b" href="{ia_image file=$item.image type='large' url=true}" rel="ia_lightbox[{$item.title|escape:'html'}]">
+			{ia_image file=$item.image type='thumbnail' class='img-responsive' alt=$item.title}
 		</a>
 	{/if}
 
@@ -36,7 +36,7 @@
 					 data-allowfullscreen="true"
 					 data-fit="cover">
 					{foreach $item.gallery as $entry}
-						<a class="ia-item-view__gallery__item" href="{ia_image file=$entry url=true large=true}">{ia_image file=$entry title=$entry.title}</a>
+						<a class="ia-item-view__gallery__item" href="{ia_image file=$entry type='large' url=true}">{ia_image file=$entry type='thumbnail' title=$item.title}</a>
 					{/foreach}
 				</div>
 			</div>
@@ -63,7 +63,7 @@
 		{if $item.image}
 			<li><a href="http://pinterest.com/pin/create/button/?url={$smarty.const.IA_SELF|escape:'url'}&media={ia_image file=$item.image url=true large=true}&description={$item.body|strip_tags|truncate:250:'...'}" target="_blank" title="Pin it"><i class="fa fa-pinterest-square fa-2x"></i></a></li>
 		{/if}
-		<li><a href="mailto:?subject={$item.title}&body={$item.body|strip_tags|truncate:250:'...'}:{$smarty.const.IA_SELF|escape:'url'}" target="_blank" title="Email"><i class="fa fa-envelope-square fa-2x"></i></a></li>
+		<li><a href="mailto:?subject={$item.title|escape:'html'}&body={$item.body|strip_tags|truncate:250:'...'}:{$smarty.const.IA_SELF|escape:'url'}" target="_blank" title="Email"><i class="fa fa-envelope-square fa-2x"></i></a></li>
 	</ul>
 
 	{if !empty($item.prev_article) || !empty($item.next_article)}

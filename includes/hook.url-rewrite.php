@@ -93,7 +93,7 @@ if ($accessGranted)
 
 				if ($categoryPath !== $categoryUrl)
 				{
-					$url = $iaView->domainUrl . ($iaView->get('url_contains_lang_code') ? $iaView->language . IA_URL_DELIMITER : '') . ($extras['url'] != '/' ? $extras['url'] : '') . ($isCompactUrlMode ? '' : 'article/') . $categoryUrl . $articleData['id'] . '-' . $articleData['title_alias'] . '.html';
+					$url = $iaView->domainUrl . IA_URL_LANG . ($extras['url'] != '/' ? $extras['url'] : '') . ($isCompactUrlMode ? '' : 'article/') . $categoryUrl . $articleData['id'] . '-' . $articleData['title_alias'] . '.html';
 
 					// get current url to prevent incorrect redirect
 					$isHTTPS = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
