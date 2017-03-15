@@ -17,8 +17,8 @@
 	</div>
 
 	{if $item.image}
-		<a class="ia-item-view__image center-block m-b" href="{ia_image file=$item.image type='large' url=true}" rel="ia_lightbox[{$item.title|escape:'html'}]">
-			{ia_image file=$item.image type='thumbnail' class='img-responsive' alt=$item.title}
+		<a class="ia-item-view__image center-block m-b" href="{ia_image file=$item.image type='original' url=true}" rel="ia_lightbox[{$item.title|escape:'html'}]">
+			{ia_image file=$item.image type='original' class='img-responsive' alt=$item.title}
 		</a>
 	{/if}
 
@@ -36,7 +36,7 @@
 					 data-allowfullscreen="true"
 					 data-fit="cover">
 					{foreach $item.gallery as $entry}
-						<a class="ia-item-view__gallery__item" href="{ia_image file=$entry type='large' url=true}">{ia_image file=$entry type='thumbnail' title=$item.title}</a>
+						<a class="ia-item-view__gallery__item" href="{ia_image file=$entry type='large' url=true}">{ia_image file=$entry type='large' title=$item.title}</a>
 					{/foreach}
 				</div>
 			</div>
