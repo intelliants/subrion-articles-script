@@ -1,4 +1,4 @@
-{if isset($priority_categories)}
+{if !empty($priority_categories)}
 	{foreach $priority_categories as $priority_category}
 		<h4{if !$priority_category@first} class="m-t-md"{/if}>
 			<span class="badge pull-right">{$priority_category.num}</span>

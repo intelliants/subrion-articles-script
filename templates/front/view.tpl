@@ -16,7 +16,7 @@
 		<span class="ia-item-view__info__item"><span class="fa fa-eye"></span> {$item.views_num} {lang key='views'}</span>
 	</div>
 
-	{if $item.image}
+	{if !empty($item.image)}
 		<a class="ia-item-view__image center-block m-b" href="{ia_image file=$item.image type='original' url=true}" rel="ia_lightbox[{$item.title|escape:'html'}]">
 			{ia_image file=$item.image type='original' class='img-responsive' alt=$item.title}
 		</a>

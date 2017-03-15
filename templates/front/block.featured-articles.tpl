@@ -1,4 +1,4 @@
-{if isset($featured_articles) && $featured_articles}
+{if !empty($featured_articles)}
 	<div class="ia-items featured-articles">
 		{foreach $featured_articles as $article}
 			<div class="ia-item ia-item--border-bottom">

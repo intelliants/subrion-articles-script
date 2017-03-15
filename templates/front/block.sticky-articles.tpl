@@ -1,4 +1,4 @@
-{if isset($sticky_articles)}
+{if !empty($sticky_articles)}
 	<div class="ia-items sticky-articles">
 		{foreach $sticky_articles as $article}
 			<div class="ia-item ia-item--border-bottom">

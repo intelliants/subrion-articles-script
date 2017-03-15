@@ -1,4 +1,4 @@
-{if isset($random_articles) && $random_articles}
+{if !empty($random_articles)}
 	<div class="ia-items random-articles">
 		{foreach $random_articles as $article}
 			<div class="ia-item">

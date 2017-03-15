@@ -1,16 +1,37 @@
 <?php
-//##copyright##
+/******************************************************************************
+ *
+ * Subrion Articles Publishing Script
+ * Copyright (C) 2017 Intelliants, LLC <https://intelliants.com>
+ *
+ * This file is part of Subrion Articles Publishing Script
+ *
+ * This program is a commercial software and any kind of using it must agree
+ * to the license, see <https://subrion.pro/license.html>.
+ *
+ * This copyright notice may not be removed from the software source without
+ * the permission of Subrion respective owners.
+ *
+ *
+ * @link https://subrion.pro/product/publishing.html
+ *
+ ******************************************************************************/
 
 class iaCommon extends abstractCore
 {
 	protected static $_table = 'articles_categories';
 
+
 	/**
-	 * @param arr $aCategories array with categories
-	 * @param int $aIdParent used only for recusive
-	 * @param int $aSelected selected category ID
+	 * Builds categories trees
+	 *
+	 * @param array $categories categories array
+	 * @param int $parentId parent category id
+	 * @param bool $selected
+	 *
+	 * @return string
 	 */
-	protected function _buildCategoriesTree($aCategories, $aIdParent = 0, $aSelected = false)
+	protected function _buildCategoriesTree($categories, $parentId = 0, $selected = false)
 	{
 		$out = '';
 		$iaCore = iaCore::instance();
@@ -18,15 +39,15 @@ class iaCommon extends abstractCore
 
 		$isBackend = (iaCore::ACCESS_ADMIN == $iaCore->getAccessType());
 
-		foreach ($aCategories as $cat)
+		foreach ($categories as $cat)
 		{
-			if ($cat['parent_id'] == $aIdParent)
+			if ($cat['parent_id'] == $parentId)
 			{
 				$cat['title'] = ($cat['level'] > 1 || $isBackend ? str_repeat('&nbsp;&nbsp;', $cat['level'] - ($isBackend ? 0 : 1)) : '') . $cat['title'];
 				if ($isBackend && $iaView->name() == 'articlecat_edit' && isset($_GET['id']) && $_GET['id'] == $cat['id'])
 				{
 					$out .= '<optgroup label="' . $cat['title'] . ' [' . iaLanguage::get('self', 'SELF CATEGORY') . ']" disabled="disabled">';
-					$out .= $this->_buildCategoriesTree($aCategories, $cat['id'], $aSelected);
+					$out .= $this->_buildCategoriesTree($categories, $cat['id'], $selected);
 					$out .= '</optgroup>';
 				}
 				else
@@ -41,13 +62,13 @@ class iaCommon extends abstractCore
 					if (!$locked && iaCore::ACCESS_FRONT == $iaCore->getAccessType()
 						|| iaCore::ACCESS_ADMIN == $iaCore->getAccessType())
 					{
-						$out .= '<option value="' . $cat['id'] . '" ' . ($aSelected == $cat['id'] ? ' selected="selected"' : '') . ' ' . ($isBackend ? ' alias="' . $cat['title_alias'] . '"' : '') . '>' . $cat['title'] . '</option>';
+						$out .= '<option value="' . $cat['id'] . '" ' . ($selected == $cat['id'] ? ' selected="selected"' : '') . ' ' . ($isBackend ? ' alias="' . $cat['title_alias'] . '"' : '') . '>' . $cat['title'] . '</option>';
 					}
 					else
 					{
 						$out .= '<optgroup label="' . $cat['title'] . '"></optgroup>';
 					}
-					$out .= $this->_buildCategoriesTree($aCategories, $cat['id'], $aSelected);
+					$out .= $this->_buildCategoriesTree($categories, $cat['id'], $selected);
 				}
 			}
 		}
@@ -56,10 +77,11 @@ class iaCommon extends abstractCore
 	}
 
 	/**
-	 * Wrapper for _buildCategoriesTree()
-	 * return HTML-code for tree select box
+	 * Wrapper for _buildCategoriesTree() to return HTML-code for tree select box
 	 *
-	 * @param int $selected selected category ID
+	 * @param bool $selected
+	 *
+	 * @return string
 	 */
 	public function getCategoriesTree($selected = false)
 	{

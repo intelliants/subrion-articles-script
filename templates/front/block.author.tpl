@@ -1,4 +1,4 @@
-{if isset($author)}
+{if !empty($author)}
 	<div class="ia-item-author p-a clearfix">
 		<a class="pull-left m-r" href="{ia_url type='url' item='members' data=$author}">
 			{if $author.avatar}
