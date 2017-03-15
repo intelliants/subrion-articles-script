@@ -45,8 +45,6 @@ $(function()
 		intelli.confirm(_t('do_you_really_want_to_delete_article'), { url: $(this).attr('href') });
 	});
 
-	console.log(intelli.config.lang)
-
 	$('#article_data').sisyphus(
 	{
 		onRestore: function(){ CKEDITOR.instances['body[' + intelli.config.lang + ']'].setData($('textarea[name="body[' + intelli.config.lang + ']"]').val()); },
