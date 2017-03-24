@@ -46,7 +46,6 @@ class iaArticlecat extends abstractPublishingModuleAdmin
 		return $result;
 	}
 
-
 	public function get($columns, $where, $order = '', $start = null, $limit = null)
 	{
 		$sql = <<<SQL

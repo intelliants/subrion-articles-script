@@ -28,7 +28,7 @@
 
 	{ia_hooker name='smartyAdminSubmitItemBeforeFields'}
 
-	{include file='field-type-content-fieldset.tpl' isSystem=true}
+	{include 'field-type-content-fieldset.tpl' isSystem=true}
 </form>
 {ia_hooker name='smartyAdminSubmitItemBeforeFooter'}
 {ia_add_media files='js:_IA_URL_modules/publishing/js/admin/articles'}
