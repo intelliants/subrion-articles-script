@@ -38,6 +38,8 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 	public function init()
 	{
 		$this->_root = $this->getHelper()->getRoot();
+
+        $this->_gridSorting['parent_title'] = ['title_' . $this->_iaCore->language['iso'], 'p'];
 	}
 
 	protected function _gridRead($params)
