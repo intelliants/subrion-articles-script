@@ -1,5 +1,4 @@
 <?php
-
 /******************************************************************************
  *
  * Subrion Articles Publishing Script
@@ -17,6 +16,7 @@
  * @link https://subrion.pro/product/publishing.html
  *
  ******************************************************************************/
+
 class iaArticle extends abstractPublishingModuleAdmin
 {
     protected static $_table = 'articles';
@@ -135,14 +135,11 @@ SQL;
             $oldData['category_id'] = $newData['category_id'];
         }
 
-        if ($newData['status'] == iaCore::STATUS_ACTIVE && $oldData['status'] != iaCore::STATUS_ACTIVE) // status of the listing has been changed to Active
-        {
+        if ($newData['status'] == iaCore::STATUS_ACTIVE && $oldData['status'] != iaCore::STATUS_ACTIVE) { // status of the listing has been changed to Active
             $this->_editCounter($newData['category_id'], self::COUNTER_ACTION_INCREMENT);
-        } elseif ($oldData['status'] == iaCore::STATUS_ACTIVE && $newData['status'] != iaCore::STATUS_ACTIVE) // listing has been deactivated
-        {
+        } elseif ($oldData['status'] == iaCore::STATUS_ACTIVE && $newData['status'] != iaCore::STATUS_ACTIVE) { // listing has been deactivated
             $this->_editCounter($oldData['category_id'], self::COUNTER_ACTION_DECREMENT);
-        } elseif ($newData['status'] == iaCore::STATUS_ACTIVE && $oldData['status'] == iaCore::STATUS_ACTIVE) // listing has only been moved to another category
-        {
+        } elseif ($newData['status'] == iaCore::STATUS_ACTIVE && $oldData['status'] == iaCore::STATUS_ACTIVE) { // listing has only been moved to another category
             if (isset($newData['category_id']) && isset($oldData['category_id']) && $newData['category_id'] != $oldData['category_id']) {
                 $this->_editCounter($newData['category_id'], self::COUNTER_ACTION_INCREMENT);
                 $this->_editCounter($oldData['category_id'], self::COUNTER_ACTION_DECREMENT);

@@ -1,464 +1,464 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module type="package" name="publishing">
-	<title>Publishing</title>
-	<summary>This package is intended to publish articles on your Subrion CMS powered website</summary>
-	<author>Intelliants LLC</author>
-	<contributor>Intelliants LLC</contributor>
-	<version>4.1.0</version>
-	<date>2016-02-14</date>
-	<compatibility>4.1.0</compatibility>
-	<url>articles</url>
+    <title>Publishing</title>
+    <summary>This package is intended to publish articles on your Subrion CMS powered website</summary>
+    <author>Intelliants LLC</author>
+    <contributor>Intelliants LLC</contributor>
+    <version>4.1.0</version>
+    <date>2016-03-24</date>
+    <compatibility>4.1.2</compatibility>
+    <url>articles</url>
 
-	<screenshots>
-		<screenshot type="preview" name="preview.jpg">Home page</screenshot>
-		<screenshot name="1.jpg">Frontend: Articles Home</screenshot>
-		<screenshot name="2.jpg">Frontend: View Article page</screenshot>
-		<screenshot name="3.jpg">Admin Panel: Index page</screenshot>
-		<screenshot name="4.jpg">Admin Panel: Manage Articles page</screenshot>
-		<screenshot name="5.jpg">Admin Panel: Add Article page</screenshot>
-	</screenshots>
+    <screenshots>
+        <screenshot type="preview" name="preview.jpg">Home page</screenshot>
+        <screenshot name="1.jpg">Frontend: Articles Home</screenshot>
+        <screenshot name="2.jpg">Frontend: View Article page</screenshot>
+        <screenshot name="3.jpg">Admin Panel: Index page</screenshot>
+        <screenshot name="4.jpg">Admin Panel: Manage Articles page</screenshot>
+        <screenshot name="5.jpg">Admin Panel: Add Article page</screenshot>
+    </screenshots>
 
-	<items>
-		<item pages="favorites,view_member" main="view_article,add_article,edit_article">articles</item>
-		<item payable="0" table_name="articles_categories">articlecats</item>
-	</items>
+    <items>
+        <item pages="favorites,view_member" main="view_article,add_article,edit_article">articles</item>
+        <item payable="0" table_name="articles_categories">articlecats</item>
+    </items>
 
-	<actions>
-		<action name="articles" url="publishing/articles/" icon="list" pages="publishing_stats,articles:add,articles:edit"><![CDATA[]]></action>
-		<action name="add_article" url="publishing/articles/add/" icon="plus" pages="articles,articles:edit"><![CDATA[]]></action>
-		<action name="articlecats" url="publishing/categories/" icon="list" pages="publishing_stats,categories:add,categories:edit"><![CDATA[]]></action>
-		<action name="add_category" url="publishing/categories/add/" icon="folder-plus" pages="categories,categories:edit"><![CDATA[]]></action>
-		<action name="dashboard_articles_list" url="publishing/articles/" icon="edit" type="dashboard"><![CDATA[]]></action>
-		<action name="dashboard_articles_add" url="publishing/articles/add/" icon="newspaper" type="dashboard"><![CDATA[]]></action>
-	</actions>
+    <actions>
+        <action name="articles" url="publishing/articles/" icon="list" pages="publishing_stats,articles:add,articles:edit"><![CDATA[]]></action>
+        <action name="add_article" url="publishing/articles/add/" icon="plus" pages="articles,articles:edit"><![CDATA[]]></action>
+        <action name="articlecats" url="publishing/categories/" icon="list" pages="publishing_stats,categories:add,categories:edit"><![CDATA[]]></action>
+        <action name="add_category" url="publishing/categories/add/" icon="folder-plus" pages="categories,categories:edit"><![CDATA[]]></action>
+        <action name="dashboard_articles_list" url="publishing/articles/" icon="edit" type="dashboard"><![CDATA[]]></action>
+        <action name="dashboard_articles_add" url="publishing/articles/add/" icon="newspaper" type="dashboard"><![CDATA[]]></action>
+    </actions>
 
-	<groups>
-		<group name="publishing">Publishing</group>
-	</groups>
+    <groups>
+        <group name="publishing">Publishing</group>
+    </groups>
 
-	<adminpages>
-		<page group="publishing" name="publishing_stats" url="publishing/" filename="statistics" menus="menu">Statistics</page>
-		<page group="publishing" menus="menu">Management</page>
-		<page group="publishing" name="articles" url="publishing/articles/" filename="articles" menus="menu">Articles</page>
-		<page group="publishing" name="categories" url="publishing/categories/" filename="categories" menus="menu">Categories</page>
-	</adminpages>
+    <adminpages>
+        <page group="publishing" name="publishing_stats" url="publishing/" filename="statistics" menus="menu">Statistics</page>
+        <page group="publishing" menus="menu">Management</page>
+        <page group="publishing" name="articles" url="publishing/articles/" filename="articles" menus="menu">Articles</page>
+        <page group="publishing" name="categories" url="publishing/categories/" filename="categories" menus="menu">Categories</page>
+    </adminpages>
 
-	<pages>
-		<page group="publishing" url="|PACKAGE|" name="publishing_home" suburl="articles/categories" menus="publishing,main" fields_item="articles">Articles</page>
-		<page group="publishing" url="|PACKAGE|article/" name="view_article" filename="view" readonly="1" nofollow="1" fields_item="articles">View Article</page>
-		<page group="publishing" url="|PACKAGE|add/" action="add" parent="publishing_home" name="add_article" filename="manage" menus="publishing,main" fields_item="articles">Add Article</page>
-		<page group="publishing" url="|PACKAGE|edit/" action="edit" parent="publishing_home" name="edit_article" filename="manage" readonly="1" fields_item="articles">Edit Article</page>
-		<page group="publishing" url="|PACKAGE|delete/" name="delete_article" filename="manage" action="delete" parent="view_article" service="1">Delete Article</page>
-		<page group="publishing" url="|PACKAGE|date/" name="date_articles" menus="publishing" fields_item="articles">Articles Archive</page>
-		<page group="publishing" url="profile/articles/" name="my_articles" menus="account" nofollow="1" parent="profile" fields_item="articles">My Articles</page>
-		<page group="publishing" url="|PACKAGE|latest/" name="latest_articles" menus="publishing" fields_item="articles">Latest Articles</page>
-		<page group="publishing" url="|PACKAGE|popular/" name="popular_articles" menus="publishing" fields_item="articles">Popular Articles</page>
-		<page group="publishing" url="|PACKAGE|rss/" name="rss_articles" service="1">RSS Articles</page>
-		<page group="publishing" url="|PACKAGE|categories/" name="article_categories" service="1"><![CDATA[]]></page>
-	</pages>
+    <pages>
+        <page group="publishing" url="|PACKAGE|" name="publishing_home" suburl="articles/categories" menus="publishing,main" fields_item="articles">Articles</page>
+        <page group="publishing" url="|PACKAGE|article/" name="view_article" filename="view" readonly="1" nofollow="1" fields_item="articles">View Article</page>
+        <page group="publishing" url="|PACKAGE|add/" action="add" parent="publishing_home" name="add_article" filename="manage" menus="publishing,main" fields_item="articles">Add Article</page>
+        <page group="publishing" url="|PACKAGE|edit/" action="edit" parent="publishing_home" name="edit_article" filename="manage" readonly="1" fields_item="articles">Edit Article</page>
+        <page group="publishing" url="|PACKAGE|delete/" name="delete_article" filename="manage" action="delete" parent="view_article" service="1">Delete Article</page>
+        <page group="publishing" url="|PACKAGE|date/" name="date_articles" menus="publishing" fields_item="articles">Articles Archive</page>
+        <page group="publishing" url="profile/articles/" name="my_articles" menus="account" nofollow="1" parent="profile" fields_item="articles">My Articles</page>
+        <page group="publishing" url="|PACKAGE|latest/" name="latest_articles" menus="publishing" fields_item="articles">Latest Articles</page>
+        <page group="publishing" url="|PACKAGE|popular/" name="popular_articles" menus="publishing" fields_item="articles">Popular Articles</page>
+        <page group="publishing" url="|PACKAGE|rss/" name="rss_articles" service="1">RSS Articles</page>
+        <page group="publishing" url="|PACKAGE|categories/" name="article_categories" service="1"><![CDATA[]]></page>
+    </pages>
 
-	<permissions>
-		<object id="publishing_home" action="add" access="1">Add Article</object>
-		<object id="publishing_home" action="edit" access="1">Edit Article</object>
-		<object id="publishing_home" action="delete" access="1">Delete Article</object>
+    <permissions>
+        <object id="publishing_home" action="add" access="1">Add Article</object>
+        <object id="publishing_home" action="edit" access="1">Edit Article</object>
+        <object id="publishing_home" action="delete" access="1">Delete Article</object>
 
-		<object meta_object="admin_page" id="articles" access="1">View Articles</object>
-		<object meta_object="admin_page" id="articles" action="add">Add Article</object>
-		<object meta_object="admin_page" id="articles" action="edit">Edit Article</object>
-		<object meta_object="admin_page" id="articles" action="delete">Delete Article</object>
+        <object meta_object="admin_page" id="articles" access="1">View Articles</object>
+        <object meta_object="admin_page" id="articles" action="add">Add Article</object>
+        <object meta_object="admin_page" id="articles" action="edit">Edit Article</object>
+        <object meta_object="admin_page" id="articles" action="delete">Delete Article</object>
 
-		<object meta_object="admin_page" id="categories" access="1">View Categories</object>
-		<object meta_object="admin_page" id="categories" action="add">Add Category</object>
-		<object meta_object="admin_page" id="categories" action="edit">Edit Category</object>
-		<object meta_object="admin_page" id="categories" action="delete">Delete Category</object>
+        <object meta_object="admin_page" id="categories" access="1">View Categories</object>
+        <object meta_object="admin_page" id="categories" action="add">Add Category</object>
+        <object meta_object="admin_page" id="categories" action="edit">Edit Category</object>
+        <object meta_object="admin_page" id="categories" action="delete">Delete Category</object>
 
-		<permission type="group" type_id="4" access="0">my_articles</permission>
-	</permissions>
+        <permission type="group" type_id="4" access="0">my_articles</permission>
+    </permissions>
 
-	<configgroup name="publishing">Publishing</configgroup>
-	<config group="publishing" type="divider" name="articles">General</config>
-	<config group="publishing" type="select" name="articles_categories_selector" values="'Standard dropdown box','Handy javascript tree'"
-		description="Type of control to manage categories">Handy javascript tree</config>
-	<config group="publishing" type="radio" name="articles_add_guest" values="1,0" description="Allow to add article for guest">1</config>
-	<config group="publishing" type="radio" name="article_auto_approval" values="1,0" description="Article auto approval">1</config>
-	<config group="publishing" type="radio" name="allow_icons" values="1,0" description="Enable categories icons">0</config>
-	<config group="publishing" type="radio" name="art_view_category" values="1,0" description="Allow to display empty categories">1</config>
-	<config group="publishing" type="radio" name="articles_show_children" values="1,0" description="Show subcategories articles in the parents">1</config>
-	<config group="publishing" type="select" name="articles_categs_sort" values="'by title','by order'" description="Sort categories in dropdown box">by title</config>
-	<config group="publishing" type="radio" name="articles_allow_adsense_code" values="1,0" description="Adsense sharing">1</config>
+    <configgroup name="publishing">Publishing</configgroup>
+    <config group="publishing" type="divider" name="articles">General</config>
+    <config group="publishing" type="select" name="articles_categories_selector" values="'Standard dropdown box','Handy javascript tree'"
+        description="Type of control to manage categories">Handy javascript tree</config>
+    <config group="publishing" type="radio" name="articles_add_guest" values="1,0" description="Allow to add article for guest">1</config>
+    <config group="publishing" type="radio" name="article_auto_approval" values="1,0" description="Article auto approval">1</config>
+    <config group="publishing" type="radio" name="allow_icons" values="1,0" description="Enable categories icons">0</config>
+    <config group="publishing" type="radio" name="art_view_category" values="1,0" description="Allow to display empty categories">1</config>
+    <config group="publishing" type="radio" name="articles_show_children" values="1,0" description="Show subcategories articles in the parents">1</config>
+    <config group="publishing" type="select" name="articles_categs_sort" values="'by title','by order'" description="Sort categories in dropdown box">by title</config>
+    <config group="publishing" type="radio" name="articles_allow_adsense_code" values="1,0" description="Adsense sharing">1</config>
 
-	<config group="publishing" type="divider" name="pub_div2">SEO</config>
-	<config group="publishing" type="radio" name="articles_compact_url" values="1,0" description="Exclude 'article/' from URL (slow)">1</config>
-	<config group="publishing" type="radio" name="articles_url_validation" values="1,0" description="Article URL validation">1</config>
-	<config group="publishing" type="radio" name="articles_source_link" values="1,0" description="Add &quot;Article Source&quot; link">0</config>
-	<config group="publishing" type="radio" name="auto_generate_keywords" values="1,0" description="Auto generate keywords">1</config>
+    <config group="publishing" type="divider" name="pub_div2">SEO</config>
+    <config group="publishing" type="radio" name="articles_compact_url" values="1,0" description="Exclude 'article/' from URL (slow)">1</config>
+    <config group="publishing" type="radio" name="articles_url_validation" values="1,0" description="Article URL validation">1</config>
+    <config group="publishing" type="radio" name="articles_source_link" values="1,0" description="Add &quot;Article Source&quot; link">0</config>
+    <config group="publishing" type="radio" name="auto_generate_keywords" values="1,0" description="Auto generate keywords">1</config>
 
-	<!-- <config group="publishing" type="divider" name="pub_div2">Restrictions</config> -->
-	<config group="publishing" name="articles_group_listings_limit" type="hidden" description="Posted listings limit">10</config>
+    <!-- <config group="publishing" type="divider" name="pub_div2">Restrictions</config> -->
+    <config group="publishing" name="articles_group_listings_limit" type="hidden" description="Posted listings limit">10</config>
 
-	<config group="publishing" type="divider" name="pub_div3">Limits</config>
-	<config group="publishing" type="select" values="1,2,3,4" name="categories_columns" description="Number of categories columns">2</config>
-	<config group="publishing" type="text" name="snip_len" description="Summary length">1000</config>
-	<config group="publishing" type="text" name="max_title" description="Max title length">100</config>
-	<config group="publishing" type="text" name="article_length" description="Article length (min,max)">50,50000</config>
-	<config group="publishing" type="text" name="art_perpage" description="Number of articles per page">10</config>
-	<config group="publishing" type="text" name="article_max_links" description="Max number of links per article">0</config>
+    <config group="publishing" type="divider" name="pub_div3">Limits</config>
+    <config group="publishing" type="select" values="1,2,3,4" name="categories_columns" description="Number of categories columns">2</config>
+    <config group="publishing" type="text" name="snip_len" description="Summary length">1000</config>
+    <config group="publishing" type="text" name="max_title" description="Max title length">100</config>
+    <config group="publishing" type="text" name="article_length" description="Article length (min,max)">50,50000</config>
+    <config group="publishing" type="text" name="art_perpage" description="Number of articles per page">10</config>
+    <config group="publishing" type="text" name="article_max_links" description="Max number of links per article">0</config>
 
-	<config group="publishing" type="divider" name="pub_div4">Blocks limits</config>
-	<config group="publishing" type="text" name="art_per_block" description="Number of articles per block">4</config>
-	<config group="publishing" type="text" name="art_per_block_new" description="Number of articles in New Articles block">6</config>
-	<config group="publishing" type="text" name="art_per_block_featured" description="Number of articles in Featured block">6</config>
-	<config group="publishing" type="text" name="art_per_block_sponsored" description="Number of articles in Sponsored block">6</config>
-	<config group="publishing" type="text" name="art_per_block_sticky" description="Number of articles in Sticky block">6</config>
-	<config group="publishing" type="text" name="art_per_block_popular" description="Number of articles in Popular block">6</config>
-	<config group="publishing" type="text" name="art_per_block_random" description="Number of articles in Random block">6</config>
-	<config group="publishing" type="text" name="art_per_block_featured_categories" description="Number of articles in Featured categories block">6</config>
-	<config group="publishing" type="text" name="article_top_categories" description="Categories number for Top Categories block">12</config>
+    <config group="publishing" type="divider" name="pub_div4">Blocks limits</config>
+    <config group="publishing" type="text" name="art_per_block" description="Number of articles per block">4</config>
+    <config group="publishing" type="text" name="art_per_block_new" description="Number of articles in New Articles block">6</config>
+    <config group="publishing" type="text" name="art_per_block_featured" description="Number of articles in Featured block">6</config>
+    <config group="publishing" type="text" name="art_per_block_sponsored" description="Number of articles in Sponsored block">6</config>
+    <config group="publishing" type="text" name="art_per_block_sticky" description="Number of articles in Sticky block">6</config>
+    <config group="publishing" type="text" name="art_per_block_popular" description="Number of articles in Popular block">6</config>
+    <config group="publishing" type="text" name="art_per_block_random" description="Number of articles in Random block">6</config>
+    <config group="publishing" type="text" name="art_per_block_featured_categories" description="Number of articles in Featured categories block">6</config>
+    <config group="publishing" type="text" name="article_top_categories" description="Categories number for Top Categories block">12</config>
 
-	<config group="email_templates" type="divider" name="article_divider" description="Publishing"><![CDATA[]]></config>
-	<config group="email_templates" type="radio" values="1,0" name="article_notif" description="New article alerts">1</config>
-	<config group="email_templates" type="text" name="article_notif_subject" description="Email Subject">New article</config>
-	<config group="email_templates" type="textarea" name="article_notif_body" description="Email Body">
-		<![CDATA[
+    <config group="email_templates" type="divider" name="article_divider" description="Publishing"><![CDATA[]]></config>
+    <config group="email_templates" type="radio" values="1,0" name="article_notif" description="New article alerts">1</config>
+    <config group="email_templates" type="text" name="article_notif_subject" description="Email Subject">New article</config>
+    <config group="email_templates" type="textarea" name="article_notif_body" description="Email Body">
+        <![CDATA[
 <p>Greetings,</p>
 <p>We have a new article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a>.</p>
 <p>For more details check the url: <a href="{%URL%}">{%URL%}</a></p>
-		]]>
-	</config>
+        ]]>
+    </config>
 
-	<config group="email_templates" type="radio" name="article_approval" values="1,0" description="Article is active">1</config>
-	<config group="email_templates" type="text" name="article_approval_subject" description="Email Subject">Your article was approved</config>
-	<config group="email_templates" type="textarea" name="article_approval_body" description="Email Body">
-		<![CDATA[
+    <config group="email_templates" type="radio" name="article_approval" values="1,0" description="Article is active">1</config>
+    <config group="email_templates" type="text" name="article_approval_subject" description="Email Subject">Your article was approved</config>
+    <config group="email_templates" type="textarea" name="article_approval_body" description="Email Body">
+        <![CDATA[
 <p>Greetings,</p>
 <p>Your article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a> went live.</p>
 <p>In order to view your article please refer to the URL:  <a href="{%VIEW_URL%}">{%VIEW_URL%}</a></p>
-		]]>
-	</config>
+        ]]>
+    </config>
 
-	<config group="email_templates" type="radio" name="article_rejected" values="1,0" description="Article is rejected">1</config>
-	<config group="email_templates" type="text" name="article_rejected_subject" description="Email Subject">Your article was rejected</config>
-	<config group="email_templates" type="textarea" name="article_rejected_body" description="Email Body">
-		<![CDATA[
+    <config group="email_templates" type="radio" name="article_rejected" values="1,0" description="Article is rejected">1</config>
+    <config group="email_templates" type="text" name="article_rejected_subject" description="Email Subject">Your article was rejected</config>
+    <config group="email_templates" type="textarea" name="article_rejected_body" description="Email Body">
+        <![CDATA[
 <p>Greetings,</p>
 <p>Your article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a> has been rejected.</p>
 <p>If you do not know the reason of the rejection or if you want to reactivate your article, please contact an administrator of the site.</p>
 <p>You can edit your article by visiting this page: <a href="{%EDIT_URL%}">{%EDIT_URL%}</a>.</p>
-		]]>
-	</config>
+        ]]>
+    </config>
 
-	<config group="email_templates" type="radio" name="article_suspended" values="1,0" description="Article is suspended">1</config>
-	<config group="email_templates" type="text" name="article_suspended_subject" description="Email Subject">Your article was suspended</config>
-	<config group="email_templates" type="textarea" name="article_suspended_body" description="Email Body">
-		<![CDATA[
+    <config group="email_templates" type="radio" name="article_suspended" values="1,0" description="Article is suspended">1</config>
+    <config group="email_templates" type="text" name="article_suspended_subject" description="Email Subject">Your article was suspended</config>
+    <config group="email_templates" type="textarea" name="article_suspended_body" description="Email Body">
+        <![CDATA[
 <p>Greetings,</p>
 <p>Your article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a> has been suspended.</p>
 <p>If you do not know the reason of the suspension or if you want to reactivate your article, please contact an administrator of the site.</p>
-		]]>
-	</config>
+        ]]>
+    </config>
 
-	<config group="email_templates" type="radio" name="article_removed" values="1,0" description="Article is removed">1</config>
-	<config group="email_templates" name="article_removed_subject" type="text" description="Subject:">Your article has been removed</config>
-	<config group="email_templates" name="article_removed_body" type="textarea" description="Email Body">
-		<![CDATA[
+    <config group="email_templates" type="radio" name="article_removed" values="1,0" description="Article is removed">1</config>
+    <config group="email_templates" name="article_removed_subject" type="text" description="Subject:">Your article has been removed</config>
+    <config group="email_templates" name="article_removed_body" type="textarea" description="Email Body">
+        <![CDATA[
 <p>Greetings,</p>
 <p>Your article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a> has been removed.</p>
 <p>If you do not know the reason of the deletion or if you want to recover your article, please contact an administrator of the site.</p>
-		]]>
-	</config>
+        ]]>
+    </config>
 
-	<tooltips>
-		<tooltip key="article_approval_body"><![CDATA[<b>{%TITLE%}</b> - Article title<br /><b>{%REASON%}</b> - Reason for approval<br /><b>{%EDIT_URL%}</b> - Url for edit article<br /><b>{%VIEW_URL%}</b> - Url for view article<br /><b>{%SITE_NAME%}</b> - Site name<br /><b>{%SITE_URL%}</b> - Site url (home page)]]></tooltip>
-		<tooltip key="article_rejected_body"><![CDATA[<b>{%TITLE%}</b> - Article title<br /><b>{%REASON%}</b> - Reason for rejeceted<b>{%EDIT_URL%}</b> - Url for edit article<br /><b>{%VIEW_URL%}</b> - Url for view article<br /><b>{%SITE_NAME%}</b> - Site name<br /><b>{%SITE_URL%}</b> - Site url (home page)]]></tooltip>
-		<tooltip key="article_suspended_body"><![CDATA[<b>{%TITLE%}</b> - Article title<br /><b>{%REASON%}</b> - Reason for suspended<b>{%EDIT_URL%}</b> - Url for edit article<br /><b>{%VIEW_URL%}</b> - Url for view article<br /><b>{%SITE_NAME%}</b> - Site name<br /><b>{%SITE_URL%}</b> - Site url (home page)]]></tooltip>
-		<tooltip key="articles_compact_url">Enable this option if you want to exclude 'article' in your View Article URL. Can only be used for small websites to avoid server overload.</tooltip>
-		<tooltip key="articles_source_link">A backlink to an article will be automatically generated and added the the bottom of each article.</tooltip>
-		<tooltip key="articles_similar_sort">Sorting order will be used to sort articles in the Similar Articles block.</tooltip>
-		<tooltip key="article_max_links">Number of links allowed to be placed per article. 0 - unlimited.</tooltip>
-		<tooltip key="articles_url_validation">Enable article URL validation. If an article has been requested using incorrect URL, the script will redirect a user to correct URL.</tooltip>
-		<tooltip key="auto_generate_keywords">Keywords will be automatically generated based on the article body</tooltip>
-	</tooltips>
+    <tooltips>
+        <tooltip key="article_approval_body"><![CDATA[<b>{%TITLE%}</b> - Article title<br /><b>{%REASON%}</b> - Reason for approval<br /><b>{%EDIT_URL%}</b> - Url for edit article<br /><b>{%VIEW_URL%}</b> - Url for view article<br /><b>{%SITE_NAME%}</b> - Site name<br /><b>{%SITE_URL%}</b> - Site url (home page)]]></tooltip>
+        <tooltip key="article_rejected_body"><![CDATA[<b>{%TITLE%}</b> - Article title<br /><b>{%REASON%}</b> - Reason for rejeceted<b>{%EDIT_URL%}</b> - Url for edit article<br /><b>{%VIEW_URL%}</b> - Url for view article<br /><b>{%SITE_NAME%}</b> - Site name<br /><b>{%SITE_URL%}</b> - Site url (home page)]]></tooltip>
+        <tooltip key="article_suspended_body"><![CDATA[<b>{%TITLE%}</b> - Article title<br /><b>{%REASON%}</b> - Reason for suspended<b>{%EDIT_URL%}</b> - Url for edit article<br /><b>{%VIEW_URL%}</b> - Url for view article<br /><b>{%SITE_NAME%}</b> - Site name<br /><b>{%SITE_URL%}</b> - Site url (home page)]]></tooltip>
+        <tooltip key="articles_compact_url">Enable this option if you want to exclude 'article' in your View Article URL. Can only be used for small websites to avoid server overload.</tooltip>
+        <tooltip key="articles_source_link">A backlink to an article will be automatically generated and added the the bottom of each article.</tooltip>
+        <tooltip key="articles_similar_sort">Sorting order will be used to sort articles in the Similar Articles block.</tooltip>
+        <tooltip key="article_max_links">Number of links allowed to be placed per article. 0 - unlimited.</tooltip>
+        <tooltip key="articles_url_validation">Enable article URL validation. If an article has been requested using incorrect URL, the script will redirect a user to correct URL.</tooltip>
+        <tooltip key="auto_generate_keywords">Keywords will be automatically generated based on the article body</tooltip>
+    </tooltips>
 
-	<fields_groups>
-		<group item="articles" name="general" title="General" tabview="1"><![CDATA[]]></group>
-		<group item="articles" name="articles_link" title="Link" tabview="1">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
-		<group item="articlecats" name="general" title="General"><![CDATA[]]></group>
-		<group item="members" name="members_publishing" title="Publishing" tabview="1">Setup your AdSense ID that is used to share ads profits on the articles you submit.</group>
-		<group item="members" name="articles_link" title="Link" tabcontainer="members_publishing">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
-	</fields_groups>
+    <fields_groups>
+        <group item="articles" name="general" title="General" tabview="1"><![CDATA[]]></group>
+        <group item="articles" name="articles_link" title="Link" tabview="1">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
+        <group item="articlecats" name="general" title="General"><![CDATA[]]></group>
+        <group item="members" name="members_publishing" title="Publishing" tabview="1">Setup your AdSense ID that is used to share ads profits on the articles you submit.</group>
+        <group item="members" name="articles_link" title="Link" tabcontainer="members_publishing">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
+    </fields_groups>
 
-	<fields>
-		<field item="articles" name="title" type="text" group="general" length="200"
-			required="1" editable="0" searchable="1" link_to="1" multilingual="1"
-			required_checks="if (isset($_POST['title']) &amp;&amp; is_array($_POST['title'])){ $maxLength = (int)iaCore::instance()-&gt;get('max_title'); foreach ($_POST['title'] as $iso =&gt; $value) { if (!empty($value)) { $l = utf8_strlen($value); if ($l &lt; 3 || $l &gt; $maxLength) $errors['title'] = iaLanguage::get('title_incorrect'); } }}"
-			page="edit_article,add_article,view_article,favorites,publishing_home,rss_articles">Title</field>
-		<field item="articles" name="summary" group="general" type="textarea" editable="0"
-			page="publishing_home,view_member" multilingual="1">Summary</field>
-		<field item="articles" name="body" group="general" type="textarea" editor="1" editable="0" searchable="1" required="1"
-			required_checks="if (isset($_POST['body']) &amp;&amp; is_array($_POST['body'])){ list($min, $max) = explode(',', iaCore::instance()-&gt;get('article_length'));  foreach ($_POST['body'] as $iso =&gt; $value) { $l = utf8_strlen(html_entity_decode(str_replace(array('\r','\n'), '*', iaSanitize::tags($value)))); if ($l &lt; $min || $l &gt; $max) $errors['body'] = iaLanguage::getf('body_length_error', array('min' =&gt; $min, 'max' =&gt; $max)); }}"
-			page="edit_article,add_article,view_article,rss_articles" multilingual="1">Body</field>
-		<field item="articles" name="meta_description" group="general" type="textarea"
-			adminonly="1" editable="0" multilingual="1">Meta-Description</field>
-		<field item="articles" name="meta_keywords" group="general" type="text" length="70" adminonly="1" editable="0" multilingual="1">Meta-Keywords</field>
-		<field item="articles" name="image" group="general" type="image" width="800" height="800" thumb_width="300" thumb_height="300"
-			editable="0" page="edit_article,add_article,favorites,publishing_home">Image</field>
-		<field item="articles" name="gallery" group="general" type="pictures"
-			width="800" height="800" thumb_width="300" thumb_height="300" prefix="articles_" length="5"
-			page="edit_article,add_article,view_article">Pictures</field>
-		<field item="articles" name="url" type="text" group="articles_link" length="255" searchable="1"
-			actions="if (!empty($_POST['url']) &amp;&amp; $_POST['url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['url'])) { $error = true; $messages[] = iaLanguage::get('incorrect_article_url'); }"
-			page="edit_article,add_article,view_article,favorites,publishing_home">URL</field>
-		<field item="articles" name="url_description" type="textarea" group="articles_link" length="1024" searchable="1"
-			page="edit_article,add_article,view_article,favorites,publishing_home">URL Description</field>
+    <fields>
+        <field item="articles" name="title" type="text" group="general" length="200"
+            required="1" editable="0" searchable="1" link_to="1" multilingual="1"
+            required_checks="if (isset($_POST['title']) &amp;&amp; is_array($_POST['title'])){ $maxLength = (int)iaCore::instance()-&gt;get('max_title'); foreach ($_POST['title'] as $iso =&gt; $value) { if (!empty($value)) { $l = utf8_strlen($value); if ($l &lt; 3 || $l &gt; $maxLength) $errors['title'] = iaLanguage::get('title_incorrect'); } }}"
+            page="edit_article,add_article,view_article,favorites,publishing_home,rss_articles">Title</field>
+        <field item="articles" name="summary" group="general" type="textarea" editable="0"
+            page="publishing_home,view_member" multilingual="1">Summary</field>
+        <field item="articles" name="body" group="general" type="textarea" editor="1" editable="0" searchable="1" required="1"
+            required_checks="if (isset($_POST['body']) &amp;&amp; is_array($_POST['body'])){ list($min, $max) = explode(',', iaCore::instance()-&gt;get('article_length'));  foreach ($_POST['body'] as $iso =&gt; $value) { $l = utf8_strlen(html_entity_decode(str_replace(array('\r','\n'), '*', iaSanitize::tags($value)))); if ($l &lt; $min || $l &gt; $max) $errors['body'] = iaLanguage::getf('body_length_error', array('min' =&gt; $min, 'max' =&gt; $max)); }}"
+            page="edit_article,add_article,view_article,rss_articles" multilingual="1">Body</field>
+        <field item="articles" name="meta_description" group="general" type="textarea"
+            adminonly="1" editable="0" multilingual="1">Meta-Description</field>
+        <field item="articles" name="meta_keywords" group="general" type="text" length="70" adminonly="1" editable="0" multilingual="1">Meta-Keywords</field>
+        <field item="articles" name="image" group="general" type="image" width="800" height="800" thumb_width="300" thumb_height="300"
+            editable="0" page="edit_article,add_article,favorites,publishing_home">Image</field>
+        <field item="articles" name="gallery" group="general" type="pictures"
+            width="800" height="800" thumb_width="300" thumb_height="300" prefix="articles_" length="5"
+            page="edit_article,add_article,view_article">Pictures</field>
+        <field item="articles" name="url" type="text" group="articles_link" length="255" searchable="1"
+            actions="if (!empty($_POST['url']) &amp;&amp; $_POST['url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['url'])) { $error = true; $messages[] = iaLanguage::get('incorrect_article_url'); }"
+            page="edit_article,add_article,view_article,favorites,publishing_home">URL</field>
+        <field item="articles" name="url_description" type="textarea" group="articles_link" length="1024" searchable="1"
+            page="edit_article,add_article,view_article,favorites,publishing_home">URL Description</field>
 
-		<field item="articlecats" name="title" group="general" type="text" length="70" required="1"
-			searchable="1" page="publishing_home" multilingual="1">Title</field>
-		<field item="articlecats" name="description" group="general" type="textarea" editor="1"
-			searchable="1" page="publishing_home" multilingual="1">Description</field>
-		<field item="articlecats" name="meta_description" group="general" type="textarea"
-			adminonly="1" multilingual="1">Meta-Description</field>
-		<field item="articlecats" name="meta_keywords" group="general" type="text"
-			length="100" adminonly="1" multilingual="1">Meta-Keywords</field>
-		<field item="articlecats" name="icon" type="iconpicker" group="general" default="fa-folder"
-			   adminonly="1" page="publishing_home">Icon</field>
+        <field item="articlecats" name="title" group="general" type="text" length="70" required="1"
+            searchable="1" page="publishing_home" multilingual="1">Title</field>
+        <field item="articlecats" name="description" group="general" type="textarea" editor="1"
+            searchable="1" page="publishing_home" multilingual="1">Description</field>
+        <field item="articlecats" name="meta_description" group="general" type="textarea"
+            adminonly="1" multilingual="1">Meta-Description</field>
+        <field item="articlecats" name="meta_keywords" group="general" type="text"
+            length="100" adminonly="1" multilingual="1">Meta-Keywords</field>
+        <field item="articlecats" name="icon" type="iconpicker" group="general" default="fa-folder"
+               adminonly="1" page="publishing_home">Icon</field>
 
-		<field item="members" name="adsense_id" group="members_publishing" type="text" length="23" page="profile">Google AdSense id</field>
-		<field item="members" name="articles_url" group="articles_link" type="text" length="255" page="profile"
-			actions="if (!empty($_POST['articles_url']) &amp;&amp; $_POST['articles_url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['articles_url'])) { $error = true; $messages[] = iaLanguage::get('error_url');}">Article URL</field>
-		<field item="members" name="articles_url_description" group="articles_link" type="textarea" length="1024" page="profile">Article URL Description</field>
-	</fields>
+        <field item="members" name="adsense_id" group="members_publishing" type="text" length="23" page="profile">Google AdSense id</field>
+        <field item="members" name="articles_url" group="articles_link" type="text" length="255" page="profile"
+            actions="if (!empty($_POST['articles_url']) &amp;&amp; $_POST['articles_url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['articles_url'])) { $error = true; $messages[] = iaLanguage::get('error_url');}">Article URL</field>
+        <field item="members" name="articles_url_description" group="articles_link" type="textarea" length="1024" page="profile">Article URL Description</field>
+    </fields>
 
-	<phrases>
-		<phrase category="admin" key="add_category">Add Category</phrase>
-		<phrase category="admin" key="all">All</phrase>
-		<phrase category="admin" key="article_added">Article added.</phrase>
-		<phrase category="admin" key="article_category_added">Article category added.</phrase>
-		<phrase category="admin" key="are_you_sure_to_delete_selected_articlecat">Are you sure you wish to delete this article category? All subcategories will be deleted as well.</phrase>
-		<phrase category="admin" key="are_you_sure_to_delete_selected_articlecats">Are you sure you wish to delete these article categories? All subcategories will be deleted as well.</phrase>
-		<phrase category="admin" key="are_you_sure_to_delete_selected_article">Are you sure you wish to delete this article?</phrase>
-		<phrase category="admin" key="are_you_sure_to_delete_selected_articles">Are you sure you wish to delete these articles?</phrase>
-		<phrase category="admin" key="dashboard_articles_list">Articles</phrase>
-		<phrase category="admin" key="dashboard_articles_add">Add article</phrase>
-		<phrase category="admin" key="edit_category">Edit Category</phrase>
-		<phrase category="admin" key="level">Level</phrase>
-		<phrase category="admin" key="num_articles">Count</phrase>
-		<phrase category="admin" key="owner">Owner</phrase>
-		<phrase category="admin" key="parent_category">Parent category</phrase>
-		<phrase category="admin" key="publishing_package">&quot;Publishing&quot; package</phrase>
-		<phrase category="admin" key="rejected">Rejected</phrase>
-		<phrase category="admin" key="rebuild_articlecats_paths">Rebuild article categories paths</phrase>
-		<phrase category="admin" key="rebuild_article_paths">Rebuild article paths</phrase>
-		<phrase category="admin" key="repair_articlecats">Repair article categories</phrase>
-		<phrase category="admin" key="repair_articlecats_num">Recount article categories</phrase>
+    <phrases>
+        <phrase category="admin" key="add_category">Add Category</phrase>
+        <phrase category="admin" key="all">All</phrase>
+        <phrase category="admin" key="article_added">Article added.</phrase>
+        <phrase category="admin" key="article_category_added">Article category added.</phrase>
+        <phrase category="admin" key="are_you_sure_to_delete_selected_articlecat">Are you sure you wish to delete this article category? All subcategories will be deleted as well.</phrase>
+        <phrase category="admin" key="are_you_sure_to_delete_selected_articlecats">Are you sure you wish to delete these article categories? All subcategories will be deleted as well.</phrase>
+        <phrase category="admin" key="are_you_sure_to_delete_selected_article">Are you sure you wish to delete this article?</phrase>
+        <phrase category="admin" key="are_you_sure_to_delete_selected_articles">Are you sure you wish to delete these articles?</phrase>
+        <phrase category="admin" key="dashboard_articles_list">Articles</phrase>
+        <phrase category="admin" key="dashboard_articles_add">Add article</phrase>
+        <phrase category="admin" key="edit_category">Edit Category</phrase>
+        <phrase category="admin" key="level">Level</phrase>
+        <phrase category="admin" key="num_articles">Count</phrase>
+        <phrase category="admin" key="owner">Owner</phrase>
+        <phrase category="admin" key="parent_category">Parent category</phrase>
+        <phrase category="admin" key="publishing_package">&quot;Publishing&quot; package</phrase>
+        <phrase category="admin" key="rejected">Rejected</phrase>
+        <phrase category="admin" key="rebuild_articlecats_paths">Rebuild article categories paths</phrase>
+        <phrase category="admin" key="rebuild_article_paths">Rebuild article paths</phrase>
+        <phrase category="admin" key="repair_articlecats">Repair article categories</phrase>
+        <phrase category="admin" key="repair_articlecats_num">Recount article categories</phrase>
 
-		<phrase category="admin" key="specified_category_title_exists">Category with the same title already exists.</phrase>
+        <phrase category="admin" key="specified_category_title_exists">Category with the same title already exists.</phrase>
 
-		<phrase category="common" key="add_article">Add Article</phrase>
-		<phrase category="common" key="articles">Articles</phrase>
-		<phrase category="common" key="articles_category_locked">Category locked</phrase>
-		<phrase category="common" key="articlecats">Article Categories</phrase>
-		<phrase category="common" key="body_length_error">Body should be :min-:max characters.</phrase>
-		<phrase category="common" key="categories">Categories</phrase>
-		<phrase category="common" key="edit_article">Edit Article</phrase>
-		<phrase category="common" key="field_title_annotation">A short description of your article</phrase>
-		<phrase category="common" key="field_title">Title</phrase>
-		<phrase category="common" key="field_category_id">Category</phrase>
-		<phrase category="common" key="field_summary">Summary</phrase>
-		<phrase category="common" key="field_member_id">Member</phrase>
-		<phrase category="common" key="hidden">Hidden</phrase>
-		<phrase category="common" key="incorrect_article_url">URL is incorrect. Please input correct URL or leave it empty.</phrase>
-		<phrase category="common" key="priority">Priority</phrase>
-		<phrase category="common" key="publishing">Publishing</phrase>
-		<phrase category="common" key="rss">RSS</phrase>
+        <phrase category="common" key="add_article">Add Article</phrase>
+        <phrase category="common" key="articles">Articles</phrase>
+        <phrase category="common" key="articles_category_locked">Category locked</phrase>
+        <phrase category="common" key="articlecats">Article Categories</phrase>
+        <phrase category="common" key="body_length_error">Body should be :min-:max characters.</phrase>
+        <phrase category="common" key="categories">Categories</phrase>
+        <phrase category="common" key="edit_article">Edit Article</phrase>
+        <phrase category="common" key="field_title_annotation">A short description of your article</phrase>
+        <phrase category="common" key="field_title">Title</phrase>
+        <phrase category="common" key="field_category_id">Category</phrase>
+        <phrase category="common" key="field_summary">Summary</phrase>
+        <phrase category="common" key="field_member_id">Member</phrase>
+        <phrase category="common" key="hidden">Hidden</phrase>
+        <phrase category="common" key="incorrect_article_url">URL is incorrect. Please input correct URL or leave it empty.</phrase>
+        <phrase category="common" key="priority">Priority</phrase>
+        <phrase category="common" key="publishing">Publishing</phrase>
+        <phrase category="common" key="rss">RSS</phrase>
 
-		<phrase category="frontend" key="art_added">Article has been posted.</phrase>
-		<phrase category="frontend" key="art_approval">Article has been added and will be waiting for consideration.</phrase>
-		<phrase category="frontend" key="art_deleted">Article has been successfully removed.</phrase>
-		<phrase category="frontend" key="article_approval">Article is waiting for consideration.</phrase>
-		<phrase category="frontend" key="article_draft">This article has been saved as a draft and it is not visible to other members.</phrase>
-		<phrase category="frontend" key="article_rejected">Your article is rejected</phrase>
-		<phrase category="frontend" key="article_suspended">Your article is suspended</phrase>
-		<phrase category="frontend" key="article_add_no_auth">Guests are not allowed to post articles. Only registered members can do that. Please &lt;a href=":base_urllogin/"&gt;sign in&lt;/a&gt; or &lt;a href=":base_urlregistration/"&gt;register&lt;/a&gt; in order to continue.</phrase>
-		<phrase category="frontend" key="article_source_url">&lt;p&gt;&lt;strong&gt;Article source:&lt;/strong&gt; &lt;a href=&quot;:url&quot;&gt;:url&lt;/a&gt;&lt;/p&gt;</phrase>
-		<phrase category="frontend" key="author_activity">Author Activity</phrase>
-		<phrase category="frontend" key="date_desc">Date (Newer First)</phrase>
-		<phrase category="frontend" key="date_asc">Date (Older First)</phrase>
-		<phrase category="frontend" key="default-articles-data">Default Articles Data</phrase>
-		<phrase category="frontend" key="delete_article">Delete Article</phrase>
-		<phrase category="frontend" key="do_you_really_want_to_delete_article">Do you really want to remove this article?</phrase>
-		<phrase category="frontend" key="error_links_limit_reached">You have reached the allowed number of links: :found (:allowed allowed)</phrase>
-		<phrase category="frontend" key="field_articles_url">URL</phrase>
-		<phrase category="frontend" key="field_articles_url_description">URL Description</phrase>
-		<phrase category="frontend" key="title_desc">Title (Descending)</phrase>
-		<phrase category="frontend" key="title_asc">Title (Ascending)</phrase>
-		<phrase category="frontend" key="views_desc">Views (Most viewed)</phrase>
-		<phrase category="frontend" key="views_asc">Views (Least viewed)</phrase>
-		<phrase category="frontend" key="new_articles">New Articles</phrase>
-		<phrase category="frontend" key="previous_article">Previous Article</phrase>
-		<phrase category="frontend" key="next_article">Next Article</phrase>
-		<phrase category="frontend" key="no_articles">There are no articles yet.</phrase>
-		<phrase category="frontend" key="no_articles2"><![CDATA[No articles added. Be the first who adds an article here. <a href=":url" rel="nofollow">Click here</a> to post an article.]]></phrase>
-		<phrase category="frontend" key="publishing_promo">Subrion CMS is a powerful platform for building publishing communities. It can be used as a blog, article directory, or review site. Lots of features and intuitive interface makes content management easy and cheerful.</phrase>
-		<phrase category="frontend" key="articles_by_date">Articles by :day :month, :year</phrase>
-		<phrase category="frontend" key="rss_feed_of_author">RSS feed of the author's articles</phrase>
-		<phrase category="frontend" key="no_articles_in_archive">No articles in the archive.</phrase>
-		<phrase category="frontend" key="these_fields_are_optional">These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</phrase>
-		<phrase category="frontend" key="redirect">Redirect</phrase>
-		<phrase category="frontend" key="save_as_draft">Save as Draft</phrase>
-		<phrase category="frontend" key="valid_google_adsense_format">Valid format is ca-pub-XXXX... (16 chars length number). Otherwise will be ignored.</phrase>
-		<phrase category="frontend" key="continue_reading"><![CDATA[Continue reading &rarr;]]></phrase>
-	</phrases>
+        <phrase category="frontend" key="art_added">Article has been posted.</phrase>
+        <phrase category="frontend" key="art_approval">Article has been added and will be waiting for consideration.</phrase>
+        <phrase category="frontend" key="art_deleted">Article has been successfully removed.</phrase>
+        <phrase category="frontend" key="article_approval">Article is waiting for consideration.</phrase>
+        <phrase category="frontend" key="article_draft">This article has been saved as a draft and it is not visible to other members.</phrase>
+        <phrase category="frontend" key="article_rejected">Your article is rejected</phrase>
+        <phrase category="frontend" key="article_suspended">Your article is suspended</phrase>
+        <phrase category="frontend" key="article_add_no_auth">Guests are not allowed to post articles. Only registered members can do that. Please &lt;a href=":base_urllogin/"&gt;sign in&lt;/a&gt; or &lt;a href=":base_urlregistration/"&gt;register&lt;/a&gt; in order to continue.</phrase>
+        <phrase category="frontend" key="article_source_url">&lt;p&gt;&lt;strong&gt;Article source:&lt;/strong&gt; &lt;a href=&quot;:url&quot;&gt;:url&lt;/a&gt;&lt;/p&gt;</phrase>
+        <phrase category="frontend" key="author_activity">Author Activity</phrase>
+        <phrase category="frontend" key="date_desc">Date (Newer First)</phrase>
+        <phrase category="frontend" key="date_asc">Date (Older First)</phrase>
+        <phrase category="frontend" key="default-articles-data">Default Articles Data</phrase>
+        <phrase category="frontend" key="delete_article">Delete Article</phrase>
+        <phrase category="frontend" key="do_you_really_want_to_delete_article">Do you really want to remove this article?</phrase>
+        <phrase category="frontend" key="error_links_limit_reached">You have reached the allowed number of links: :found (:allowed allowed)</phrase>
+        <phrase category="frontend" key="field_articles_url">URL</phrase>
+        <phrase category="frontend" key="field_articles_url_description">URL Description</phrase>
+        <phrase category="frontend" key="title_desc">Title (Descending)</phrase>
+        <phrase category="frontend" key="title_asc">Title (Ascending)</phrase>
+        <phrase category="frontend" key="views_desc">Views (Most viewed)</phrase>
+        <phrase category="frontend" key="views_asc">Views (Least viewed)</phrase>
+        <phrase category="frontend" key="new_articles">New Articles</phrase>
+        <phrase category="frontend" key="previous_article">Previous Article</phrase>
+        <phrase category="frontend" key="next_article">Next Article</phrase>
+        <phrase category="frontend" key="no_articles">There are no articles yet.</phrase>
+        <phrase category="frontend" key="no_articles2"><![CDATA[No articles added. Be the first who adds an article here. <a href=":url" rel="nofollow">Click here</a> to post an article.]]></phrase>
+        <phrase category="frontend" key="publishing_promo">Subrion CMS is a powerful platform for building publishing communities. It can be used as a blog, article directory, or review site. Lots of features and intuitive interface makes content management easy and cheerful.</phrase>
+        <phrase category="frontend" key="articles_by_date">Articles by :day :month, :year</phrase>
+        <phrase category="frontend" key="rss_feed_of_author">RSS feed of the author's articles</phrase>
+        <phrase category="frontend" key="no_articles_in_archive">No articles in the archive.</phrase>
+        <phrase category="frontend" key="these_fields_are_optional">These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</phrase>
+        <phrase category="frontend" key="redirect">Redirect</phrase>
+        <phrase category="frontend" key="save_as_draft">Save as Draft</phrase>
+        <phrase category="frontend" key="valid_google_adsense_format">Valid format is ca-pub-XXXX... (16 chars length number). Otherwise will be ignored.</phrase>
+        <phrase category="frontend" key="continue_reading"><![CDATA[Continue reading &rarr;]]></phrase>
+    </phrases>
 
-	<blocks>
-		<block name="articles_archive" title="Articles Archive" position="right" type="smarty" header="1" collapsible="1" filename="block.articles-archive"><![CDATA[]]></block>
-		<block name="new_articles" title="New Articles" position="bottom" type="smarty" header="0" sticky="0" pages="index,publishing_home" filename="block.new-articles"><![CDATA[]]></block>
-		<block name="featured_articles" title="Featured Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--featured" filename="block.featured-articles"><![CDATA[]]></block>
-		<block name="sponsored_articles" title="Sponsored Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--sponsored" filename="block.sponsored-articles"><![CDATA[]]></block>
-		<block name="random_articles" title="Random Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" filename="block.random-articles"><![CDATA[]]></block>
-		<block name="latest_articles" order="2" title="Latest Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.latest-articles"><![CDATA[]]></block>
-		<block name="popular_articles" order="3" title="Popular Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.popular-articles"><![CDATA[]]></block>
-		<block name="sticky_articles" title="Sticky Articles" position="left" type="smarty" header="1" sticky="0" pages="index" collapsible="1" filename="block.sticky-articles"><![CDATA[]]></block>
-		<block name="top_categories" order="1" title="Top Categories" position="left" type="smarty" header="1" sticky="1" collapsible="1" pages="publishing_home" filename="block.top-categories"><![CDATA[]]></block>
-		<block name="priority_categories" order="2" title="Featured Categories" position="bottom" type="smarty" header="1" sticky="0" collapsible="1" pages="index" filename="block.priority-categories"><![CDATA[]]></block>
-		<block name="author_info" title="Author" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" order="-1" filename="block.author"><![CDATA[]]></block>
-		<block name="related_articles" title="Related Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.related-articles" status="inactive"><![CDATA[]]></block>
-		<block name="most_viewed_articles" title="Most Viewed Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-viewed-articles" status="inactive"><![CDATA[]]></block>
-		<block name="most_recent_articles" title="Most Recent Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-recent-articles"><![CDATA[]]></block>
-		<block name="author_articles" title="More Author Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.author-articles" status="inactive"><![CDATA[]]></block>
-	</blocks>
+    <blocks>
+        <block name="articles_archive" title="Articles Archive" position="right" type="smarty" header="1" collapsible="1" filename="block.articles-archive"><![CDATA[]]></block>
+        <block name="new_articles" title="New Articles" position="bottom" type="smarty" header="0" sticky="0" pages="index,publishing_home" filename="block.new-articles"><![CDATA[]]></block>
+        <block name="featured_articles" title="Featured Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--featured" filename="block.featured-articles"><![CDATA[]]></block>
+        <block name="sponsored_articles" title="Sponsored Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--sponsored" filename="block.sponsored-articles"><![CDATA[]]></block>
+        <block name="random_articles" title="Random Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" filename="block.random-articles"><![CDATA[]]></block>
+        <block name="latest_articles" order="2" title="Latest Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.latest-articles"><![CDATA[]]></block>
+        <block name="popular_articles" order="3" title="Popular Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.popular-articles"><![CDATA[]]></block>
+        <block name="sticky_articles" title="Sticky Articles" position="left" type="smarty" header="1" sticky="0" pages="index" collapsible="1" filename="block.sticky-articles"><![CDATA[]]></block>
+        <block name="top_categories" order="1" title="Top Categories" position="left" type="smarty" header="1" sticky="1" collapsible="1" pages="publishing_home" filename="block.top-categories"><![CDATA[]]></block>
+        <block name="priority_categories" order="2" title="Featured Categories" position="bottom" type="smarty" header="1" sticky="0" collapsible="1" pages="index" filename="block.priority-categories"><![CDATA[]]></block>
+        <block name="author_info" title="Author" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" order="-1" filename="block.author"><![CDATA[]]></block>
+        <block name="related_articles" title="Related Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.related-articles" status="inactive"><![CDATA[]]></block>
+        <block name="most_viewed_articles" title="Most Viewed Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-viewed-articles" status="inactive"><![CDATA[]]></block>
+        <block name="most_recent_articles" title="Most Recent Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-recent-articles"><![CDATA[]]></block>
+        <block name="author_articles" title="More Author Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.author-articles" status="inactive"><![CDATA[]]></block>
+    </blocks>
 
-	<hooks>
-		<hook name="phpCoreUrlRewrite" page_type="front" filename="hook.url-rewrite"><![CDATA[]]></hook>
-		<hook name="phpCoreBeforePageDisplay" page_type="front" filename="hook.blocks-load"><![CDATA[]]></hook>
-		<hook name="smartyFrontFiltersBeforeFields" type="smarty" page_type="front" filename="search.filters"><![CDATA[]]></hook>
-		<hook name="populateCommonStatisticsBlock" page_type="front">
-			<![CDATA[
+    <hooks>
+        <hook name="phpCoreUrlRewrite" page_type="front" filename="hook.url-rewrite"><![CDATA[]]></hook>
+        <hook name="phpCoreBeforePageDisplay" page_type="front" filename="hook.blocks-load"><![CDATA[]]></hook>
+        <hook name="smartyFrontFiltersBeforeFields" type="smarty" page_type="front" filename="search.filters"><![CDATA[]]></hook>
+        <hook name="populateCommonStatisticsBlock" page_type="front">
+            <![CDATA[
 $condition = iaDb::printf("`status` = ':status'", array('status' => iaCore::STATUS_ACTIVE));
 $statistics['publishing'] = array(
-	array(
-		'title' => iaLanguage::get('articles'),
-		'value' => number_format((int)$iaDb->one(iaDb::STMT_COUNT_ROWS, $condition, 'articles'))
-	),
-	array(
-		'title' => iaLanguage::get('categories'),
-		'value' => number_format((int)$iaDb->one(iaDb::STMT_COUNT_ROWS, $condition . ' AND `parent_id` != 0', 'articles_categories'))
-	)
+    array(
+        'title' => iaLanguage::get('articles'),
+        'value' => number_format((int)$iaDb->one(iaDb::STMT_COUNT_ROWS, $condition, 'articles'))
+    ),
+    array(
+        'title' => iaLanguage::get('categories'),
+        'value' => number_format((int)$iaDb->one(iaDb::STMT_COUNT_ROWS, $condition . ' AND `parent_id` != 0', 'articles_categories'))
+    )
 );
-			]]>
-		</hook>
-		<hook name="smartyFrontAfterHeadSection" page_type="front" type="smarty">
-			<![CDATA[
+            ]]>
+        </hook>
+        <hook name="smartyFrontAfterHeadSection" page_type="front" type="smarty">
+            <![CDATA[
 {if defined('IA_CURRENT_MODULE') && 'publishing' == $smarty.const.IA_CURRENT_MODULE}
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="{$smarty.const.IA_MODULE_URL}rss/{if isset($rss_feed)}{$rss_feed}{else}latest.xml{/if}">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="{$smarty.const.IA_MODULE_URL}rss/{if isset($rss_feed)}{$rss_feed}{else}latest.xml{/if}">
 {/if}
-			]]>
-		</hook>
-		<hook name="adminDatabaseConsistency" type="smarty" page_type="admin" filename="hook.db-consistency"><![CDATA[]]></hook>
-		<hook name="phpAdminDatabaseConsistencyType" page_type="admin">
-			<![CDATA[
+            ]]>
+        </hook>
+        <hook name="adminDatabaseConsistency" type="smarty" page_type="admin" filename="hook.db-consistency"><![CDATA[]]></hook>
+        <hook name="phpAdminDatabaseConsistencyType" page_type="admin">
+            <![CDATA[
 if (in_array($_GET['type'], array('repair_articlecats', 'rebuild_articlecats_paths', 'repair_articlecats_num')))
 {
-	$iaArticleCategory = $iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN);
+    $iaArticleCategory = $iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN);
 
-	switch ($_GET['type'])
-	{
-		case 'repair_articlecats':
-			$iaArticleCategory->rebuildRelations();
-			break;
-		case 'rebuild_articlecats_paths':
-			$iaArticleCategory->rebuildAliases();
-			break;
-		case 'repair_articlecats_num':
-			$iaArticleCategory->calculateArticles();
-	}
+    switch ($_GET['type'])
+    {
+        case 'repair_articlecats':
+            $iaArticleCategory->rebuildRelations();
+            break;
+        case 'rebuild_articlecats_paths':
+            $iaArticleCategory->rebuildAliases();
+            break;
+        case 'repair_articlecats_num':
+            $iaArticleCategory->calculateArticles();
+    }
 
-	$iaView->setMessages(iaLanguage::get($_GET['type'] . '_success'), iaView::SUCCESS);
+    $iaView->setMessages(iaLanguage::get($_GET['type'] . '_success'), iaView::SUCCESS);
 }
-			]]>
-		</hook>
-	</hooks>
+            ]]>
+        </hook>
+    </hooks>
 
-	<install>
-		<sql>
-			<![CDATA[
+    <install>
+        <sql>
+            <![CDATA[
 CREATE TABLE `{prefix}articles` (
-	`id` mediumint(8) unsigned NOT NULL auto_increment,
-	`member_id` int(11) unsigned NOT NULL,
-	`title_alias` tinytext NOT NULL,
-	`category_id` mediumint(8) unsigned NOT NULL,
-	`status` enum('approval','active','rejected','hidden','suspended','draft','pending') NOT NULL default 'approval',
-	`date_added` datetime NOT NULL,
-	`date_modified` datetime NOT NULL,
-	`expire_date` date NOT NULL,
-	`ip` bigint(12) NOT NULL,
-	`session` varchar(32) NOT NULL,
-	`views_num` mediumint(7) unsigned NOT NULL,
-	`sticky` tinyint(1) unsigned NOT NULL,
-	`nofollow` tinyint(1) unsigned NOT NULL,
-	`featured` tinyint(1) unsigned NOT NULL,
-	`featured_start` datetime NULL,
-	`featured_end` datetime NULL,
-	`sponsored` tinyint(1) unsigned NOT NULL,
-	`sponsored_start` datetime NULL,
-	`sponsored_end` datetime NULL,
-	`sponsored_plan_id` smallint(5) unsigned NOT NULL,
-	PRIMARY KEY (`id`),
-	KEY `STATUS` (`status`),
-	KEY `DATE` (`date_added`),
-	KEY `VIEWS` (`views_num`)
+    `id` mediumint(8) unsigned NOT NULL auto_increment,
+    `member_id` int(11) unsigned NOT NULL,
+    `title_alias` tinytext NOT NULL,
+    `category_id` mediumint(8) unsigned NOT NULL,
+    `status` enum('approval','active','rejected','hidden','suspended','draft','pending') NOT NULL default 'approval',
+    `date_added` datetime NOT NULL,
+    `date_modified` datetime NOT NULL,
+    `expire_date` date NOT NULL,
+    `ip` bigint(12) NOT NULL,
+    `session` varchar(32) NOT NULL,
+    `views_num` mediumint(7) unsigned NOT NULL,
+    `sticky` tinyint(1) unsigned NOT NULL,
+    `nofollow` tinyint(1) unsigned NOT NULL,
+    `featured` tinyint(1) unsigned NOT NULL,
+    `featured_start` datetime NULL,
+    `featured_end` datetime NULL,
+    `sponsored` tinyint(1) unsigned NOT NULL,
+    `sponsored_start` datetime NULL,
+    `sponsored_end` datetime NULL,
+    `sponsored_plan_id` smallint(5) unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `STATUS` (`status`),
+    KEY `DATE` (`date_added`),
+    KEY `VIEWS` (`views_num`)
 ) {mysql_version};
-			]]>
-		</sql>
-		<sql>
-			<![CDATA[
+            ]]>
+        </sql>
+        <sql>
+            <![CDATA[
 CREATE TABLE `{prefix}articles_categories` (
-	`id` mediumint(8) unsigned NOT NULL auto_increment,
-	`parent_id` mediumint(8) unsigned NOT NULL,
-	`title_alias` tinytext NOT NULL,
-	`date_added` date,
-	`date_modified` date,
-	`status` enum('inactive', 'active') NOT NULL default 'inactive',
-	`locked` tinyint(1) unsigned NOT NULL,
-	`nofollow` tinyint(1) unsigned NOT NULL,
-	`priority` tinyint(1) unsigned NOT NULL,
-	`level` tinyint(3) unsigned NOT NULL,
-	`parents` tinytext NOT NULL,
-	`child` text NOT NULL,
-	`order` mediumint(8) NOT NULL,
-	`num_articles` mediumint(8) unsigned NOT NULL,
-	`num_all_articles` mediumint(8) unsigned NOT NULL,
-	PRIMARY KEY (`id`)
+    `id` mediumint(8) unsigned NOT NULL auto_increment,
+    `parent_id` mediumint(8) unsigned NOT NULL,
+    `title_alias` tinytext NOT NULL,
+    `date_added` date,
+    `date_modified` date,
+    `status` enum('inactive', 'active') NOT NULL default 'inactive',
+    `locked` tinyint(1) unsigned NOT NULL,
+    `nofollow` tinyint(1) unsigned NOT NULL,
+    `priority` tinyint(1) unsigned NOT NULL,
+    `level` tinyint(3) unsigned NOT NULL,
+    `parents` tinytext NOT NULL,
+    `child` text NOT NULL,
+    `order` mediumint(8) NOT NULL,
+    `num_articles` mediumint(8) unsigned NOT NULL,
+    `num_all_articles` mediumint(8) unsigned NOT NULL,
+    PRIMARY KEY (`id`)
 ) {mysql_version};
-			]]>
-		</sql>
-		<sql stage="end">
-			<![CDATA[
+            ]]>
+        </sql>
+        <sql stage="end">
+            <![CDATA[
 INSERT INTO `{prefix}articles_categories` (`id`, `parent_id`, `status`, `title_{lang}`, `title_alias`, `level`, `parents`, `child`, `order`, `locked`) VALUES
 (1, 0, 'active', 'ROOT', '', 0, '1', '1', 0, 1);
-			]]>
-		</sql>
-		<sql stage="end">
-			<![CDATA[
+            ]]>
+        </sql>
+        <sql stage="end">
+            <![CDATA[
 ALTER TABLE `{prefix}articles` ADD FULLTEXT (`title_{lang}`, `body_{lang}`);
-			]]>
-		</sql>
-		<sql stage="end">
-			<![CDATA[
+            ]]>
+        </sql>
+        <sql stage="end">
+            <![CDATA[
 ALTER TABLE `{prefix}members` ADD `articles_url` tinytext NOT NULL, ADD `articles_url_description` text NOT NULL;
-			]]>
-		</sql>
-	</install>
+            ]]>
+        </sql>
+    </install>
 
-	<uninstall>
-		<sql>
-			<![CDATA[
+    <uninstall>
+        <sql>
+            <![CDATA[
 DROP TABLE IF EXISTS `{prefix}articles`, `{prefix}articles_categories`
-			]]>
-		</sql>
-		<sql>
-			<![CDATA[
+            ]]>
+        </sql>
+        <sql>
+            <![CDATA[
 ALTER TABLE `{prefix}members` DROP `articles_url`, `articles_url_description`
-			]]>
-		</sql>
-	</uninstall>
+            ]]>
+        </sql>
+    </uninstall>
 </module>

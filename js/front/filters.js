@@ -1,41 +1,34 @@
-$(function()
-{
-	var $cSelect = $('#js-a-c'),
-		$scSelect = $('#js-a-sc');
+$(function () {
+    var $cSelect = $('#js-a-c'),
+        $scSelect = $('#js-a-sc');
 
-	$cSelect.on('change', function(e)
-	{
-		var value = $(this).val();
+    $cSelect.on('change', function (e) {
+        var value = $(this).val();
 
-		$scSelect.val(0).prop('disabled', true).find('option:not(:first)').remove();
+        $scSelect.val(0).prop('disabled', true).find('option:not(:first)').remove();
 
-		if (value != '')
-		{
-			$.getJSON(intelli.config.packages.publishing.url + 'publishing/read.json', {id: value}, function(response)
-			{
-				if (response && response.length > 0)
-				{
-					var d = $scSelect.data('id');
-					$.each(response, function(index, item)
-					{
-						var $option = $('<option>').val(item.id).text(item.text);
-						if (d == item.id) $option.attr('selected', true);
-						$scSelect.append($option);
-					});
+        if (value != '') {
+            $.getJSON(intelli.config.packages.publishing.url + 'publishing/read.json', {id: value}, function (response) {
+                if (response && response.length > 0) {
+                    var d = $scSelect.data('id');
+                    $.each(response, function (index, item) {
+                        var $option = $('<option>').val(item.id).text(item.text);
+                        if (d == item.id) $option.attr('selected', true);
+                        $scSelect.append($option);
+                    });
 
-					$scSelect.prop('disabled', false);
-				}
-			});
-		}
-		else {
-			$scSelect.prop('disabled', true);
-		}
-	});
+                    $scSelect.prop('disabled', false);
+                }
+            });
+        }
+        else {
+            $scSelect.prop('disabled', true);
+        }
+    });
 
-	if ($scSelect.data('id')) $cSelect.trigger('change');
+    if ($scSelect.data('id')) $cSelect.trigger('change');
 
-	$scSelect.on('change', function()
-	{
-		intelli.search.run();
-	});
+    $scSelect.on('change', function () {
+        intelli.search.run();
+    });
 });

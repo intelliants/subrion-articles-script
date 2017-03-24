@@ -56,14 +56,12 @@ if ($accessGranted) {
                     $iaView->name($pageUrl);
                     $iaCore->requestPath = $iaView->url;
                 }
-            }
-            else {
+            } else {
                 $iaCore->requestPath = $iaView->url;
                 $iaView->name('publishing_home');
             }
         }
-    }
-    else {
+    } else {
         if ($articleData = $iaDb->row(['id', 'category_id', 'title_alias'], iaDb::convertIds($url), 'articles')) {
             if ($articleData['title_alias']) {
                 $alias = substr($url, strpos($url, '-') + 1);
