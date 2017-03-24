@@ -81,7 +81,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 			$entryData['url'] = $this->_processUrl($entryData['url']);
 		}
 
-		return  parent::_entryUpdate($entryData, $entryId);
+		return parent::_entryUpdate($entryData, $entryId);
 	}
 
 	public function updateCounters($entryId, array $entryData, $action, $previousData = null)
@@ -104,7 +104,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 			}
 		}
 
-		$this->getHelper()->recount($entryId, $entryData, $previousData);
+		$this->getHelper()->recount($entryId, $previousData);
 	}
 
 	protected function _setDefaultValues(array &$entry)
