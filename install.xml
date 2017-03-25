@@ -183,8 +183,8 @@
         <group item="articles" name="general" title="General" tabview="1"><![CDATA[]]></group>
         <group item="articles" name="articles_link" title="Link" tabview="1">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
         <group item="articlecats" name="general" title="General"><![CDATA[]]></group>
-        <group item="members" name="members_publishing" title="Publishing" tabview="1">Setup your AdSense ID that is used to share ads profits on the articles you submit.</group>
-        <group item="members" name="articles_link" title="Link" tabcontainer="members_publishing">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
+        <group item="members" name="publishing" title="Publishing" tabview="1">Setup your AdSense ID that is used to share ads profits on the articles you submit.</group>
+        <group item="members" name="articles_link" title="Link" tabcontainer="publishing">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
     </fields_groups>
 
     <fields>
@@ -222,7 +222,7 @@
         <field item="articlecats" name="icon" type="iconpicker" group="general" default="fa-folder"
                adminonly="1" page="publishing_home">Icon</field>
 
-        <field item="members" name="adsense_id" group="members_publishing" type="text" length="23" page="profile">Google AdSense id</field>
+        <field item="members" name="adsense_id" group="publishing" type="text" length="23" page="profile">Google AdSense id</field>
         <field item="members" name="articles_url" group="articles_link" type="text" length="255" page="profile"
             actions="if (!empty($_POST['articles_url']) &amp;&amp; $_POST['articles_url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['articles_url'])) { $error = true; $messages[] = iaLanguage::get('error_url');}">Article URL</field>
         <field item="members" name="articles_url_description" group="articles_link" type="textarea" length="1024" page="profile">Article URL Description</field>
