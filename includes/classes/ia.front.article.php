@@ -28,7 +28,7 @@ class iaArticle extends abstractPublishingModuleFront
     public $coreSearchEnabled = true;
     public $coreSearchOptions = [
         'tableAlias' => 't1',
-        'regularSearchFields' => ['title', 'body'],
+        'regularSearchFields' => ['title', 'body', 'url', 'url_description'],
         'customColumns' => ['keywords', 'c', 'sc']
     ];
 
@@ -39,6 +39,8 @@ class iaArticle extends abstractPublishingModuleFront
     ];
 
     protected $_validProtocols = ['http://', 'https://'];
+
+    private $_foundRows = 0;
 
 
     public function url($action, array $data)
@@ -76,19 +78,19 @@ class iaArticle extends abstractPublishingModuleFront
         $stmt = $stmt ? ('AND ' . $stmt . $order) : null;
         $rows = $this->get($stmt, $start, $limit);
 
-        return [$this->iaDb->foundRows(), $rows];
+        return [$this->getFoundRows(), $rows];
     }
 
     public function coreSearchTranslateColumn($column, $value)
     {
         switch ($column) {
             case 'keywords':
-                $fields = ['title', 'description'];
+                $columns = ['title_' . $this->iaView->language, 'body_' . $this->iaView->language, 'url', 'url_description'];
                 $value = "'%" . iaSanitize::sql($value) . "%'";
 
                 $result = [];
-                foreach ($fields as $fieldName) {
-                    $result[] = ['col' => ':column', 'cond' => 'LIKE', 'val' => $value, 'field' => $fieldName];
+                foreach ($columns as $column) {
+                    $result[] = ['col' => ':column', 'cond' => 'LIKE', 'val' => $value, 'field' => $column];
                 }
 
                 return $result;
@@ -161,10 +163,16 @@ class iaArticle extends abstractPublishingModuleFront
             . ' LIMIT ' . $start . ', ' . $limit;
 
         $articles = $this->iaDb->getAll($sql);
+        $this->_foundRows = $this->iaDb->foundRows();
 
         $this->_processValues($articles);
 
         return $articles;
+    }
+
+    public function getFoundRows()
+    {
+        return $this->_foundRows;
     }
 
     public function getArticleBy($where, $order = '', $displayInactive = false, $decorateValues = true)

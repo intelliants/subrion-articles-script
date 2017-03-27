@@ -189,12 +189,12 @@
 
     <fields>
         <field item="articles" name="title" type="text" group="general" length="200"
-            required="1" editable="0" searchable="1" link_to="1" multilingual="1"
+            required="1" editable="0" link_to="1" multilingual="1"
             required_checks="if (isset($_POST['title']) &amp;&amp; is_array($_POST['title'])){ $maxLength = (int)iaCore::instance()-&gt;get('max_title'); foreach ($_POST['title'] as $iso =&gt; $value) { if (!empty($value)) { $l = utf8_strlen($value); if ($l &lt; 3 || $l &gt; $maxLength) $errors['title'] = iaLanguage::get('title_incorrect'); } }}"
             page="edit_article,add_article,view_article,favorites,publishing_home,rss_articles">Title</field>
         <field item="articles" name="summary" group="general" type="textarea" editable="0"
             page="publishing_home,view_member" multilingual="1">Summary</field>
-        <field item="articles" name="body" group="general" type="textarea" editor="1" editable="0" searchable="1" required="1"
+        <field item="articles" name="body" group="general" type="textarea" editor="1" editable="0" required="1"
             required_checks="if (isset($_POST['body']) &amp;&amp; is_array($_POST['body'])){ list($min, $max) = explode(',', iaCore::instance()-&gt;get('article_length'));  foreach ($_POST['body'] as $iso =&gt; $value) { $l = utf8_strlen(html_entity_decode(str_replace(array('\r','\n'), '*', iaSanitize::tags($value)))); if ($l &lt; $min || $l &gt; $max) $errors['body'] = iaLanguage::getf('body_length_error', array('min' =&gt; $min, 'max' =&gt; $max)); }}"
             page="edit_article,add_article,view_article,rss_articles" multilingual="1">Body</field>
         <field item="articles" name="meta_description" group="general" type="textarea"
@@ -205,10 +205,10 @@
         <field item="articles" name="gallery" group="general" type="pictures"
             width="800" height="800" thumb_width="300" thumb_height="300" prefix="articles_" length="5"
             page="edit_article,add_article,view_article">Pictures</field>
-        <field item="articles" name="url" type="text" group="articles_link" length="255" searchable="1"
+        <field item="articles" name="url" type="text" group="articles_link" length="255"
             actions="if (!empty($_POST['url']) &amp;&amp; $_POST['url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['url'])) { $error = true; $messages[] = iaLanguage::get('incorrect_article_url'); }"
             page="edit_article,add_article,view_article,favorites,publishing_home">URL</field>
-        <field item="articles" name="url_description" type="textarea" group="articles_link" length="1024" searchable="1"
+        <field item="articles" name="url_description" type="textarea" group="articles_link" length="1024"
             page="edit_article,add_article,view_article,favorites,publishing_home">URL Description</field>
 
         <field item="articlecats" name="title" group="general" type="text" length="70" required="1"
