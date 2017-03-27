@@ -145,11 +145,15 @@ class iaBackendController extends iaAbstractControllerModuleBackend
         }
 
         // category
-        $parent = $this->_iaArticlecat->getById($entryData['category_id']);
+        $category = $this->_iaArticlecat->getById($entryData['category_id']);
 
-        $entryData['parents'] = $parent['parents'];
+        $parents = explode(',', $category['parents']);
+        $parents = array_reverse($parents);
+        $parents = implode(',', $parents);
 
-        $iaView->assign('parent', $parent);
+        $entryData['parents'] = $parents;
+
+        $iaView->assign('parent', $category);
         $iaView->assign('statuses', $this->getHelper()->getStatuses());
     }
 

@@ -78,13 +78,11 @@ SQL;
         $category = $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, iaDb::convertIds($id));
 
         // update parents
-        $parents = [];
+        $parents = [$category['id']];
         $parents = $this->_getParents($category['id'], $parents);
-        $parents[] = $category['id'];
         $level = count($parents) - 1;
 
-        $children = [];
-        $children[] = $category['id'];
+        $children = [$category['id']];
         $children = $this->_getChildren($category['id'], $children);
 
         $entry = [
