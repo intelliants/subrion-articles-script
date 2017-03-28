@@ -133,11 +133,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
         $iaView->assign('author_articles', $authorArticles);
     }
 
+    $sections = $iaField->getTabs($iaArticle->getItemName(), $article);
+
     if ($iaCore->get('articles_source_link')) {
         $article['body'] .= iaLanguage::getf('article_source_url', ['url' => $iaArticle->url('view', $article)]);
     }
-
-    $sections = $iaField->getTabs($iaArticle->getItemName(), $article);
 
     $iaView->assign('item', $article);
     $iaView->assign('sections', $sections);
