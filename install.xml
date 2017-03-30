@@ -413,7 +413,6 @@ CREATE TABLE `{prefix}articles` (
             <![CDATA[
 CREATE TABLE `{prefix}articles_categories` (
     `id` mediumint(8) unsigned NOT NULL auto_increment,
-    `parent_id` mediumint(8) unsigned NOT NULL,
     `title_alias` tinytext NOT NULL,
     `date_added` date,
     `date_modified` date,
@@ -421,20 +420,11 @@ CREATE TABLE `{prefix}articles_categories` (
     `locked` tinyint(1) unsigned NOT NULL,
     `nofollow` tinyint(1) unsigned NOT NULL,
     `priority` tinyint(1) unsigned NOT NULL,
-    `level` tinyint(3) unsigned NOT NULL,
-    `parents` tinytext NOT NULL,
-    `child` text NOT NULL,
     `order` mediumint(8) NOT NULL,
     `num_articles` mediumint(8) unsigned NOT NULL,
     `num_all_articles` mediumint(8) unsigned NOT NULL,
     PRIMARY KEY (`id`)
 ) {mysql_version};
-            ]]>
-        </sql>
-        <sql stage="end">
-            <![CDATA[
-INSERT INTO `{prefix}articles_categories` (`id`, `parent_id`, `status`, `title_{lang}`, `title_alias`, `level`, `parents`, `child`, `order`, `locked`) VALUES
-(1, 0, 'active', 'ROOT', '', 0, '1', '1', 0, 1);
             ]]>
         </sql>
         <sql stage="end">
@@ -447,6 +437,11 @@ ALTER TABLE `{prefix}articles` ADD FULLTEXT (`title_{lang}`, `body_{lang}`);
 ALTER TABLE `{prefix}members` ADD `articles_url` tinytext NOT NULL, ADD `articles_url_description` text NOT NULL;
             ]]>
         </sql>
+		<code>
+			<![CDATA[
+$iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN)->setupDbStructure();
+			]]>
+		</code>
     </install>
 
     <uninstall>

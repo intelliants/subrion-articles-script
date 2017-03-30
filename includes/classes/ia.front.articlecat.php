@@ -17,9 +17,11 @@
  *
  ******************************************************************************/
 
-class iaArticlecat extends abstractPublishingModuleFront
+class iaArticlecat extends iaAbstractFrontHelperCategoryHybrid
 {
     protected static $_table = 'articles_categories';
+
+    protected $_moduleName = 'publishing';
 
     protected $_itemName = 'articlecats';
 
@@ -29,20 +31,6 @@ class iaArticlecat extends abstractPublishingModuleFront
         'default' => ':base:alias'
     ];
 
-
-    public function getRootId()
-    {
-        if (is_null($this->_rootId)) {
-            $this->_rootId = $this->iaDb->one(iaDb::ID_COLUMN_SELECTION, iaDb::convertIds(0, 'parent_id'), self::getTable());
-        }
-
-        return $this->_rootId;
-    }
-
-    public function all($aWhere, $fields = '*')
-    {
-        return $this->iaDb->all($fields, $aWhere, null, null, self::getTable());
-    }
 
     public function url($action, array $data)
     {
@@ -86,10 +74,11 @@ class iaArticlecat extends abstractPublishingModuleFront
      */
     public function get($where = null, $start = 0, $limit = 0, $parentId = 0, $sorting = false)
     {
-        $fields = "SQL_CALC_FOUND_ROWS `id`, `title_{$this->iaView->language}`, `level`, `title_alias`, `child`, `icon`, `nofollow`, `num_all_articles` `num`";
+        $fields = sprintf('SQL_CALC_FOUND_ROWS `id`, `title_alias`, `icon`, `nofollow`, `num_all_articles` `num`,'
+            . '`title_%s`, `%s`, `%s`', $this->iaView->language, self::COL_LEVEL, self::COL_CHILDREN);
 
-        $stmt = "`status` = 'active' AND `parent_id` != 0 " . ($parentId > 0 ? "AND `parent_id`='{$parentId}' " : '');
-        $where && $stmt.= ' ' . $where;
+        $stmt = "`status` = 'active' AND `_pid` != 0 " . ($parentId > 0 ? "AND `_pid` = {$parentId} " : '');
+        $where && $stmt.= $where;
         $stmt.= ' ORDER BY ';
         $stmt.= $sorting
             ? $sorting

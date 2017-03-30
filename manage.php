@@ -18,41 +18,7 @@
  ******************************************************************************/
 
 if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
-    $iaArticlecat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
-
-    $entriesNum = $iaDb->one_bind(iaDb::STMT_COUNT_ROWS, '`status` = :status', ['status' => iaCore::STATUS_ACTIVE], iaArticlecat::getTable());
-    $dynamicLoadMode = ($entriesNum > 200);
-
-    $parentId = $iaArticlecat->getRootId();
-
-    if ($dynamicLoadMode) {
-        empty($_GET['id']) || $parentId = (int)$_GET['id'];
-        $clause = '`parent_id` = :parent AND `status` = :status';
-
-        $iaDb->bind($clause, ['parent' => $parentId, 'status' => iaCore::STATUS_ACTIVE]);
-    } else {
-        $clause = '`parent_id` != 0 AND `status` = :status';
-
-        $iaDb->bind($clause, ['status' => iaCore::STATUS_ACTIVE]);
-    }
-
-    $clause.= ' ORDER BY `title_' . $iaView->language . '`';
-
-    $categories = $iaArticlecat->all($clause, ['id', 'parent_id', 'title' => 'title_' . $iaView->language, 'locked', 'child']);
-    $output = [];
-
-    foreach ($categories as $row) {
-        $entry = ['id' => $row['id'], 'text' => $row['title']];
-        empty($row['locked']) || $entry['state'] = ['disabled' => true];
-
-        $dynamicLoadMode
-            ? $entry['children'] = $row['child'] && $row['child'] != $row['id']
-            : $entry['parent'] = ($parentId == $row['parent_id']) ? '#' : $row['parent_id'];
-
-        $output[] = $entry;
-    }
-
-    $iaView->assign($output);
+    $iaView->assign($iaCore->factoryModule('articlecat', IA_CURRENT_MODULE)->getJsonTree($_GET));
 }
 
 if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
