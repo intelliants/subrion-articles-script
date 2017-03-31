@@ -32,6 +32,8 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
     protected $_activityLog = true;
 
+    protected $_treeEnabled = true;
+
     private $_validUrlProtocols = ['http://', 'https://'];
 
     private $_iaArticlecat;
@@ -40,6 +42,8 @@ class iaBackendController extends iaAbstractControllerModuleBackend
     public function init()
     {
         $this->_iaArticlecat = $this->_iaCore->factoryModule('articlecat', $this->getModuleName(), iaCore::ADMIN);
+
+        $this->_treeSettings = ['parent_id' => iaArticlecat::COL_PARENT_ID, 'parents' => iaArticlecat::COL_PARENTS];
     }
 
     protected function _modifyGridParams(&$conditions, &$values, array $params)
@@ -144,19 +148,22 @@ class iaBackendController extends iaAbstractControllerModuleBackend
             $entryData['url'] = $this->_validUrlProtocols[0];
         }
 
-        // category
-        $category = $this->_iaArticlecat->getById($entryData['category_id']);
-
-        $parents = explode(',', $category['parents']);
-        $parents = array_reverse($parents);
-        $parents = implode(',', $parents);
-
-        $entryData['parents'] = $parents;
-
-        $iaView->assign('parent', $category);
         $iaView->assign('statuses', $this->getHelper()->getStatuses());
     }
 
+    protected function _getTreeVars(array $entryData)
+    {
+        $category = empty($entryData['category_id'])
+            ? $this->_iaArticlecat->getRoot()
+            : $this->_iaArticlecat->getById($entryData['category_id']);
+
+        return [
+            'url' => IA_ADMIN_URL . 'publishing/categories/tree.json',
+            'nodes' => $category[iaArticlecat::COL_PARENTS],
+            'id' => $category['id'],
+            'title' => $category['title']
+        ];
+    }
 
     protected function _getJsonAlias($params)
     {

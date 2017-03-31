@@ -105,7 +105,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             $iaArticleCat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
             // build breadcrumb
             $parents = $iaDb->all(['title' => 'title_' . $iaView->language, 'title_alias'],
-                "`id` IN ({$article['category_parents']}) AND `parent_id` != 0 ORDER BY `level`",
+                "`id` IN ({$article['category_parents']}) AND `_pid` != 0 ORDER BY `level`",
                 null, null, iaArticlecat::getTable());
             foreach ($parents as $p) {
                 iaBreadcrumb::add($p['title'], $iaArticleCat->url('view', $p), -1);

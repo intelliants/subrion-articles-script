@@ -3,7 +3,7 @@
 
     {if 0 != $item._pid}
         {capture name='general' append='fieldset_before'}
-            {include 'tree.tpl' url="{$smarty.const.IA_ADMIN_URL}publishing/categories/tree.json?cid={$id}"}
+            {include 'tree.tpl'}
         {/capture}
 
         {capture name='title' append='field_after'}

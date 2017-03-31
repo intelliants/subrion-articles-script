@@ -40,6 +40,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
         $this->_root = $this->getHelper()->getRoot();
 
         $this->_gridSorting['parent_title'] = ['title_' . $this->_iaCore->language['iso'], 'p'];
+        $this->_treeSettings = ['parent_id' => iaArticlecat::COL_PARENT_ID, 'parents' => iaArticlecat::COL_PARENTS];
     }
 
     protected function _gridRead($params)
@@ -47,39 +48,28 @@ class iaBackendController extends iaAbstractControllerModuleBackend
         $iaArticle = $this->_iaCore->factoryModule('article', $this->getModuleName(), iaCore::ADMIN);
 
         if (isset($_POST['action'])) {
+            $output = [];
+            $iaView = $this->_iaCore->iaView;
+
             switch ($_POST['action']) {
+                // repairing
                 case 'pre_repair_articlecats':
                     $this->getHelper()->dropRelations();
-                    $total = $this->getHelper()->getCount();
-                    $this->_iaCore->iaView->assign('total', $total);
-
-                    break;
-
-                case 'pre_repair_articlecats_paths':
-                    $total = $this->getHelper()->getCount();
-                    $this->_iaCore->iaView->assign('total', $total);
-
-                    break;
-
-                case 'pre_repair_articlecats_num':
-                    $this->getHelper()->clearArticlesNum();
-                    $total = $this->getHelper()->getCount();
-                    $this->_iaCore->iaView->assign('total', $total);
-
-                    break;
-
-                case 'pre_rebuild_article_paths':
-                    $total = $iaArticle->getCount();
-                    $this->_iaCore->iaView->assign('total', $total);
+                    $output['total'] = $this->getHelper()->getCount();
 
                     break;
 
                 case 'repair_articlecats':
                     $rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], '', (int)$_POST['start'], (int)$_POST['limit']);
-
                     foreach ($rows as $row) {
                         $this->getHelper()->rebuildRelations($row['id']);
                     }
+
+                    break;
+
+                // fixing paths
+                case 'pre_repair_articlecats_paths':
+                    $output['total'] = $this->getHelper()->getCount();
 
                     break;
 
@@ -91,12 +81,23 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
                     break;
 
-                case 'repair_articlecats_num':
-                    $output = $this->getHelper()->calculateArticles((int)$_POST['start'], (int)$_POST['limit']);
+                // recount
+                case 'pre_repair_articlecats_num':
+                    $this->getHelper()->clearArticlesNum();
+                    $output['total'] = $this->getHelper()->getCount();
 
                     break;
 
-                // Rebuld Article Paths
+                case 'repair_articlecats_num':
+                    $this->getHelper()->calculateArticles((int)$_POST['start'], (int)$_POST['limit']);
+
+                    break;
+
+                case 'pre_rebuild_article_paths':
+                    $output['total'] = $iaArticle->getCount();
+
+                    break;
+
                 case 'rebuild_article_paths':
                     $rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], '', (int)$_POST['start'], (int)$_POST['limit'], iaArticle::getTable());
 
@@ -105,7 +106,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
                     }
             }
 
-            return;
+            return $output;
         }
 
         return parent::_gridRead($params);
@@ -113,7 +114,25 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
     public function _gridQuery($columns, $where, $order, $start, $limit)
     {
-        return $this->getHelper()->get($columns, $where, $order, $start, $limit);
+        $sql = <<<SQL
+SELECT :columns, p.`title_:lang` `parent_title`
+	FROM `:table` c 
+LEFT JOIN `:table` p ON (c.`:col_parent` = p.`id`) 
+WHERE :where :order 
+LIMIT :start, :limit
+SQL;
+        $sql = iaDb::printf($sql, [
+            'lang' => $this->_iaCore->language['iso'],
+            'table' => $this->_iaDb->prefix . $this->getTable(),
+            'columns' => $columns,
+            'where' => $where,
+            'order' => $order,
+            'start' => $start,
+            'limit' => $limit,
+            'col_parent' => iaArticlecat::COL_PARENT_ID
+        ]);
+
+        return $this->_iaDb->getAll($sql);
     }
 
     protected function _entryAdd(array $entryData)
@@ -163,11 +182,11 @@ class iaBackendController extends iaAbstractControllerModuleBackend
         $entry['priority'] = (int)$data['priority'];
         $entry[iaArticlecat::COL_PARENT_ID] = (int)$data['tree_id'];
 
-        if ($entry[iaArticlecat::COL_PARENT_ID] != $this->_root['parent_id']) {
+        if ($entry[iaArticlecat::COL_PARENT_ID] != $this->_root[iaArticlecat::COL_PARENT_ID]) {
             $entry['title_alias'] = empty($data['title_alias']) ? $data['title'][$this->_iaCore->language['iso']] : $data['title_alias'];
             $entry['title_alias'] = iaSanitize::alias($entry['title_alias']);
 
-            if ($this->_iaDb->exists('`title` = :title AND `parent_id` = :parent_id AND `id` != :id',
+            if ($this->_iaDb->exists('`title_' . $this->_iaCore->language['iso'] . '` = :title AND `_pid` = :parent_id AND `id` != :id',
                 ['title' => $entry['title_' . $this->_iaCore->language['iso']], 'parent_id' => $entry[iaArticlecat::COL_PARENT_ID], 'id' => $this->getEntryId()])) {
                 $this->addMessage('specified_category_title_exists');
             }
@@ -183,13 +202,9 @@ class iaBackendController extends iaAbstractControllerModuleBackend
     {
         parent::_assignValues($iaView, $entryData);
 
-        $parent = $this->getHelper()->getById($entryData[iaArticlecat::COL_PARENT_ID]);
-
         $array = explode(IA_URL_DELIMITER, trim($entryData['title_alias'], IA_URL_DELIMITER));
         $entryData['title_alias'] = end($array);
 
-        $iaView->assign('parent', $parent);
-        $iaView->assign('treeParents', $parent[iaArticlecat::COL_PARENTS]);
         $iaView->assign('statuses', $this->getHelper()->getStatuses());
     }
 

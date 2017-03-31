@@ -17,26 +17,6 @@
  *
  ******************************************************************************/
 
-$iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
-
-if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
-    $categoryId = isset($_GET['id']) ? (int)$_GET['id'] : $iaDb->one('id', '`parent_id` = 0', 'articles_categories');
-
-    $where = "`parent_id` = $categoryId && `status` = 'active' ORDER BY `title`";
-
-    $data = [];
-    $rows = $iaDb->all(['id', 'title', 'title_alias', 'locked', 'child'], $where, null, null, 'articles_categories');
-    foreach ($rows as &$row) {
-        $data[] = [
-            'id' => (int)$row['id'],
-            'text' => $row['title'],
-            'children' => $row['child'] && $row['child'] != $row['id']
-        ];
-    }
-
-    $iaView->assign($data);
-}
-
 if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     $pagination = [
         'total' => 0,
@@ -81,6 +61,9 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
         $order = ' `' . $sort . '` ' . $type;
     }
 
+    $iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
+    $iaArticlecat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
+
     switch ($iaView->name()) {
         case 'popular_articles':
             $articles = $iaArticle->get($where . " ORDER BY t1.`views_num` DESC", $start, $pagination['limit']);
@@ -101,8 +84,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             break;
 
         case 'publishing_home':
-            $iaArticlecat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
-
             // get current category
             $category = $iaArticlecat->getCategory("`title_alias` = '" . (count($iaCore->requestPath) > 0 ? iaSanitize::sql(implode('/', $iaCore->requestPath)) . '/' : '') . "'");
             if (empty($category)) {
@@ -110,29 +91,27 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             }
             $iaView->set('subpage', $category['id']);
 
-            if ($category['level'] > 0) {
+            if ($category[iaArticlecat::COL_LEVEL] > 0) {
                 $iaView->title($category['title']);
             }
 
-            if (0 == $category['parent_id']) {
-                $rssFeed = 'latest';
-            }
-
-            if (0 != $category['parent_id'] && $category['parents']) {
+            if ($iaArticlecat->getRootId() != $category[iaArticlecat::COL_PARENT_ID]) {
                 // build breadcrumb
                 $parents = $iaDb->all(['title' => 'title_' . $iaView->language, 'title_alias'],
-                    "`id` IN({$category['parents']}) AND `parent_id` != 0 ORDER BY `level`",
+                    "`id` IN({$category[iaArticlecat::COL_PARENTS]}) AND `_pid` != 0 ORDER BY `level`",
                     0, 0, 'articles_categories');
                 foreach ($parents as $p) {
                     iaBreadcrumb::toEnd($p['title'], $iaArticlecat->url('view', $p));
                 }
+            } else {
+                $rssFeed = 'latest';
             }
 
             $categories = $iaArticlecat->get(($iaCore->get('art_view_category', true) ? '' : " AND `num_all_articles` > 0"), 0, 0, $category['id']);
 
             $order = " ORDER BY t1." . $order;
 
-            $where .= $iaCore->get('articles_show_children') ? " AND t1.`category_id` IN ({$category['child']}) " : " AND t1.`category_id` = ({$category['id']}) " ;
+            $where .= $iaCore->get('articles_show_children') ? " AND t1.`category_id` IN ({$category[iaArticlecat::COL_CHILDREN]}) " : " AND t1.`category_id` = ({$category['id']}) " ;
 
             $articles = $iaArticle->get($where . $order, $start, $pagination['limit']);
 

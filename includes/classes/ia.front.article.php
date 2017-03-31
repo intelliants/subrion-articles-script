@@ -131,6 +131,7 @@ class iaArticle extends abstractPublishingModuleFront
 
     public function get($stmtWhere = null, $start = 0, $limit = 0, $joinTransactions = false)
     {
+        $this->iaCore->factoryModule('articlecat', $this->getModuleName());
         if (!$limit) {
             $limit = 1000;
         }
@@ -138,8 +139,8 @@ class iaArticle extends abstractPublishingModuleFront
             't1.*',
             't2.`title_' . $this->iaView->language . '` `category_title`',
             't2.`title_alias` `category_alias`',
-            't2.`parent_id` `category_parent`',
-            't2.`parents` `category_parents`',
+            't2.`' . iaArticlecat::COL_PARENT_ID . '` `category_parent`',
+            't2.`' . iaArticlecat::COL_PARENTS . '` `category_parents`',
             't2.`locked` `category_locked`',
             't3.`username` `account_username`',
             'IF(\'\' != t3.`fullname`, t3.`fullname`, t3.`username`) `account_fullname`',
@@ -177,14 +178,16 @@ class iaArticle extends abstractPublishingModuleFront
 
     public function getArticleBy($where, $order = '', $displayInactive = false, $decorateValues = true)
     {
+        $this->iaCore->factoryModule('articlecat', $this->getModuleName());
+
         $accountId = iaUsers::hasIdentity() ? iaUsers::getIdentity()->id : 0;
 
         $fields = [
             'SQL_CALC_FOUND_ROWS art.*',
             'cat.`title_' . $this->iaView->language . '` `category_title`',
             'cat.`title_alias` `category_alias`',
-            'cat.`parent_id` `category_parent`',
-            'cat.`parents` `category_parents`',
+            'cat.`' . iaArticlecat::COL_PARENT_ID . '` `category_parent`',
+            'cat.`' . iaArticlecat::COL_PARENTS . '` `category_parents`',
             'acc.`username` `account_username`',
             'IF(\'\' != acc.`fullname`, acc.`fullname`, acc.`username`) `account_fullname`',
         ];
@@ -315,7 +318,7 @@ class iaArticle extends abstractPublishingModuleFront
         $this->iaCore->factory('util');
 
         // get the previous data
-        $article = $this->getById($id, true);
+        $article = $this->getById($id);
         $langCode = $this->iaCore->language['iso'];
 
         // If URL field is empty, fill it
@@ -391,7 +394,7 @@ class iaArticle extends abstractPublishingModuleFront
         $sql  = "UPDATE `{$this->iaDb->prefix}articles_categories` ";
         $sql .= "SET `num_articles`=IF(`id`=$parentCategoryId, `num_articles`+{$factor}, `num_articles`) ";
         $sql .= ", `num_all_articles`=`num_all_articles`+{$factor} ";
-        $sql .= "WHERE FIND_IN_SET({$parentCategoryId}, `child`) ";
+        $sql .= "WHERE FIND_IN_SET({$parentCategoryId}, `" . iaArticlecat::COL_CHILDREN . "`) ";
 
         return $this->iaDb->query($sql);
     }

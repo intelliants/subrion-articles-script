@@ -354,28 +354,6 @@ $statistics['publishing'] = array(
             ]]>
         </hook>
         <hook name="adminDatabaseConsistency" type="smarty" page_type="admin" filename="hook.db-consistency"><![CDATA[]]></hook>
-        <hook name="phpAdminDatabaseConsistencyType" page_type="admin">
-            <![CDATA[
-if (in_array($_GET['type'], array('repair_articlecats', 'rebuild_articlecats_paths', 'repair_articlecats_num')))
-{
-    $iaArticleCategory = $iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN);
-
-    switch ($_GET['type'])
-    {
-        case 'repair_articlecats':
-            $iaArticleCategory->rebuildRelations();
-            break;
-        case 'rebuild_articlecats_paths':
-            $iaArticleCategory->rebuildAliases();
-            break;
-        case 'repair_articlecats_num':
-            $iaArticleCategory->calculateArticles();
-    }
-
-    $iaView->setMessages(iaLanguage::get($_GET['type'] . '_success'), iaView::SUCCESS);
-}
-            ]]>
-        </hook>
     </hooks>
 
     <install>
