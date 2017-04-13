@@ -1,12 +1,7 @@
 <div class="row">
     <label class="col col-lg-2 control-label">{lang key='repair_articlecats'}</label>
     <div class="col col-lg-1">
-        <button class="btn btn-success btn-small js-repair" data-action="repair_articlecats" data-pre="pre_repair_articlecats">{lang key='start'}</button>
-    </div>
-    <div class="col col-lg-2">
-        <div class="progress progress-striped hidden js-repair-progress">
-            <div class="progress-bar progress-bar-success" style="width: 0"></div>
-        </div>
+        <button class="btn btn-success btn-small" name="type" value="repair_article_categories">{lang key='start'}</button>
     </div>
 </div>
 <div class="row">
@@ -23,7 +18,7 @@
 <div class="row">
     <label class="col col-lg-2 control-label">{lang key='repair_articlecats_num'}</label>
     <div class="col col-lg-1">
-        <button class="btn btn-success btn-small js-repair" data-action="repair_articlecats_num" data-pre="pre_repair_articlecats_num">{lang key='start'}</button>
+        <button class="btn btn-success btn-small js-repair" data-action="recount_counters" data-pre="pre_recount_counters">{lang key='start'}</button>
     </div>
     <div class="col col-lg-2">
         <div class="progress progress-striped hidden js-repair-progress">

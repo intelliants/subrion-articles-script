@@ -19,8 +19,8 @@
     </screenshots>
 
     <items>
-        <item pages="favorites,view_member" main="view_article,add_article,edit_article">articles</item>
-        <item payable="0" table_name="articles_categories">articlecats</item>
+        <item pages="favorites,view_member,view_article,add_article,edit_article">articles</item>
+        <item payable="0" table_name="articles_categories" pages="publishing_home">articlecats</item>
     </items>
 
     <actions>
@@ -54,7 +54,6 @@
         <page group="publishing" url="|PACKAGE|latest/" name="latest_articles" menus="publishing" fields_item="articles">Latest Articles</page>
         <page group="publishing" url="|PACKAGE|popular/" name="popular_articles" menus="publishing" fields_item="articles">Popular Articles</page>
         <page group="publishing" url="|PACKAGE|rss/" name="rss_articles" service="1">RSS Articles</page>
-        <page group="publishing" url="|PACKAGE|categories/" name="article_categories" service="1"><![CDATA[]]></page>
     </pages>
 
     <permissions>
@@ -237,6 +236,7 @@
         <phrase category="admin" key="are_you_sure_to_delete_selected_articlecats">Are you sure you wish to delete these article categories? All subcategories will be deleted as well.</phrase>
         <phrase category="admin" key="are_you_sure_to_delete_selected_article">Are you sure you wish to delete this article?</phrase>
         <phrase category="admin" key="are_you_sure_to_delete_selected_articles">Are you sure you wish to delete these articles?</phrase>
+		<phrase category="admin" key="categories_repaired">Categories repaired.</phrase>
         <phrase category="admin" key="dashboard_articles_list">Articles</phrase>
         <phrase category="admin" key="dashboard_articles_add">Add article</phrase>
         <phrase category="admin" key="edit_category">Edit Category</phrase>
@@ -354,6 +354,14 @@ $statistics['publishing'] = array(
             ]]>
         </hook>
         <hook name="adminDatabaseConsistency" type="smarty" page_type="admin" filename="hook.db-consistency"><![CDATA[]]></hook>
+		<hook name="phpAdminDatabaseConsistencyType" page_type="admin" pages="database">
+			<![CDATA[
+if ('repair_article_categories' == $type) {
+    $iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN)->rebuild();
+    $iaView->setMessages(iaLanguage::get('categories_repaired'), iaView::SUCCESS);
+}
+            ]]>
+		</hook>
     </hooks>
 
     <install>

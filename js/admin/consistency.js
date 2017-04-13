@@ -8,7 +8,7 @@ $(function () {
             total = 0,
             progress = 0,
             interval = 3000,
-            url = intelli.config.admin_url + '/publishing/categories/read.json',
+            url = intelli.config.admin_url + '/publishing/categories/consistency.json',
             timer;
 
         var $barHolder = $(this).parent().next().find('.js-repair-progress');

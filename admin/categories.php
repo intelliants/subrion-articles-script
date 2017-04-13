@@ -38,74 +38,6 @@ class iaBackendController extends iaAbstractControllerModuleBackend
         $this->_gridSorting['parent_title'] = ['title_' . $this->_iaCore->language['iso'], 'p'];
     }
 
-    protected function _gridRead($params)
-    {
-        $iaArticle = $this->_iaCore->factoryModule('article', $this->getModuleName(), iaCore::ADMIN);
-
-        if (isset($_POST['action'])) {
-            $output = [];
-
-            switch ($_POST['action']) {
-                // repairing
-                case 'pre_repair_articlecats':
-                    $this->getHelper()->resetCounters();
-                    $output['total'] = $this->getHelper()->getCount();
-
-                    break;
-
-                case 'repair_articlecats':
-                    $rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], '', (int)$_POST['start'], (int)$_POST['limit']);
-                    foreach ($rows as $row) {
-                        $this->getHelper()->rebuildRelations($row['id']);
-                    }
-
-                    break;
-
-                // fixing paths
-                case 'pre_repair_articlecats_paths':
-                    $output['total'] = $this->getHelper()->getCount();
-
-                    break;
-
-                case 'rebuild_articlecats_paths':
-                    $rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], iaDb::convertIds(0, 'parent_id', false), (int)$_POST['start'], (int)$_POST['limit']);
-                    foreach ($rows as $row) {
-                        $this->getHelper()->rebuildAliases($row['id']);
-                    }
-
-                    break;
-
-                // recount
-                case 'pre_repair_articlecats_num':
-                    $this->getHelper()->clearArticlesNum();
-                    $output['total'] = $this->getHelper()->getCount();
-
-                    break;
-
-                case 'repair_articlecats_num':
-                    $this->getHelper()->calculateArticles((int)$_POST['start'], (int)$_POST['limit']);
-
-                    break;
-
-                case 'pre_rebuild_article_paths':
-                    $output['total'] = $iaArticle->getCount();
-
-                    break;
-
-                case 'rebuild_article_paths':
-                    $rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], '', (int)$_POST['start'], (int)$_POST['limit'], iaArticle::getTable());
-
-                    foreach ($rows as $row) {
-                        $iaArticle->rebuildArticleAliases($row['id']);
-                    }
-            }
-
-            return $output;
-        }
-
-        return parent::_gridRead($params);
-    }
-
     public function _gridQuery($columns, $where, $order, $start, $limit)
     {
         $sql = <<<SQL
@@ -235,5 +167,58 @@ SQL;
         $alias.= iaSanitize::alias($data['title']) . IA_URL_DELIMITER;
 
         return ['data' => $alias];
+    }
+
+    protected function _getJsonConsistency(array $data)
+    {
+        $output = [];
+
+        if (isset($_POST['action'])) {
+            $iaArticle = $this->_iaCore->factoryModule('article', $this->getModuleName(), iaCore::ADMIN);
+
+            switch ($_POST['action']) {
+                // fixing paths
+                case 'pre_repair_articlecats_paths':
+                    $output['total'] = $this->getHelper()->getCount();
+
+                    break;
+
+                case 'rebuild_articlecats_paths':
+                    $rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], iaDb::convertIds(0, 'parent_id', false), (int)$_POST['start'], (int)$_POST['limit']);
+                    foreach ($rows as $row) {
+                        $this->getHelper()->rebuildAliases($row['id']);
+                    }
+
+                    break;
+
+                // recount
+                case 'pre_recount_counters':
+                    $this->getHelper()->resetCounters();
+
+                    $output['total'] = $this->_iaDb->one(iaDb::STMT_COUNT_ROWS,
+                        iaDb::convertIds(iaCore::STATUS_ACTIVE, 'status'), iaArticle::getTable());
+
+                    break;
+
+                case 'recount_counters':
+                    $this->getHelper()->recount($_POST['start'], $_POST['limit']);
+
+                    break;
+
+                case 'pre_rebuild_article_paths':
+                    $output['total'] = $iaArticle->getCount();
+
+                    break;
+
+                case 'rebuild_article_paths':
+                    $rows = $this->_iaDb->all([iaDb::ID_COLUMN_SELECTION], '', (int)$_POST['start'], (int)$_POST['limit'], iaArticle::getTable());
+
+                    foreach ($rows as $row) {
+                        $iaArticle->rebuildArticleAliases($row['id']);
+                    }
+            }
+        }
+
+        return $output;
     }
 }
