@@ -139,8 +139,8 @@ class iaArticle extends abstractPublishingModuleFront
             't1.*',
             't2.`title_' . $this->iaView->language . '` `category_title`',
             't2.`title_alias` `category_alias`',
-            't2.`' . iaArticlecat::COL_PARENT_ID . '` `category_parent`',
-            't2.`' . iaArticlecat::COL_PARENTS . '` `category_parents`',
+            //'t2.`' . iaArticlecat::COL_PARENT_ID . '` `category_parent`',
+            //'t2.`' . iaArticlecat::COL_PARENTS . '` `category_parents`',
             't2.`locked` `category_locked`',
             't3.`username` `account_username`',
             'IF(\'\' != t3.`fullname`, t3.`fullname`, t3.`username`) `account_fullname`',
@@ -186,8 +186,8 @@ class iaArticle extends abstractPublishingModuleFront
             'SQL_CALC_FOUND_ROWS art.*',
             'cat.`title_' . $this->iaView->language . '` `category_title`',
             'cat.`title_alias` `category_alias`',
-            'cat.`' . iaArticlecat::COL_PARENT_ID . '` `category_parent`',
-            'cat.`' . iaArticlecat::COL_PARENTS . '` `category_parents`',
+            //'cat.`' . iaArticlecat::COL_PARENT_ID . '` `category_parent`',
+            //'cat.`' . iaArticlecat::COL_PARENTS . '` `category_parents`',
             'acc.`username` `account_username`',
             'IF(\'\' != acc.`fullname`, acc.`fullname`, acc.`username`) `account_fullname`',
         ];
@@ -249,10 +249,8 @@ class iaArticle extends abstractPublishingModuleFront
 
     public function updateCounters($itemId, array $itemData, $action, $previousData = null)
     {
-        if (iaCore::STATUS_ACTIVE == $itemData['status'] && in_array($action, [iaCore::ACTION_DELETE, iaCore::ACTION_ADD])) {
-            $factor = ($action == iaCore::ACTION_DELETE) ? -1 : 1;
-            $this->_updateCategoryCounter($itemData['category_id'], $factor);
-        }
+        $this->_checkIfCountersNeedUpdate($action, $itemData, $previousData,
+            $this->iaCore->factoryModule('articlecat', $this->getModuleName()));
     }
 
     public function sendMail($articleId)
@@ -317,8 +315,6 @@ class iaArticle extends abstractPublishingModuleFront
     {
         $this->iaCore->factory('util');
 
-        // get the previous data
-        $article = $this->getById($id);
         $langCode = $this->iaCore->language['iso'];
 
         // If URL field is empty, fill it
@@ -352,51 +348,7 @@ class iaArticle extends abstractPublishingModuleFront
         $entryData['date_modified'] = date(iaDb::DATETIME_FORMAT);
         $entryData['ip'] = iaUtil::getIp();
 
-        $result = parent::update($entryData, $id);
-
-        if ($result) {
-            $status = isset($entryData['status']) ? $entryData['status'] : null;
-            $categoryId = isset($entryData['category_id']) ? $entryData['category_id'] : $article['category_id'];
-
-            // If category changed
-            if ($categoryId != $article['category_id']) {
-                if (iaCore::STATUS_ACTIVE == $article['status'] && iaCore::STATUS_ACTIVE == $status) {
-                    $this->_updateCategoryCounter($article['category_id'], -1);
-                    $this->_updateCategoryCounter($categoryId);
-                } elseif (iaCore::STATUS_ACTIVE != $article['status'] && iaCore::STATUS_ACTIVE == $status) {
-                    $this->_updateCategoryCounter($categoryId);
-                } elseif (iaCore::STATUS_ACTIVE == $article['status'] && iaCore::STATUS_ACTIVE != $status) {
-                    $this->_updateCategoryCounter($article['category_id'], -1);
-                }
-            } else {
-                // status changed
-                if (iaCore::STATUS_ACTIVE == $article['status'] && $status != iaCore::STATUS_ACTIVE) {
-                    $this->_updateCategoryCounter($categoryId, -1);
-                } elseif (iaCore::STATUS_ACTIVE != $article['status'] && iaCore::STATUS_ACTIVE == $status) {
-                    $this->_updateCategoryCounter($categoryId);
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Updates counter for article categories recursively
-     *
-     * @param integer $parentCategoryId category id to update counter
-     * @param integer $factor difference between values
-     *
-     * @return void
-     */
-    public function _updateCategoryCounter($parentCategoryId, $factor = 1)
-    {
-        $sql  = "UPDATE `{$this->iaDb->prefix}articles_categories` ";
-        $sql .= "SET `num_articles`=IF(`id`=$parentCategoryId, `num_articles`+{$factor}, `num_articles`) ";
-        $sql .= ", `num_all_articles`=`num_all_articles`+{$factor} ";
-        $sql .= "WHERE FIND_IN_SET({$parentCategoryId}, `" . iaArticlecat::COL_CHILDREN . "`) ";
-
-        return $this->iaDb->query($sql);
+        return parent::update($entryData, $id);
     }
 
     public function fetchMemberListings($memberId, $start, $limit)

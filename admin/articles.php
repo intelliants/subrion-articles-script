@@ -32,8 +32,6 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
     protected $_activityLog = true;
 
-    protected $_treeEnabled = true;
-
     private $_validUrlProtocols = ['http://', 'https://'];
 
     private $_iaArticlecat;
@@ -42,8 +40,6 @@ class iaBackendController extends iaAbstractControllerModuleBackend
     public function init()
     {
         $this->_iaArticlecat = $this->_iaCore->factoryModule('articlecat', $this->getModuleName(), iaCore::ADMIN);
-
-        $this->_treeSettings = ['parent_id' => iaArticlecat::COL_PARENT_ID, 'parents' => iaArticlecat::COL_PARENTS];
     }
 
     protected function _modifyGridParams(&$conditions, &$values, array $params)
@@ -60,49 +56,6 @@ class iaBackendController extends iaAbstractControllerModuleBackend
     public function _gridQuery($columns, $where, $order, $start, $limit)
     {
         return $this->getHelper()->get($columns, $where, $order, $start, $limit);
-    }
-
-    protected function _entryAdd(array $entryData)
-    {
-        $entryData['date_added'] = date(iaDb::DATETIME_FORMAT);
-        $entryData['date_modified'] = date(iaDb::DATETIME_FORMAT);
-
-        if (isset($entryData['url'])) {
-            $entryData['url'] = $this->_processUrl($entryData['url']);
-        }
-
-        return parent::_entryAdd($entryData);
-    }
-
-    protected function _entryUpdate(array $entryData, $entryId)
-    {
-        $entryData['date_modified'] = date(iaDb::DATETIME_FORMAT);
-
-        if (isset($entryData['url'])) {
-            $entryData['url'] = $this->_processUrl($entryData['url']);
-        }
-
-        return parent::_entryUpdate($entryData, $entryId);
-    }
-
-    public function updateCounters($entryId, array $entryData, $action, $previousData = null)
-    {
-        if (iaCore::ACTION_EDIT == $action) {
-            // notify owner on status change
-            if (isset($entryData['status']) && in_array($entryData['status'], [iaArticle::STATUS_SUSPENDED, iaArticle::STATUS_REJECTED, iaCore::STATUS_ACTIVE])) {
-                $entry = $this->getById($entryId);
-                $owner = $this->_iaCore->factory('users')->getInfo($entry['member_id']);
-                $action = $entryData['status'];
-
-                if (iaCore::STATUS_ACTIVE == $entryData['status']) {
-                    $action = iaCore::STATUS_APPROVAL;
-                }
-
-                $this->getHelper()->sendMail('article_' . $action, $owner['email'], $entry);
-            }
-        }
-
-        $this->getHelper()->recount($entryId, $previousData);
     }
 
     protected function _setDefaultValues(array &$entry)
@@ -122,7 +75,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
     {
         parent::_preSaveEntry($entry, $data, $action);
 
-        $langCode = $this->_iaCore->language['iso'];
+        $langCode = iaLanguage::getMasterLanguage()->iso;
 
         $entry['category_id'] = (int)$data['tree_id'];
         $entry['sticky'] = (int)$data['sticky'];
@@ -137,7 +90,26 @@ class iaBackendController extends iaAbstractControllerModuleBackend
             $entry['summary_' . $langCode] = iaSanitize::snippet($data['body'][$langCode], $this->_iaCore->get('snip_len'));
         }
 
+        if (isset($entry['url'])) {
+            $entry['url'] = $this->_processUrl($entry['url']);
+        }
+
         return !$this->getMessages();
+    }
+
+    protected function _entryAdd(array $entryData)
+    {
+        return $this->getHelper()->insert($entryData);
+    }
+
+    protected function _entryUpdate(array $entryData, $entryId)
+    {
+        return $this->getHelper()->update($entryData, $entryId);
+    }
+
+    protected function _entryDelete($entryId)
+    {
+        return (bool)$this->getHelper()->delete($entryId);
     }
 
     protected function _assignValues(&$iaView, array &$entryData)
@@ -149,20 +121,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
         }
 
         $iaView->assign('statuses', $this->getHelper()->getStatuses());
-    }
-
-    protected function _getTreeVars(array $entryData)
-    {
-        $category = empty($entryData['category_id'])
-            ? $this->_iaArticlecat->getRoot()
-            : $this->_iaArticlecat->getById($entryData['category_id']);
-
-        return [
-            'url' => IA_ADMIN_URL . 'publishing/categories/tree.json',
-            'nodes' => $category[iaArticlecat::COL_PARENTS],
-            'id' => $category['id'],
-            'title' => $category['title']
-        ];
+        $iaView->assign('tree', $this->getHelper()->getTreeVars($entryData));
     }
 
     protected function _getJsonAlias($params)

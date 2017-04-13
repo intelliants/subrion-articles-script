@@ -1,5 +1,5 @@
 TRUNCATE TABLE `{prefix}articles_categories`;
-INSERT INTO `{prefix}articles_categories` (`id`,`_pid`,`title_{lang}`,`title_alias`,`level`,`_parents`,`_children`,`order`) VALUES
+INSERT INTO `{prefix}articles_categories` (`id`,`parent_id`,`title_{lang}`,`title_alias`,`level`,`_parents`,`_children`,`order`) VALUES
 (1,0,'ROOT','',0,'1','2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,1',0),
 (2,1,'Arts & Entertainment','Arts-and-Entertainment/',1,'2,1','2',1),
 (3,1,'Business','Business/',1,'3,1','3',2),
@@ -23,5 +23,4 @@ INSERT INTO `{prefix}articles_categories` (`id`,`_pid`,`title_{lang}`,`title_ali
 (21,1,'Photography','Photography/',1,'21,1','21',20),
 (22,1,'Software','Software/',1,'22,1','22',21),
 (23,1,'Home Improvement','Home-Improvement/',1,'23,1','23',22);
-UPDATE `{prefix}articles_categories` SET `locked` = 1 WHERE `_pid` = 0;
-UPDATE `{prefix}articles_categories` SET `status` = 'active',`date_added` = NOW(),`date_modified` = NOW();
+UPDATE `{prefix}articles_categories` SET `locked` = 1 WHERE `parent_id` = 0;

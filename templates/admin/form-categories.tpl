@@ -1,7 +1,7 @@
 <form method="post" enctype="multipart/form-data" class="sap-form form-horizontal">
     {preventCsrf}
 
-    {if 0 != $item._pid}
+    {if $item.parent_id}
         {capture name='general' append='fieldset_before'}
             {include 'tree.tpl'}
         {/capture}
@@ -17,11 +17,11 @@
             </div>
         {/capture}
     {else}
-        <input type="hidden" name="parent_id" id="parent_id" value="0">
+        <input type="hidden" name="tree_id" value="0">
     {/if}
 
     {capture name='systems' append='fieldset_before'}
-        {if 0 != $item._pid}
+        {if 0 != $item.parent_id}
             <div class="row">
                 <label class="col col-lg-2 control-label">{lang key='priority'}</label>
 

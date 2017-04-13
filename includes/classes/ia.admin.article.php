@@ -35,12 +35,29 @@ class iaArticle extends abstractPublishingModuleAdmin
 
     public $dashboardStatistics = ['icon' => 'news'];
 
+    private $_iaArticlecat;
+
 
     public function init()
     {
-        iaCore::instance()->factoryModule('articlecat', $this->getModuleName(), iaCore::ADMIN);
-
         parent::init();
+
+        $this->_iaArticlecat = $this->iaCore->factoryModule('articlecat', $this->getModuleName(), iaCore::ADMIN);
+    }
+
+    public function insert(array $itemData)
+    {
+        $itemData['date_added'] = date(iaDb::DATETIME_FORMAT);
+        $itemData['date_modified'] = date(iaDb::DATETIME_FORMAT);
+
+        return parent::insert($itemData);
+    }
+
+    public function update(array $itemData, $id)
+    {
+        $itemData['date_modified'] = date(iaDb::DATETIME_FORMAT);
+
+        return parent::update($itemData, $id);
     }
 
     public function getSitemapEntries()
@@ -69,7 +86,6 @@ SQL;
 
         return $result;
     }
-
 
     public function get($columns, $where, $order = '', $start = null, $limit = null)
     {
@@ -108,51 +124,43 @@ SQL;
         $this->iaDb->resetTable();
     }
 
-    protected function _editCounter($categId, $action)
+    public function updateCounters($itemId, array $itemData, $action, $previousData = null)
     {
-        $sql = <<<SQL
-UPDATE `:table` SET `num_articles` = IF(`id` = :catId, `num_articles` :action 1, `num_articles`), 
-	`num_all_articles` = `num_all_articles` :action 1 
-WHERE FIND_IN_SET(:catId, `child`) > 0
-SQL;
-        $sql = iaDb::printf($sql, [
-            'table' => iaArticlecat::getTable(true),
-            'action' => $action,
-            'catId' => $categId
-        ]);
+        $this->_checkIfCountersNeedUpdate($action, $itemData, $previousData, $this->_iaArticlecat);
 
-        $this->iaDb->query($sql);
-    }
+        if (iaCore::ACTION_EDIT == $action) {
+            // notify owner on status change
+            if (isset($itemData['status']) && in_array($itemData['status'], [self::STATUS_SUSPENDED, self::STATUS_REJECTED, iaCore::STATUS_ACTIVE])) {
+                $entry = $this->getById($itemId);
+                $owner = $this->iaCore->factory('users')->getInfo($entry['member_id']);
+                $action = $itemData['status'];
 
-    public function recount($entryId, $oldData)
-    {
-        $newData = $this->getById($entryId);
+                if (iaCore::STATUS_ACTIVE == $itemData['status']) {
+                    $action = iaCore::STATUS_APPROVAL;
+                }
 
-        if (!isset($oldData['status'])) {
-            $oldData['status'] = iaCore::STATUS_INACTIVE;
-        }
-        if (!isset($oldData['category_id'])) {
-            $oldData['category_id'] = $newData['category_id'];
-        }
-
-        if ($newData['status'] == iaCore::STATUS_ACTIVE && $oldData['status'] != iaCore::STATUS_ACTIVE) { // status of the listing has been changed to Active
-            $this->_editCounter($newData['category_id'], self::COUNTER_ACTION_INCREMENT);
-        } elseif ($oldData['status'] == iaCore::STATUS_ACTIVE && $newData['status'] != iaCore::STATUS_ACTIVE) { // listing has been deactivated
-            $this->_editCounter($oldData['category_id'], self::COUNTER_ACTION_DECREMENT);
-        } elseif ($newData['status'] == iaCore::STATUS_ACTIVE && $oldData['status'] == iaCore::STATUS_ACTIVE) { // listing has only been moved to another category
-            if (isset($newData['category_id']) && isset($oldData['category_id']) && $newData['category_id'] != $oldData['category_id']) {
-                $this->_editCounter($newData['category_id'], self::COUNTER_ACTION_INCREMENT);
-                $this->_editCounter($oldData['category_id'], self::COUNTER_ACTION_DECREMENT);
+                $this->_sendMail('article_' . $action, $owner['email'], $entry);
             }
         }
     }
 
-    public function getCount()
+    public function getTreeVars(array $entryData)
     {
-        return $this->iaDb->one(iaDb::STMT_COUNT_ROWS, null, self::getTable());
+        $category = empty($entryData['category_id'])
+            ? $this->_iaArticlecat->getRoot()
+            : $this->_iaArticlecat->getById($entryData['category_id']);
+
+        $nodes = $this->_iaArticlecat->getParents($category['id'], true);
+
+        return [
+            'url' => IA_ADMIN_URL . 'publishing/categories/tree.json?noroot',
+            'nodes' => implode(',', $nodes),
+            'id' => $category['id'],
+            'title' => $category['title']
+        ];
     }
 
-    public function sendMail($action, $email, $data)
+    protected function _sendMail($action, $email, $data)
     {
         if ($this->iaCore->get($action) && $email) {
             $iaMailer = $this->iaCore->factory('mailer');

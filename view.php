@@ -96,20 +96,10 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
         }
     }
 
-    // set subpage to display blocks
-    $iaView->set('subpage', $article['category_id']);
-
     // breadcrumb
     if ($article['category_id']) {
-        if (0 != $article['category_parent'] && $article['category_parents']) {
-            $iaArticleCat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
-            // build breadcrumb
-            $parents = $iaDb->all(['title' => 'title_' . $iaView->language, 'title_alias'],
-                "`id` IN ({$article['category_parents']}) AND `_pid` != 0 ORDER BY `level`",
-                null, null, iaArticlecat::getTable());
-            foreach ($parents as $p) {
-                iaBreadcrumb::add($p['title'], $iaArticleCat->url('view', $p), -1);
-            }
+        foreach ($iaCore->factoryModule('articlecat', IA_CURRENT_MODULE)->getParents($article['category_id']) as $p) {
+            iaBreadcrumb::add($p['title'], $p['link'], -1);
         }
     }
 
@@ -144,6 +134,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     $iaView->assign('session_id', session_id());
 
     // define page params
+    $iaView->set('subpage', $article['category_id']);
     $iaView->set('keywords', $article['meta_keywords']);
     $iaView->set('description', $article['meta_description']);
 

@@ -392,15 +392,11 @@ CREATE TABLE `{prefix}articles` (
 CREATE TABLE `{prefix}articles_categories` (
     `id` mediumint(8) unsigned NOT NULL auto_increment,
     `title_alias` tinytext NOT NULL,
-    `date_added` date,
-    `date_modified` date,
-    `status` enum('inactive', 'active') NOT NULL default 'inactive',
+    `status` enum('inactive', 'active') NOT NULL default 'active',
     `locked` tinyint(1) unsigned NOT NULL,
     `nofollow` tinyint(1) unsigned NOT NULL,
     `priority` tinyint(1) unsigned NOT NULL,
     `order` mediumint(8) NOT NULL,
-    `num_articles` mediumint(8) unsigned NOT NULL,
-    `num_all_articles` mediumint(8) unsigned NOT NULL,
     PRIMARY KEY (`id`)
 ) {mysql_version};
             ]]>
@@ -425,7 +421,7 @@ $iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN)->setupDbStruct
     <uninstall>
         <sql>
             <![CDATA[
-DROP TABLE IF EXISTS `{prefix}articles`, `{prefix}articles_categories`
+DROP TABLE IF EXISTS `{prefix}articles`, `{prefix}articles_categories`, `{prefix}articles_categories_flat`
             ]]>
         </sql>
         <sql>

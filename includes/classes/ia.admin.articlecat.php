@@ -17,7 +17,7 @@
  *
  ******************************************************************************/
 
-class iaArticlecat extends iaAbstractHelperCategoryHybrid
+class iaArticlecat extends iaAbstractHelperCategoryFlat implements iaPublishingModule
 {
     protected static $_table = 'articles_categories';
 
@@ -27,59 +27,12 @@ class iaArticlecat extends iaAbstractHelperCategoryHybrid
 
     public $dashboardStatistics = ['icon' => 'folder', 'url' => 'publishing/categories/'];
 
+    protected $_recountOptions = [
+        'listingsTable' => 'articles',
+        'columnCounter' => 'num_articles',
+        'columnTotalCounter' => 'num_all_articles'
+    ];
 
-    /**
-     * Updates number of active articles for each category
-     */
-    public function calculateArticles($start = 0, $limit = 10)
-    {
-        $this->iaDb->setTable(self::getTable());
-
-        $categories = $this->iaDb->all(['id', 'parent_id', 'child'], '1 ORDER BY `level` DESC', $start, $limit);
-
-        foreach ($categories as $cat) {
-            if (0 != $cat['parent_id']) {
-                $_id = $cat['id'];
-
-                $sql  = 'SELECT COUNT(a.`id`) `num`';
-                $sql .= "FROM `{$this->iaDb->prefix}articles` a ";
-                $sql .= "LEFT JOIN `{$this->iaDb->prefix}members` acc ON (a.`member_id` = acc.`id`) ";
-                $sql .= "WHERE a.`status`= 'active' AND (acc.`status` = 'active' OR acc.`status` IS NULL) ";
-                $sql .= "AND a.`category_id` = {$_id}";
-
-                $num_articles = $this->iaDb->getOne($sql);
-                $_num_articles = $num_articles ? $num_articles : 0;
-                $num_all_articles = 0;
-
-                if (!empty($cat['child']) && $cat['child'] != $cat['id']) {
-                    $num_all_articles = $this->iaDb->one('SUM(`num_articles`)', "`id` IN ({$cat['child']})", self::getTable());
-                }
-
-                $num_all_articles += $_num_articles;
-
-                $this->iaDb->update(['num_articles' => $_num_articles, 'num_all_articles' => $num_all_articles], iaDb::convertIds($_id));
-            }
-        }
-
-        $this->iaDb->resetTable();
-
-        return true;
-    }
-
-    public function insert(array $itemData)
-    {
-        $itemData['date_added'] = date(iaDb::DATE_FORMAT);
-        $itemData['date_modified'] = date(iaDb::DATE_FORMAT);
-
-        return parent::insert($itemData);
-    }
-
-    public function update(array $itemData, $id)
-    {
-        $itemData['date_modified'] = date(iaDb::DATE_FORMAT);
-
-        return parent::update($itemData, $id);
-    }
 
     public function getSitemapEntries()
     {

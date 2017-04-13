@@ -24,7 +24,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
     protected $_helperName = 'articlecat';
 
-    protected $_gridColumns = ['parent_id' => '_pid', 'title', 'title_alias', 'num_articles', 'num_all_articles', 'locked', 'level', 'order', 'date_added', 'date_modified', 'status'];
+    protected $_gridColumns = ['parent_id', 'title', 'title_alias', 'num_articles', 'num_all_articles', 'locked', 'level', 'order', 'status'];
     protected $_gridFilters = ['status' => self::EQUAL, 'title' => self::LIKE];
     protected $_gridQueryMainTableAlias = 'c';
 
@@ -32,15 +32,10 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
     protected $_activityLog = ['item' => 'category'];
 
-    private $_root;
-
 
     public function init()
     {
-        $this->_root = $this->getHelper()->getRoot();
-
         $this->_gridSorting['parent_title'] = ['title_' . $this->_iaCore->language['iso'], 'p'];
-        $this->_treeSettings = ['parent_id' => iaArticlecat::COL_PARENT_ID, 'parents' => iaArticlecat::COL_PARENTS];
     }
 
     protected function _gridRead($params)
@@ -49,12 +44,11 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
         if (isset($_POST['action'])) {
             $output = [];
-            $iaView = $this->_iaCore->iaView;
 
             switch ($_POST['action']) {
                 // repairing
                 case 'pre_repair_articlecats':
-                    $this->getHelper()->dropRelations();
+                    $this->getHelper()->resetCounters();
                     $output['total'] = $this->getHelper()->getCount();
 
                     break;
@@ -147,7 +141,7 @@ SQL;
 
     protected function _entryDelete($entryId)
     {
-        return ($this->_root['id'] == $entryId) ? false : (bool)$this->getHelper()->delete($entryId);
+        return $this->getHelper()->delete($entryId);
     }
 
     public function updateCounters($entryId, array $entryData, $action, $previousData = null)
@@ -162,14 +156,12 @@ SQL;
     protected function _setDefaultValues(array &$entry)
     {
         $entry = [
-            iaArticlecat::COL_PARENT_ID => $this->_root['id'],
-            iaArticlecat::COL_PARENTS => '',
-
             'title_alias' => '',
             'locked' => false,
             'nofollow' => false,
             'priority' => false,
-            'status' => iaCore::STATUS_ACTIVE
+            'status' => iaCore::STATUS_ACTIVE,
+            'parent_id' => $this->getHelper()->getRootId()
         ];
     }
 
@@ -180,19 +172,19 @@ SQL;
         $entry['locked'] = (int)$data['locked'];
         $entry['nofollow'] = (int)$data['nofollow'];
         $entry['priority'] = (int)$data['priority'];
-        $entry[iaArticlecat::COL_PARENT_ID] = (int)$data['tree_id'];
+        $entry['parent_id'] = (int)$data['tree_id'];
 
-        if ($entry[iaArticlecat::COL_PARENT_ID] != $this->_root[iaArticlecat::COL_PARENT_ID]) {
-            $entry['title_alias'] = empty($data['title_alias']) ? $data['title'][$this->_iaCore->language['iso']] : $data['title_alias'];
-            $entry['title_alias'] = iaSanitize::alias($entry['title_alias']);
+        $langCode = iaLanguage::getMasterLanguage()->iso;
 
-            if ($this->_iaDb->exists('`title_' . $this->_iaCore->language['iso'] . '` = :title AND `_pid` = :parent_id AND `id` != :id',
-                ['title' => $entry['title_' . $this->_iaCore->language['iso']], 'parent_id' => $entry[iaArticlecat::COL_PARENT_ID], 'id' => $this->getEntryId()])) {
-                $this->addMessage('specified_category_title_exists');
-            }
+        $entry['title_alias'] = empty($data['title_alias']) ? $data['title'][$langCode] : $data['title_alias'];
+        $entry['title_alias'] = iaSanitize::alias($entry['title_alias']) . IA_URL_DELIMITER;
 
-            $parentCategory = $this->_iaDb->row('title_alias', iaDb::convertIds($entry[iaArticlecat::COL_PARENT_ID]));
-            $entry['title_alias'] = ($parentCategory ? $parentCategory['title_alias'] : '') . $entry['title_alias'] . IA_URL_DELIMITER;
+        if ($this->_iaDb->exists('`title_' . $langCode . '` = :title AND `parent_id` = :parent_id AND `id` != :id',
+            ['title' => $entry['title_' . $langCode], 'parent_id' => $entry['parent_id'], 'id' => $this->getEntryId()])) {
+            $this->addMessage('specified_category_title_exists');
+        } elseif ($entry['parent_id'] != $this->getHelper()->getRootId()) {
+            $parentCategory = $this->_iaDb->row('title_alias', iaDb::convertIds($entry['parent_id']));
+            $entry['title_alias'] = ($parentCategory ? $parentCategory['title_alias'] : '') . $entry['title_alias'];
         }
 
         return !$this->getMessages();
@@ -206,6 +198,7 @@ SQL;
         $entryData['title_alias'] = end($array);
 
         $iaView->assign('statuses', $this->getHelper()->getStatuses());
+        $iaView->assign('tree', $this->getHelper()->getTreeVars($this->getEntryId(), $entryData, $this->getPath()));
     }
 
     protected function _writeLog($action, array $entryData, $entryId)
@@ -235,7 +228,7 @@ SQL;
 
     protected function _getJsonAlias(array $data)
     {
-        $categoryId = isset($data['category']) ? (int)$data['category'] : $this->_root['id'];
+        $categoryId = isset($data['category']) ? (int)$data['category'] : $this->getHelper()->getRootId();
 
         $alias = IA_MODULE_URL;
         $alias.= $this->_iaDb->one('title_alias', iaDb::convertIds($categoryId));

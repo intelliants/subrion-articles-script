@@ -17,7 +17,7 @@
  *
  ******************************************************************************/
 
-class iaArticlecat extends iaAbstractFrontHelperCategoryHybrid
+class iaArticlecat extends iaAbstractFrontHelperCategoryFlat implements iaPublishingModule
 {
     protected static $_table = 'articles_categories';
 
@@ -25,7 +25,11 @@ class iaArticlecat extends iaAbstractFrontHelperCategoryHybrid
 
     protected $_itemName = 'articlecats';
 
-    protected $_rootId;
+    protected $_recountOptions = [
+        'listingsTable' => 'articles',
+        'columnCounter' => 'num_articles',
+        'columnTotalCounter' => 'num_all_articles'
+    ];
 
     private $_urlPatterns = [
         'default' => ':base:alias'
@@ -47,22 +51,6 @@ class iaArticlecat extends iaAbstractFrontHelperCategoryHybrid
     }
 
     /**
-     * Returns category information
-     *
-     * @param string $where condition to return category information
-     *
-     * @return array
-     */
-    public function getCategory($where)
-    {
-        $row = $this->iaDb->row(iaDb::ALL_COLUMNS_SELECTION, $where, self::getTable());
-
-        $this->_processValues($row, true);
-
-        return $row;
-    }
-
-    /**
      * Returns article categories
      *
      * @param string $where additional WHERE clause
@@ -74,20 +62,20 @@ class iaArticlecat extends iaAbstractFrontHelperCategoryHybrid
      */
     public function get($where = null, $start = 0, $limit = 0, $parentId = 0, $sorting = false)
     {
-        $fields = sprintf('SQL_CALC_FOUND_ROWS `id`, `title_alias`, `icon`, `nofollow`, `num_all_articles` `num`,'
-            . '`title_%s`, `%s`, `%s`', $this->iaView->language, self::COL_LEVEL, self::COL_CHILDREN);
+        $fields = 'SQL_CALC_FOUND_ROWS `id`, `title_alias`, `icon`, `nofollow`, `num_all_articles` `num`,'
+            . '`title_' . $this->iaView->language . '`, `parent_id`';
 
-        $stmt = "`status` = 'active' AND `_pid` != 0 " . ($parentId > 0 ? "AND `_pid` = {$parentId} " : '');
+        $stmt = "`status` = 'active' AND `parent_id` != 0 " . ($parentId > 0 ? "AND `parent_id` = {$parentId} " : '');
         $where && $stmt.= $where;
         $stmt.= ' ORDER BY ';
         $stmt.= $sorting
             ? $sorting
             : ($this->iaCore->get('articles_categs_sort', 'by title') == 'by title' ? '`title_' . $this->iaView->language . '`' : '`order`');
 
-        $result = $this->iaDb->all($fields, $stmt, $start, $limit, self::getTable());
+        $rows = $this->iaDb->all($fields, $stmt, $start, $limit, self::getTable());
 
-        $this->_processValues($result);
+        $this->_processValues($rows);
 
-        return $result;
+        return $rows;
     }
 }
