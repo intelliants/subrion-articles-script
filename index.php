@@ -85,7 +85,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
         case 'publishing_home':
             // get current category
-            $category = $iaArticlecat->getOne("`title_alias` = '" . (count($iaCore->requestPath) > 0 ? iaSanitize::sql(implode('/', $iaCore->requestPath)) . '/' : '') . "'");
+            $category = $iaArticlecat->getOne("`title_alias` = '" . (count($iaCore->requestPath) > 0 ? iaSanitize::sql(implode('/',
+                        $iaCore->requestPath)) . '/' : '') . "'");
 
             if (empty($category)) {
                 return iaView::errorPage(iaView::ERROR_NOT_FOUND);
@@ -102,13 +103,15 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
                 $rssFeed = 'latest';
             }
 
-            $categories = $iaArticlecat->get(($iaCore->get('art_view_category', true) ? '' : " AND `num_all_articles` > 0"), 0, 0, $category['id']);
+            $categories = $iaArticlecat->get(($iaCore->get('art_view_category',
+                true) ? '' : " AND `num_all_articles` > 0"), 0, 0, $category['id']);
 
             $order = " ORDER BY t1." . $order;
 
             $where .= $iaCore->get('articles_show_children')
-                ? sprintf(" AND t1.`category_id` IN (SELECT `category_id` FROM `%s` WHERE `parent_id` = %d) ", $iaArticlecat->getTableFlat(true), $category['id'])
-                : " AND t1.`category_id` = ({$category['id']}) " ;
+                ? sprintf(" AND t1.`category_id` IN (SELECT `category_id` FROM `%s` WHERE `parent_id` = %d) ",
+                    $iaArticlecat->getTableFlat(true), $category['id'])
+                : " AND t1.`category_id` = ({$category['id']}) ";
 
             $articles = $iaArticle->get($where . $order, $start, $pagination['limit']);
 
@@ -128,7 +131,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
                 return iaView::accessDenied();
             }
 
-            $articles = $iaArticle->get('AND t1.`member_id` = ' . iaUsers::getIdentity()->id . ' ORDER BY t1.' . $order, $start, $pagination['limit'], true);
+            $articles = $iaArticle->get('AND t1.`member_id` = ' . iaUsers::getIdentity()->id . ' ORDER BY t1.' . $order,
+                $start, $pagination['limit'], true);
 
             $pagination['total'] = $iaDb->foundRows();
 
@@ -211,7 +215,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
                         if ($day > 0 && $day <= 31) {
                             $stmt .= ' AND DAY(t1.`date_added`) = ' . $day;
 
-                            iaBreadcrumb::add(iaLanguage::get('month' . $month), IA_MODULE_URL . $baseUrl . $year . IA_URL_DELIMITER . $month . IA_URL_DELIMITER);
+                            iaBreadcrumb::add(iaLanguage::get('month' . $month),
+                                IA_MODULE_URL . $baseUrl . $year . IA_URL_DELIMITER . $month . IA_URL_DELIMITER);
                             iaBreadcrumb::replaceEnd($day, IA_SELF);
                         }
                     } else {
@@ -225,7 +230,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
                 $pagination['total'] = $iaDb->foundRows();
 
-                $caption = iaLanguage::getf('articles_by_date', ['year' => $year, 'month' => iaLanguage::get('month' . $month), 'day' => is_numeric($day) ? $day : '']);
+                $caption = iaLanguage::getf('articles_by_date', [
+                    'year' => $year,
+                    'month' => iaLanguage::get('month' . $month),
+                    'day' => is_numeric($day) ? $day : ''
+                ]);
                 $iaView->caption($caption);
 
                 $iaView->assign('curr_year', $year);
@@ -238,7 +247,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
         $iaView->assign('pagination', $pagination);
     } elseif ('publishing_home' == $iaView->name()) {
         if (isset($category['parent_id']) && $category['parent_id'] != 0 && isset($category['level']) && $category['level'] > 0) {
-            $iaView->setMessages(iaLanguage::getf('no_articles2', ['url' => IA_MODULE_URL . 'add/?category=' . $category['id']]), iaView::ALERT);
+            $iaView->setMessages(iaLanguage::getf('no_articles2',
+                ['url' => IA_MODULE_URL . 'add/?category=' . $category['id']]), iaView::ALERT);
         }
     } elseif (!('date_articles' == $iaView->name() && !isset($iaCore->requestPath[1]))) {
         $iaView->setMessages(iaLanguage::get('no_articles'), iaView::ALERT);
@@ -278,7 +288,9 @@ if (iaView::REQUEST_XML == $iaView->getRequestType()) {
     $limit = (int)$iaCore->get('art_perpage', 10);
 
     if (isset($iaCore->requestPath[0]) && $iaCore->requestPath[0] == 'author' && isset($iaCore->requestPath[1])) {
-        if ($memberInfo = $iaDb->row_bind(['fullname', 'id'], '`username` = :user AND `status` = :status', ['user' => $iaCore->requestPath[1], 'status' => iaCore::STATUS_ACTIVE], iaUsers::getTable())) {
+        if ($memberInfo = $iaDb->row_bind(['fullname', 'id'], '`username` = :user AND `status` = :status',
+            ['user' => $iaCore->requestPath[1], 'status' => iaCore::STATUS_ACTIVE], iaUsers::getTable())
+        ) {
             $stmt = 'AND t1.`member_id` = ' . $memberInfo['id'] . $stmt;
 
             $category = iaLanguage::get('author') . ': ' . $memberInfo['fullname'];
@@ -289,7 +301,8 @@ if (iaView::REQUEST_XML == $iaView->getRequestType()) {
     } elseif (isset($iaCore->requestPath[0]) && $iaCore->requestPath[0] == 'latest') {
         $articles = $iaArticle->get('AND 1 ORDER BY t1.`date_added` DESC', 0, $limit);
     } else {
-        $stmt = "AND t2.`title_alias` = '" . (implode(IA_URL_DELIMITER, $iaCore->requestPath) . IA_URL_DELIMITER) . "'" . $stmt;
+        $stmt = "AND t2.`title_alias` = '" . (implode(IA_URL_DELIMITER,
+                    $iaCore->requestPath) . IA_URL_DELIMITER) . "'" . $stmt;
         $articles = $iaArticle->get($stmt, 0, $limit);
     }
 

@@ -66,7 +66,7 @@ class iaArticle extends abstractPublishingModuleAdmin
 
         $sql = <<<SQL
 SELECT a.`id`, a.`title_alias`, c.`title_alias` `category_alias` 
-	FROM `:table_articles` a 
+    FROM `:table_articles` a 
 LEFT JOIN `:table_categories` c ON (c.`id` = a.`category_id`) 
 WHERE a.`status` = ':status'
 SQL;
@@ -91,7 +91,7 @@ SQL;
     {
         $sql = <<<SQL
 SELECT :columns, c.`title_:lang` `category_title`, c.`title_alias` `category_alias`, m.`fullname` `member` 
-	FROM `:prefix:table_articles` a 
+    FROM `:prefix:table_articles` a 
 LEFT JOIN `:prefix:table_categories` c ON (a.`category_id` = c.`id`) 
 LEFT JOIN `:prefix:table_members` m ON (a.`member_id` = m.`id`) 
 WHERE :where :order

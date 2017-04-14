@@ -111,7 +111,6 @@ class iaArticle extends abstractPublishingModuleFront
      * Returns listings for Favorites page
      *
      * @param $ids
-     * @param $fields
      *
      * @return mixed
      */
@@ -296,7 +295,7 @@ class iaArticle extends abstractPublishingModuleFront
     /**
      * Returns incomplete article
      *
-     * @param integer $aAuthorId account id
+     * @param integer $authorId account id
      * @param string $sessionId session id
      *
      * @return array

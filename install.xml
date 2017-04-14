@@ -4,9 +4,9 @@
     <summary>This package is intended to publish articles on your Subrion CMS powered website</summary>
     <author>Intelliants LLC</author>
     <contributor>Intelliants LLC</contributor>
-    <version>4.1.0</version>
-    <date>2016-03-24</date>
-    <compatibility>4.1.2</compatibility>
+    <version>4.1.1</version>
+    <date>2016-04-14</date>
+    <compatibility>4.1.3</compatibility>
     <url>articles</url>
 
     <screenshots>
@@ -236,7 +236,7 @@
         <phrase category="admin" key="are_you_sure_to_delete_selected_articlecats">Are you sure you wish to delete these article categories? All subcategories will be deleted as well.</phrase>
         <phrase category="admin" key="are_you_sure_to_delete_selected_article">Are you sure you wish to delete this article?</phrase>
         <phrase category="admin" key="are_you_sure_to_delete_selected_articles">Are you sure you wish to delete these articles?</phrase>
-		<phrase category="admin" key="categories_repaired">Categories repaired.</phrase>
+        <phrase category="admin" key="categories_repaired">Categories repaired.</phrase>
         <phrase category="admin" key="dashboard_articles_list">Articles</phrase>
         <phrase category="admin" key="dashboard_articles_add">Add article</phrase>
         <phrase category="admin" key="edit_category">Edit Category</phrase>
@@ -334,16 +334,15 @@
         <hook name="populateCommonStatisticsBlock" page_type="front">
             <![CDATA[
 $condition = iaDb::printf("`status` = ':status'", array('status' => iaCore::STATUS_ACTIVE));
-$statistics['publishing'] = array(
-    array(
+$statistics['publishing'] = [
+    [
         'title' => iaLanguage::get('articles'),
         'value' => number_format((int)$iaDb->one(iaDb::STMT_COUNT_ROWS, $condition, 'articles'))
-    ),
-    array(
+    ], [
         'title' => iaLanguage::get('categories'),
         'value' => number_format((int)$iaDb->one(iaDb::STMT_COUNT_ROWS, $condition . ' AND `parent_id` != 0', 'articles_categories'))
-    )
-);
+    ]
+];
             ]]>
         </hook>
         <hook name="smartyFrontAfterHeadSection" page_type="front" type="smarty">
@@ -354,14 +353,14 @@ $statistics['publishing'] = array(
             ]]>
         </hook>
         <hook name="adminDatabaseConsistency" type="smarty" page_type="admin" filename="hook.db-consistency"><![CDATA[]]></hook>
-		<hook name="phpAdminDatabaseConsistencyType" page_type="admin" pages="database">
-			<![CDATA[
+        <hook name="phpAdminDatabaseConsistencyType" page_type="admin" pages="database">
+            <![CDATA[
 if ('repair_article_categories' == $type) {
     $iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN)->rebuild();
     $iaView->setMessages(iaLanguage::get('categories_repaired'), iaView::SUCCESS);
 }
             ]]>
-		</hook>
+        </hook>
     </hooks>
 
     <install>
@@ -419,11 +418,11 @@ ALTER TABLE `{prefix}articles` ADD FULLTEXT (`title_{lang}`, `body_{lang}`);
 ALTER TABLE `{prefix}members` ADD `articles_url` tinytext NOT NULL, ADD `articles_url_description` text NOT NULL;
             ]]>
         </sql>
-		<code>
-			<![CDATA[
+        <code>
+            <![CDATA[
 $iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN)->setupDbStructure();
-			]]>
-		</code>
+            ]]>
+        </code>
     </install>
 
     <uninstall>

@@ -1,7 +1,7 @@
 {if isset($publishingFiltersCategories)}
     <div class="form-group">
         <label>{lang key='keywords'}</label>
-        <input type="text" name="keywords" placeholder="{lang key='keywords'}" class="form-control"{if isset($filters.params.keywords)} value="{$filters.params.keywords|escape:'html'}"{/if}>
+        <input type="text" name="keywords" placeholder="{lang key='keywords'}" class="form-control"{if isset($filters.params.keywords)} value="{$filters.params.keywords|escape}"{/if}>
     </div>
     <div class="form-group">
         <label>{lang key='category'}</label>

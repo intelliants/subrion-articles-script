@@ -54,9 +54,10 @@ class iaArticlecat extends iaAbstractFrontHelperCategoryFlat implements iaPublis
      * Returns article categories
      *
      * @param string $where additional WHERE clause
-     * @param integer $start[optional] starting position
-     * @param integer $limit[optional] number of categories to return
-     * @param integer $parentId[optional] parent category id
+     * @param integer $start [optional] starting position
+     * @param integer $limit [optional] number of categories to return
+     * @param integer $parentId [optional] parent category id
+     * @param bool $sorting
      *
      * @return array
      */
