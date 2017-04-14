@@ -272,6 +272,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 }
 
 if (iaView::REQUEST_XML == $iaView->getRequestType()) {
+    $iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
+
     $stmt = ' ORDER BY t1.`date_added` DESC';
     $limit = (int)$iaCore->get('art_perpage', 10);
 

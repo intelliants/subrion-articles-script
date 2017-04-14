@@ -115,7 +115,7 @@ class iaArticle extends abstractPublishingModuleFront
      *
      * @return mixed
      */
-    public function getFavorites($ids, $fields)
+    public function getFavorites($ids)
     {
         $listingIds = implode(",", $ids);
         $listings = $this->get("&& `t1`.`id` IN ({$listingIds}) ", 0, 50);
