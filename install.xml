@@ -199,10 +199,10 @@
         <field item="articles" name="meta_description" group="general" type="textarea"
             adminonly="1" editable="0" multilingual="1">Meta-Description</field>
         <field item="articles" name="meta_keywords" group="general" type="text" length="70" adminonly="1" editable="0" multilingual="1">Meta-Keywords</field>
-        <field item="articles" name="image" group="general" type="image" width="800" height="800" thumb_width="300" thumb_height="300"
+        <field item="articles" name="image" group="general" type="image" width="1600" height="900" thumb_width="800" thumb_height="450"
             editable="0" page="edit_article,add_article,favorites,publishing_home">Image</field>
         <field item="articles" name="gallery" group="general" type="pictures"
-            width="800" height="800" thumb_width="300" thumb_height="300" prefix="articles_" length="5"
+            width="1600" height="900" thumb_width="800" thumb_height="450" prefix="articles_" length="5"
             page="edit_article,add_article,view_article">Pictures</field>
         <field item="articles" name="url" type="text" group="articles_link" length="255"
             actions="if (!empty($_POST['url']) &amp;&amp; $_POST['url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['url'])) { $error = true; $messages[] = iaLanguage::get('incorrect_article_url'); }"
