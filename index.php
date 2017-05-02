@@ -109,8 +109,9 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             $order = " ORDER BY t1." . $order;
 
             $where .= $iaCore->get('articles_show_children')
-                ? $iaArticlecat->getChildren($category['id'])
-                : " && t1.`category_id` = {$category['id']} ";
+                ? sprintf(" && t1.`category_id` IN (SELECT `child_id` FROM `%s` WHERE `parent_id` = %d) ",
+                    $iaArticlecat->getTableFlat(true), $category['id'])
+                : " && t1.`category_id` = ({$category['id']}) ";
 
             $articles = $iaArticle->get($where . $order, $start, $pagination['limit']);
 
