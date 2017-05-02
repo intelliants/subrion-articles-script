@@ -104,14 +104,13 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             }
 
             $categories = $iaArticlecat->get(($iaCore->get('art_view_category',
-                true) ? '' : " AND `num_all_articles` > 0"), 0, 0, $category['id']);
+                true) ? '' : " && `num_all_articles` > 0"), 0, 0, $category['id']);
 
             $order = " ORDER BY t1." . $order;
 
             $where .= $iaCore->get('articles_show_children')
-                ? sprintf(" AND t1.`category_id` IN (SELECT `category_id` FROM `%s` WHERE `parent_id` = %d) ",
-                    $iaArticlecat->getTableFlat(true), $category['id'])
-                : " AND t1.`category_id` = ({$category['id']}) ";
+                ? $iaArticlecat->getChildren($category['id'])
+                : " && t1.`category_id` = {$category['id']} ";
 
             $articles = $iaArticle->get($where . $order, $start, $pagination['limit']);
 
@@ -205,7 +204,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
                 $month = (int)$iaCore->requestPath[1];
                 $day = null;
 
-                $stmt = sprintf('AND MONTH(t1.`date_added`) = %d AND YEAR(t1.`date_added`) = %d', $month, $year);
+                $stmt = sprintf('AND MONTH(t1.`date_added`) = %d && YEAR(t1.`date_added`) = %d', $month, $year);
 
                 if ($year > 1980 && $year < 2200 && $month >= 1 && $month <= 12) {
                     iaBreadcrumb::add($year, IA_MODULE_URL . $baseUrl . $year . IA_URL_DELIMITER);
@@ -213,7 +212,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
                     if (isset($iaCore->requestPath[2]) && is_numeric($iaCore->requestPath[1])) {
                         $day = (int)$iaCore->requestPath[2];
                         if ($day > 0 && $day <= 31) {
-                            $stmt .= ' AND DAY(t1.`date_added`) = ' . $day;
+                            $stmt .= ' && DAY(t1.`date_added`) = ' . $day;
 
                             iaBreadcrumb::add(iaLanguage::get('month' . $month),
                                 IA_MODULE_URL . $baseUrl . $year . IA_URL_DELIMITER . $month . IA_URL_DELIMITER);
@@ -288,7 +287,7 @@ if (iaView::REQUEST_XML == $iaView->getRequestType()) {
     $limit = (int)$iaCore->get('art_perpage', 10);
 
     if (isset($iaCore->requestPath[0]) && $iaCore->requestPath[0] == 'author' && isset($iaCore->requestPath[1])) {
-        if ($memberInfo = $iaDb->row_bind(['fullname', 'id'], '`username` = :user AND `status` = :status',
+        if ($memberInfo = $iaDb->row_bind(['fullname', 'id'], '`username` = :user && `status` = :status',
             ['user' => $iaCore->requestPath[1], 'status' => iaCore::STATUS_ACTIVE], iaUsers::getTable())
         ) {
             $stmt = 'AND t1.`member_id` = ' . $memberInfo['id'] . $stmt;
