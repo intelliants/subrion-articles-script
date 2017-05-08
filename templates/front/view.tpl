@@ -18,7 +18,7 @@
 
     {if !empty($item.image)}
         <a class="ia-item-view__image center-block m-b" href="{ia_image file=$item.image type='original' url=true}" rel="ia_lightbox[{$item.title|escape}]">
-            {ia_image file=$item.image type='original' class='img-responsive' alt=$item.title}
+            {ia_image file=$item.image type='large' class='img-responsive' alt=$item.title}
         </a>
     {/if}
 
