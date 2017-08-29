@@ -21,10 +21,10 @@ $(function () {
         $button.prop('disabled', true);
 
         $.ajaxSetup({async: false});
-        $.post(url, {action: $(this).data('pre')}, function (response) {
+        intelli.post(url, {action: $(this).data('pre')}, function (response) {
             total = response.total;
             timer = setInterval(function () {
-                $.post(url, {start: start, limit: limit, action: action}, function () {
+                intelli.post(url, {start: start, limit: limit, action: action}, function () {
                     progress = Math.round(start / total * 100);
 
                     if (start > total) {

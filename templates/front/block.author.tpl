@@ -66,16 +66,13 @@
     </div><!-- /.modal -->
 
     {ia_add_js}
-$(function()
-{
-    $('#send-email').click(function(e)
-    {
+$(function() {
+    $('#send-email').click(function(e) {
         e.preventDefault();
 
-        if (!$(this).hasClass('disabled'))
-        {
+        if (!$(this).hasClass('disabled')) {
             var url = intelli.config.ia_url + 'actions/read.json';
-            var params = new Object();
+            var params = { };
             $.each($('input', '#send-email-box'), function()
             {
                 var input_name = $(this).attr('name');
@@ -86,18 +83,13 @@ $(function()
             params['email_body'] = $('#email-body').val();
 
             $.ajaxSetup( { async: false } );
-            $.post(url, params, function(data)
-            {
-                if (data.error)
-                {
+            $.post(url, intelli.includeSecurityToken(params), function(data) {
+                if (data.error) {
                     $('#author-block-alert').addClass('alert-danger').removeClass('alert-success');
-                }
-                else
-                {
+                } else {
                     $('#author-block-alert').addClass('alert-success').removeClass('alert-danger');
                     $('#send-email').addClass('disabled');
-                    setTimeout(function()
-                    {
+                    setTimeout(function() {
                         $('#send-email-box').modal('hide');
                     }, 1500);
                 }
@@ -105,7 +97,7 @@ $(function()
                 $('#author-block-alert').html(data.message.join('<br>')).show();
             });
 
-            $.ajaxSetup( { async: true } );
+            $.ajaxSetup({ async: true });
         }
     });
 });
