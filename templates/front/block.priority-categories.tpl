@@ -20,7 +20,7 @@
                                 {ia_url item='articles' type='link' data=$article text=$article.title}
                             </h5>
                             <div class="ia-item__additional">
-                                <p>{lang key='on'} {$article.date_added|date_format:$core.config.date_format} <span class="fa fa-folder"></span> <a href="{ia_url type='url' item='articlecats' data=$article}">{$article.category_title}</a></p>
+                                <p>{lang key='on'} {$article.date_added|date_format} <span class="fa fa-folder"></span> <a href="{ia_url type='url' item='articlecats' data=$article}">{$article.category_title}</a></p>
                             </div>
 
                             <p>{$article.summary|strip_tags|truncate:150:'...':false}</p>

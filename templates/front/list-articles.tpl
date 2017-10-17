@@ -35,7 +35,7 @@
                 {else}
                     {lang key='guest'}
                 {/if}
-                {lang key='on'} {$listing.date_added|date_format:$core.config.date_format}
+                {lang key='on'} {$listing.date_added|date_format}
             </p>
             {if 'publishing_home' != $core.page.name && $listing.category_title}
                 <p><span class="fa fa-folder"></span> <a href="{ia_url type='url' item='articlecats' data=$listing}">{$listing.category_title}</a></p>
