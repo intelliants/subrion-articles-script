@@ -28,13 +28,3 @@ interface iaPublishingModule
     const COUNTER_ACTION_INCREMENT = '+';
     const COUNTER_ACTION_DECREMENT = '-';
 }
-
-abstract class abstractPublishingModuleAdmin extends abstractModuleAdmin implements iaPublishingModule
-{
-    protected $_moduleName = 'publishing';
-}
-
-abstract class abstractPublishingModuleFront extends abstractModuleFront implements iaPublishingModule
-{
-    protected $_moduleName = 'publishing';
-}

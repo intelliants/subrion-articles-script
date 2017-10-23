@@ -17,7 +17,7 @@
  *
  ******************************************************************************/
 
-class iaArticle extends abstractPublishingModuleFront
+class iaArticle extends abstractModuleFront implements iaPublishingModule
 {
     protected static $_table = 'articles';
 
