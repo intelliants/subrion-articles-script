@@ -33,6 +33,12 @@ class iaArticlecat extends iaAbstractHelperCategoryFlat implements iaPublishingM
         'columnTotalCounter' => 'num_all_articles'
     ];
 
+    public function insert(array $itemData)
+    {
+        $itemData['date_added'] = date(iaDb::DATETIME_FORMAT);
+
+        return parent::insert($itemData);
+    }
 
     public function getSitemapEntries()
     {

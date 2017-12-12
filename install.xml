@@ -403,6 +403,7 @@ CREATE TABLE `{prefix}articles_categories` (
     `locked` tinyint(1) unsigned NOT NULL,
     `nofollow` tinyint(1) unsigned NOT NULL,
     `priority` tinyint(1) unsigned NOT NULL,
+    `date_added` datetime NOT NULL,
     `order` mediumint(8) NOT NULL,
     PRIMARY KEY (`id`)
 ) {mysql_version};
