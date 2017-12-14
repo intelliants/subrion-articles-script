@@ -36,10 +36,16 @@ class iaArticlecat extends iaAbstractFrontHelperCategoryFlat implements iaPublis
     ];
 
 
+    public function getUrl(array $data)
+    {
+        return $this->getInfo('url')
+            . (isset($data['category_alias']) ? $data['category_alias'] : $data['title_alias']);
+    }
+/*
     public function url($action, array $data)
     {
         $params = [
-            'base' => $this->getInfo('url'),
+            'base' => ,
             'action' => $action,
             'alias' => isset($data['title_alias']) ? $data['title_alias'] : ''
         ];
@@ -49,7 +55,7 @@ class iaArticlecat extends iaAbstractFrontHelperCategoryFlat implements iaPublis
 
         return iaDb::printf($this->_urlPatterns[$action], $params);
     }
-
+*/
     /**
      * Returns article categories
      *

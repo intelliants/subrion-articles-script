@@ -33,7 +33,7 @@ if ($iaCore->checkDomain() && $isDefaultPackage) {
     }
 } elseif ($isCompactUrlMode && count($iaCore->requestPath) > 0) {
     $accessGranted = true;
-} elseif (!$isCompactUrlMode && 'article' == $iaCore->requestPath[0]) {
+} elseif (!$isCompactUrlMode && !empty($iaCore->requestPath[0]) && 'article' == $iaCore->requestPath[0]) {
     $accessGranted = true;
 }
 
