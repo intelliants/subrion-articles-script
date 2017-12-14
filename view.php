@@ -28,7 +28,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     }
 
     $iaField = $iaCore->factory('field');
-    $iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
+    $iaArticle = $iaCore->factoryItem('article');
+    $iaArticleCat = $iaCore->factoryItem('articlecat');
 
     $article = $iaArticle->getById($articleId);
 
@@ -98,7 +99,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
     // breadcrumb
     if ($article['category_id']) {
-        foreach ($iaCore->factoryModule('articlecat', IA_CURRENT_MODULE)->getParents($article['category_id']) as $p) {
+        foreach ($iaArticleCat->getParents($article['category_id']) as $p) {
             iaBreadcrumb::add($p['title'], $p['link'], -1);
         }
     }
@@ -129,6 +130,9 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
         $article['body'] .= iaLanguage::getf('article_source_url', ['url' => $iaArticle->url('view', $article)]);
     }
 
+    $category = $iaArticleCat->getById($article['category_id']);
+
+    $iaView->assign('category', $category);
     $iaView->assign('item', $article);
     $iaView->assign('sections', $sections);
     $iaView->assign('session_id', session_id());

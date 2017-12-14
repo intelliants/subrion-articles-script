@@ -37,9 +37,10 @@
                 {/if}
                 {lang key='on'} {$listing.date_added|date_format}
             </p>
-            {if 'publishing_home' != $core.page.name && $listing.category_title}
-                <p><span class="fa fa-folder"></span> <a href="{ia_url type='url' item='articlecats' data=$listing}">{$listing.category_title}</a></p>
-            {/if}
+            {*{if 'publishing_home' != $core.page.name && $listing.category_title}*}
+                {*<p><span class="fa fa-folder"></span> <a href="{ia_url type='url' item='articlecats' data=$listing}">{$listing.category_title}</a></p>*}
+            {*{/if}*}
+            <p><span class="fa fa-folder"></span> <a href="{ia_url type='url' item='articlecats' data=$listing}">{$listing.category_title}</a></p>
             <p><span class="fa fa-eye"></span> {$listing.views_num} {if 1 == $listing.views_num}{lang key='view'}{else}{lang key='views'}{/if}</p>
         </div>
 

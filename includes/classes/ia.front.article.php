@@ -62,6 +62,11 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
         return iaDb::printf($this->_urlPatterns[$action], $data);
     }
 
+    public function getUrl(array $data)
+    {
+        return $this->url('view', $data);
+    }
+
     public function accountActions($params)
     {
         $url = '';

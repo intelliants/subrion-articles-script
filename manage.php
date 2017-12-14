@@ -132,7 +132,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             ]);
 
             if ($result && iaCore::ACTION_ADD == $pageAction) {
-                $iaCore->factory('log')->write(iaLog::ACTION_CREATE, ['item' => 'article', 'name' => $itemData['title'], 'id' => $id]);
+                $iaCore->factory('log')->write(iaLog::ACTION_CREATE, ['item' => 'article', 'name' => $itemData['title_' . $iaView->language], 'id' => $id]);
             }
 
             $iaArticle->sendMail($id);
