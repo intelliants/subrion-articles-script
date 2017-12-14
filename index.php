@@ -56,8 +56,13 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
     if (isset($_SESSION['p_order']) && in_array($_SESSION['p_order'], $orders)) {
         list($sort, $type) = explode('-', $_SESSION['p_order']);
+
         $iaView->assign('sort_name', $sort);
         $iaView->assign('sort_type', $type);
+
+        if ('title' == $sort) {
+            $sort = $sort . '_' . $iaCore->language['iso'];
+        }
         $order = ' `' . $sort . '` ' . $type;
     }
 
