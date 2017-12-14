@@ -26,6 +26,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
     protected $_gridColumns = ['title', 'title_alias', 'body', 'date_added', 'date_modified', 'sticky', 'status'];
     protected $_gridFilters = ['status' => self::EQUAL, 'title' => self::LIKE];
+    protected $_gridSorting = ['category_title' => ['title_alias', 'c'], 'member' => ['fullname', 'm']];
     protected $_gridQueryMainTableAlias = 'a';
 
     protected $_phraseAddSuccess = 'article_added';
