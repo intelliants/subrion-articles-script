@@ -26,8 +26,8 @@
     <actions>
         <action name="articles" url="publishing/articles/" icon="list" pages="publishing_stats,articles:add,articles:edit"><![CDATA[]]></action>
         <action name="add_article" url="publishing/articles/add/" icon="plus" pages="articles,articles:edit"><![CDATA[]]></action>
-        <action name="articlecats" url="publishing/categories/" icon="list" pages="publishing_stats,categories:add,categories:edit"><![CDATA[]]></action>
-        <action name="add_category" url="publishing/categories/add/" icon="folder-plus" pages="categories,categories:edit"><![CDATA[]]></action>
+        <action name="articlecats" url="publishing/categories/" icon="list" pages="publishing_stats,publish_categories:add,publish_categories:edit"><![CDATA[]]></action>
+        <action name="add_category" url="publishing/categories/add/" icon="folder-plus" pages="publish_categories,publish_categories:edit"><![CDATA[]]></action>
         <action name="dashboard_articles_list" url="publishing/articles/" icon="edit" type="dashboard"><![CDATA[]]></action>
         <action name="dashboard_articles_add" url="publishing/articles/add/" icon="newspaper" type="dashboard"><![CDATA[]]></action>
     </actions>
@@ -40,7 +40,7 @@
         <page group="publishing" name="publishing_stats" url="publishing/" filename="statistics" menus="menu">Statistics</page>
         <page group="publishing" menus="menu">Management</page>
         <page group="publishing" name="articles" url="publishing/articles/" filename="articles" menus="menu">Articles</page>
-        <page group="publishing" name="categories" url="publishing/categories/" filename="categories" menus="menu">Categories</page>
+        <page group="publishing" name="publish_categories" url="publishing/categories/" filename="categories" menus="menu">Categories</page>
     </adminpages>
 
     <pages>
@@ -307,6 +307,7 @@
         <phrase category="frontend" key="save_as_draft">Save as Draft</phrase>
         <phrase category="frontend" key="valid_google_adsense_format">Valid format is ca-pub-XXXX... (16 chars length number). Otherwise will be ignored.</phrase>
         <phrase category="frontend" key="continue_reading"><![CDATA[Continue reading &rarr;]]></phrase>
+        <phrase category="frontend" key="subcategory">Subcategory</phrase>
     </phrases>
 
     <blocks>
