@@ -108,8 +108,12 @@ SQL;
 
         $langCode = iaLanguage::getMasterLanguage()->iso;
 
-        $entry['title_alias'] = empty($data['title_alias']) ? $data['title'][$langCode] : $data['title_alias'];
-        $entry['title_alias'] = iaSanitize::alias($entry['title_alias']) . IA_URL_DELIMITER;
+        if (0 == $entry['parent_id']) {
+            $entry['title_alias'] = '';
+        } else {
+            $entry['title_alias'] = empty($data['title_alias']) ? $data['title'][$langCode] : $data['title_alias'];
+            $entry['title_alias'] = iaSanitize::alias($entry['title_alias']) . IA_URL_DELIMITER;
+        }
 
         if ($this->_iaDb->exists('`title_' . $langCode . '` = :title AND `parent_id` = :parent_id AND `id` != :id',
             ['title' => $entry['title_' . $langCode], 'parent_id' => $entry['parent_id'], 'id' => $this->getEntryId()])) {
