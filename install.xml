@@ -308,6 +308,7 @@
         <phrase category="frontend" key="valid_google_adsense_format">Valid format is ca-pub-XXXX... (16 chars length number). Otherwise will be ignored.</phrase>
         <phrase category="frontend" key="continue_reading"><![CDATA[Continue reading &rarr;]]></phrase>
         <phrase category="frontend" key="subcategory">Subcategory</phrase>
+        <phrase category="frontend" key="field_category_id_annotation">Category</phrase>
     </phrases>
 
     <blocks>

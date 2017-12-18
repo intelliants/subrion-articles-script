@@ -36,12 +36,13 @@ class iaCommon extends abstractCore
         $out = '';
         $iaCore = iaCore::instance();
         $iaView = &$iaCore->iaView;
+        $title = 'title_'. $this->iaCore->language['iso'];
 
         $isBackend = (iaCore::ACCESS_ADMIN == $iaCore->getAccessType());
 
         foreach ($categories as $cat) {
             if ($cat['parent_id'] == $parentId) {
-                $cat['title'] = ($cat['level'] > 1 || $isBackend ? str_repeat('&nbsp;&nbsp;', $cat['level'] - ($isBackend ? 0 : 1)) : '') . $cat['title'];
+                $cat[$title] = ($cat['level'] > 1 || $isBackend ? str_repeat('&nbsp;&nbsp;', $cat[$title] - ($isBackend ? 0 : 1)) : '') . $cat[$title];
                 if ($isBackend && $iaView->name() == 'articlecat_edit' && isset($_GET['id']) && $_GET['id'] == $cat['id']) {
                     $out .= '<optgroup label="' . $cat['title'] . ' [' . iaLanguage::get('self', 'SELF CATEGORY') . ']" disabled="disabled">';
                     $out .= $this->_buildCategoriesTree($categories, $cat['id'], $selected);
@@ -55,7 +56,7 @@ class iaCommon extends abstractCore
 
                     if (!$locked && iaCore::ACCESS_FRONT == $iaCore->getAccessType()
                         || iaCore::ACCESS_ADMIN == $iaCore->getAccessType()) {
-                        $out .= '<option value="' . $cat['id'] . '" ' . ($selected == $cat['id'] ? ' selected="selected"' : '') . ' ' . ($isBackend ? ' alias="' . $cat['title_alias'] . '"' : '') . '>' . $cat['title'] . '</option>';
+                        $out .= '<option value="' . $cat['id'] . '" ' . ($selected == $cat['id'] ? ' selected="selected"' : '') . ' ' . ($isBackend ? ' alias="' . $cat['title_alias'] . '"' : '') . '>' . $cat[$title] . '</option>';
                     } else {
                         $out .= '<optgroup label="' . $cat['title'] . '"></optgroup>';
                     }
@@ -76,9 +77,11 @@ class iaCommon extends abstractCore
      */
     public function getCategoriesTree($selected = false)
     {
-        $fields = ['id', 'parent_id', 'title', 'level', 'locked', 'title_alias'];
+        $title = 'title_'. $this->iaCore->language['iso'];
+
+        $fields = ['id', 'parent_id', $title, 'level', 'locked', 'title_alias'];
         $stmt = '`status` = :status AND `locked` = 0 ';
-        $order = 'ORDER BY `' . ('by title' == $this->iaCore->get('articles_categs_sort', 'by title') ? 'title' : 'order') . '`';
+        $order = 'ORDER BY `' . ('by ' . $title == $this->iaCore->get('articles_categs_sort', 'by ' . $title) ? $title : 'order') . '`';
 
         $this->iaDb->bind($stmt, ['status' => iaCore::STATUS_ACTIVE]);
 
