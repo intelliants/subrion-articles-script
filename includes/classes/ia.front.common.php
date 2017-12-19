@@ -36,10 +36,10 @@ class iaCommon extends abstractCore
         $out = '';
         $iaCore = iaCore::instance();
         $iaView = &$iaCore->iaView;
-
         $isBackend = (iaCore::ACCESS_ADMIN == $iaCore->getAccessType());
 
         foreach ($categories as $cat) {
+            $cat['title'] = $cat['title_' . $this->iaCore->language['iso']];
             if ($cat['parent_id'] == $parentId) {
                 $cat['title'] = ($cat['level'] > 1 || $isBackend ? str_repeat('&nbsp;&nbsp;', $cat['level'] - ($isBackend ? 0 : 1)) : '') . $cat['title'];
                 if ($isBackend && $iaView->name() == 'articlecat_edit' && isset($_GET['id']) && $_GET['id'] == $cat['id']) {
@@ -76,9 +76,11 @@ class iaCommon extends abstractCore
      */
     public function getCategoriesTree($selected = false)
     {
-        $fields = ['id', 'parent_id', 'title', 'level', 'locked', 'title_alias'];
+        $title = 'title_'. $this->iaCore->language['iso'];
+
+        $fields = ['id', 'parent_id', $title, 'level', 'locked', 'title_alias'];
         $stmt = '`status` = :status AND `locked` = 0 ';
-        $order = 'ORDER BY `' . ('by title' == $this->iaCore->get('articles_categs_sort', 'by title') ? 'title' : 'order') . '`';
+        $order = 'ORDER BY `' . ('by ' . $title == $this->iaCore->get('articles_categs_sort', 'by ' . $title) ? $title : 'order') . '`';
 
         $this->iaDb->bind($stmt, ['status' => iaCore::STATUS_ACTIVE]);
 

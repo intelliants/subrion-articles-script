@@ -81,7 +81,11 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             $messages[] = iaLanguage::get('confirmation_code_incorrect');
         }
 
-        $itemData['category_id'] = (int)$_POST['tree_id'];
+        if ($iaCore->get('articles_categories_selector') == 'Handy javascript tree') {
+            $itemData['category_id'] = (int)$_POST['tree_id'];
+        } else {
+            $itemData['category_id'] = (int)$_POST['category_id'];
+        }
 
         if (empty($itemData['category_id'])) {
             $messages[] = iaLanguage::getf('field_is_not_selected', ['field' => iaLanguage::get('category')]);
@@ -175,7 +179,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             $url || $url = 'http://';
 
             $article = [
-                'title' => '',
+                'title'. $iaView->language => '',
                 'body' => '',
                 'category_id' => empty($_GET['category']) ? 0 : (int)$_GET['category_id'],
                 'url' => $url,
@@ -193,6 +197,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
         $category = $aiArticlecat->getById($article['category_id']);
 
         $iaView->assign('category', $category);
+        $iaView->assign('tree', $aiArticlecat->getTreeVars($category['id'], $category['title']));
     } else {
         $categoryOptions = $iaCore->factoryModule('common', IA_CURRENT_MODULE, iaCore::FRONT)
             ->getCategoriesTree($article['category_id']);
@@ -201,7 +206,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     }
 
     $iaView->assign('sections', $iaField->getTabs($iaArticle->getItemName(), $article));
-    $iaView->assign('tree', $aiArticlecat->getTreeVars($category['id'], $category['title']));
 
     $iaView->display('manage');
 }
