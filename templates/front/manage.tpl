@@ -10,7 +10,7 @@
             {if $core.config.articles_categories_selector == 'Handy javascript tree'}
                 {include 'tree.tpl' url="{$core.packages.publishing.url}add.json"}
             {else}
-                <label for="field_category_select">{lang key='field_category_id_annotation'}:</label>
+                <label for="field_category_select">{lang key='field_category_id_tooltip'}:</label>
                 <select class="form-control" name="category_id" id="field_category_select">{$categories}</select>
             {/if}
         </div>

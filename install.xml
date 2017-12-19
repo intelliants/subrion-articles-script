@@ -255,6 +255,7 @@
 
         <phrase category="common" key="add_article">Add Article</phrase>
         <phrase category="common" key="articles">Articles</phrase>
+        <phrase category="common" key="article">Article</phrase>
         <phrase category="common" key="articles_category_locked">Category locked</phrase>
         <phrase category="common" key="articlecats">Article Categories</phrase>
         <phrase category="common" key="body_length_error">Body should be :min-:max characters.</phrase>
@@ -308,7 +309,7 @@
         <phrase category="frontend" key="valid_google_adsense_format">Valid format is ca-pub-XXXX... (16 chars length number). Otherwise will be ignored.</phrase>
         <phrase category="frontend" key="continue_reading"><![CDATA[Continue reading &rarr;]]></phrase>
         <phrase category="frontend" key="subcategory">Subcategory</phrase>
-        <phrase category="frontend" key="field_category_id_annotation">Category</phrase>
+        <phrase category="frontend" key="field_category_id_tooltip">Category</phrase>
     </phrases>
 
     <blocks>

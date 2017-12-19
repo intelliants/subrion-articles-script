@@ -2,7 +2,7 @@
     <div id="tree_fieldzone" class="control-group  fieldzone regular">
         <div class="controls">
             <a href="#" onclick="return false" id="change_cat">{lang key='field_category_id'}
-                [<span id="change_cat_title">{if $category.title != 'ROOT'}{$category.title}{else}{lang key='field_category_id_annotation'}{/if}</span>]
+                [<span id="change_cat_title">{if $category.title != 'ROOT'}{$category.title}{else}{lang key='field_category_id_tooltip'}{/if}</span>]
             </a>
             <div id="tree" class="tree">{lang key='loading'}</div>
             <input type="hidden" name="category_id" id="category_id" value="{$category.id}">
@@ -18,7 +18,7 @@
         intelli.categories_select = {$item.category_id};
     {/ia_add_js}
 {else}
-    <label for="field_category_select" class="control-label">{lang key='field_category_id_annotation'}:</label>
+    <label for="field_category_select" class="control-label">{lang key='field_category_id_tooltip'}:</label>
     <div class="controls">
         <select name="category_id" id="field_category_select">{$category}</select>
     </div>
