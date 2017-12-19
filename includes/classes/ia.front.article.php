@@ -326,7 +326,7 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
             $entryData['title_alias'] = iaSanitize::alias($entryData['title_' . $langCode]);
         }
 
-        if (empty($entryData['meta_keywords_' . $langCode]) && $entryData['body_' . $langCode]) {
+        if ($this->iaCore->get('auto_generate_keywords') && empty($entryData['meta_keywords_' . $langCode]) && $entryData['body_' . $langCode]) {
             $entryData['meta_keywords_' . $langCode] = iaUtil::getMetaKeywords($entryData['body_' . $langCode]);
         }
 

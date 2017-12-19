@@ -139,6 +139,8 @@ SQL;
                     $action = iaCore::STATUS_APPROVAL;
                 }
 
+
+
                 $this->_sendMail('article_' . $action, $owner['email'], $entry);
             }
         }
@@ -162,6 +164,8 @@ SQL;
 
     protected function _sendMail($action, $email, $data)
     {
+        $category = $this->_iaArticlecat->getById($data['category_id']);
+
         if ($this->iaCore->get($action) && $email) {
             $iaMailer = $this->iaCore->factory('mailer');
 
@@ -170,7 +174,7 @@ SQL;
             $iaMailer->setReplacements([
                 'title' => $data['title'],
                 'reason' => isset($data['reason']) ? $data['reason'] : '',
-                'view_url' => IA_URL . 'article/' . $data['category_alias'] . $data['id'] . '-' . $data['title_alias'] . '.html',
+                'view_url' => IA_URL . 'article/' . $category['title_alias'] . $data['id'] . '-' . $data['title_alias'] . '.html',
                 'edit_url' => IA_MODULE_URL . 'edit/' . $data['id'] . '/'
             ]);
 
