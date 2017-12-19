@@ -47,15 +47,35 @@ class iaArticle extends abstractModuleAdmin implements iaPublishingModule
 
     public function insert(array $itemData)
     {
+        $langCode = $this->iaCore->language['iso'];
+
         $itemData['date_added'] = date(iaDb::DATETIME_FORMAT);
         $itemData['date_modified'] = date(iaDb::DATETIME_FORMAT);
+
+        if (empty($itemData['meta_keywords_' . $langCode]) && $itemData['body_' . $langCode]) {
+            $itemData['meta_keywords_' . $langCode] = iaUtil::getMetaKeywords($itemData['body_' . $langCode]);
+        }
+
+        if (empty($itemData['meta_description_' . $langCode]) && !empty($itemData['summary_' . $langCode])) {
+            $itemData['meta_description_' . $langCode] = substr(str_replace(PHP_EOL, '', iaSanitize::tags($itemData['summary_' . $langCode])), 0, 255);
+        }
 
         return parent::insert($itemData);
     }
 
     public function update(array $itemData, $id)
     {
+        $langCode = $this->iaCore->language['iso'];
+
         $itemData['date_modified'] = date(iaDb::DATETIME_FORMAT);
+
+        if (empty($itemData['meta_keywords_' . $langCode]) && $itemData['body_' . $langCode]) {
+            $itemData['meta_keywords_' . $langCode] = iaUtil::getMetaKeywords($itemData['body_' . $langCode]);
+        }
+
+        if (empty($itemData['meta_description_' . $langCode]) && !empty($itemData['summary_' . $langCode])) {
+            $itemData['meta_description_' . $langCode] = substr(str_replace(PHP_EOL, '', iaSanitize::tags($itemData['summary_' . $langCode])), 0, 255);
+        }
 
         return parent::update($itemData, $id);
     }
@@ -139,6 +159,8 @@ SQL;
                     $action = iaCore::STATUS_APPROVAL;
                 }
 
+
+
                 $this->_sendMail('article_' . $action, $owner['email'], $entry);
             }
         }
@@ -162,6 +184,8 @@ SQL;
 
     protected function _sendMail($action, $email, $data)
     {
+        $category = $this->_iaArticlecat->getById($data['category_id']);
+
         if ($this->iaCore->get($action) && $email) {
             $iaMailer = $this->iaCore->factory('mailer');
 
@@ -170,7 +194,7 @@ SQL;
             $iaMailer->setReplacements([
                 'title' => $data['title'],
                 'reason' => isset($data['reason']) ? $data['reason'] : '',
-                'view_url' => IA_URL . 'article/' . $data['category_alias'] . $data['id'] . '-' . $data['title_alias'] . '.html',
+                'view_url' => IA_URL . 'article/' . $category['title_alias'] . $data['id'] . '-' . $data['title_alias'] . '.html',
                 'edit_url' => IA_MODULE_URL . 'edit/' . $data['id'] . '/'
             ]);
 
