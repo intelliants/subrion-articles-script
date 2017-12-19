@@ -81,6 +81,9 @@ class iaArticlecat extends iaAbstractFrontHelperCategoryFlat implements iaPublis
 
         $rows = $this->iaDb->all($fields, $stmt, $start, $limit, self::getTable());
 
+        $root_cat_id = $this->getRootId();
+
+        $this->iaView->assign('root_cat_id', $root_cat_id);
         $this->_processValues($rows);
 
         return $rows;
