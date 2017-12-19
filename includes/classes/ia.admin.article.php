@@ -47,35 +47,15 @@ class iaArticle extends abstractModuleAdmin implements iaPublishingModule
 
     public function insert(array $itemData)
     {
-        $langCode = $this->iaCore->language['iso'];
-
         $itemData['date_added'] = date(iaDb::DATETIME_FORMAT);
         $itemData['date_modified'] = date(iaDb::DATETIME_FORMAT);
-
-        if (empty($itemData['meta_keywords_' . $langCode]) && $itemData['body_' . $langCode]) {
-            $itemData['meta_keywords_' . $langCode] = iaUtil::getMetaKeywords($itemData['body_' . $langCode]);
-        }
-
-        if (empty($itemData['meta_description_' . $langCode]) && !empty($itemData['summary_' . $langCode])) {
-            $itemData['meta_description_' . $langCode] = substr(str_replace(PHP_EOL, '', iaSanitize::tags($itemData['summary_' . $langCode])), 0, 255);
-        }
 
         return parent::insert($itemData);
     }
 
     public function update(array $itemData, $id)
     {
-        $langCode = $this->iaCore->language['iso'];
-
         $itemData['date_modified'] = date(iaDb::DATETIME_FORMAT);
-
-        if (empty($itemData['meta_keywords_' . $langCode]) && $itemData['body_' . $langCode]) {
-            $itemData['meta_keywords_' . $langCode] = iaUtil::getMetaKeywords($itemData['body_' . $langCode]);
-        }
-
-        if (empty($itemData['meta_description_' . $langCode]) && !empty($itemData['summary_' . $langCode])) {
-            $itemData['meta_description_' . $langCode] = substr(str_replace(PHP_EOL, '', iaSanitize::tags($itemData['summary_' . $langCode])), 0, 255);
-        }
 
         return parent::update($itemData, $id);
     }

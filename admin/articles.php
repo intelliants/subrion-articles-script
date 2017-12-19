@@ -91,6 +91,10 @@ class iaBackendController extends iaAbstractControllerModuleBackend
             $entry['summary_' . $langCode] = iaSanitize::snippet($data['body'][$langCode], $this->_iaCore->get('snip_len'));
         }
 
+        if (empty($entry['meta_description_' . $langCode]) && !empty($entry['summary_' . $langCode])) {
+            $entry['meta_description_' . $langCode] = substr(str_replace(PHP_EOL, '', iaSanitize::tags($entry['summary_' . $langCode])), 0, 255);
+        }
+
         if (isset($entry['url'])) {
             $entry['url'] = $this->_processUrl($entry['url']);
         }
