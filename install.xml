@@ -114,57 +114,64 @@
     <config group="publishing" type="text" name="art_per_block_featured_categories" description="Number of articles in Featured categories block">6</config>
     <config group="publishing" type="text" name="article_top_categories" description="Categories number for Top Categories block">12</config>
 
-    <config group="email_templates" type="divider" name="article_divider" description="Publishing"><![CDATA[]]></config>
-    <config group="email_templates" type="radio" values="1,0" name="article_notif" description="New article alerts">1</config>
-    <config group="email_templates" type="text" name="article_notif_subject" description="Email Subject">New article</config>
-    <config group="email_templates" type="textarea" name="article_notif_body" description="Email Body">
-        <![CDATA[
-<p>Greetings,</p>
-<p>We have a new article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a>.</p>
-<p>For more details check the url: <a href="{%URL%}">{%URL%}</a></p>
-        ]]>
-    </config>
+    <emails>
+        <email description="Publishing" divider="1"><![CDATA[]]></email>
 
-    <config group="email_templates" type="radio" name="article_approval" values="1,0" description="Article is active">1</config>
-    <config group="email_templates" type="text" name="article_approval_subject" description="Email Subject">Your article was approved</config>
-    <config group="email_templates" type="textarea" name="article_approval_body" description="Email Body">
-        <![CDATA[
+        <email name="article_notif"
+               description="New article alerts"
+               variables="title|Article title,siteUrl|site URL,siteName|Name of the site"
+               subject="New article">
+            <![CDATA[
 <p>Greetings,</p>
-<p>Your article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a> went live.</p>
-<p>In order to view your article please refer to the URL:  <a href="{%VIEW_URL%}">{%VIEW_URL%}</a></p>
-        ]]>
-    </config>
+<p>We have a new article "{$title}" at <a href="{$siteUrl}">{$siteName}</a>.</p>
+<p>For more details check the url: <a href=&quot;{$view_url}&quot;>{$view_url}</a>.</p>
+            ]]>
+        </email>
 
-    <config group="email_templates" type="radio" name="article_rejected" values="1,0" description="Article is rejected">1</config>
-    <config group="email_templates" type="text" name="article_rejected_subject" description="Email Subject">Your article was rejected</config>
-    <config group="email_templates" type="textarea" name="article_rejected_body" description="Email Body">
-        <![CDATA[
+        <email name="article_approval"
+               description="Article is active"
+               variables=""
+               subject="Your article was approved">
+            <![CDATA[
 <p>Greetings,</p>
-<p>Your article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a> has been rejected.</p>
+<p>Your article "{$title}" at <a href="{$siteUrl}">{$siteName}</a> went live.</p>
+<p>In order to view your article please refer to the URL:  <a href="{$view_url}">{$view_url}</a></p>
+            ]]>
+        </email>
+
+        <email name="article_rejected"
+               description="Article is rejected"
+               variables=""
+               subject="Your article was rejected">
+            <![CDATA[
+<p>Greetings,</p>
+<p>Your article "{$title}" at <a href="{$siteUrl}">{$siteName}</a> has been rejected.</p>
 <p>If you do not know the reason of the rejection or if you want to reactivate your article, please contact an administrator of the site.</p>
-<p>You can edit your article by visiting this page: <a href="{%EDIT_URL%}">{%EDIT_URL%}</a>.</p>
-        ]]>
-    </config>
+            ]]>
+        </email>
 
-    <config group="email_templates" type="radio" name="article_suspended" values="1,0" description="Article is suspended">1</config>
-    <config group="email_templates" type="text" name="article_suspended_subject" description="Email Subject">Your article was suspended</config>
-    <config group="email_templates" type="textarea" name="article_suspended_body" description="Email Body">
-        <![CDATA[
+        <email name="article_suspended"
+               description="Article is suspended"
+               variables=""
+               subject="Your article was suspended">
+            <![CDATA[
 <p>Greetings,</p>
-<p>Your article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a> has been suspended.</p>
+<p>Your article "{$title}" at <a href="{$siteUrl}">{$siteName}</a> has been suspended.</p>
 <p>If you do not know the reason of the suspension or if you want to reactivate your article, please contact an administrator of the site.</p>
-        ]]>
-    </config>
+            ]]>
+        </email>
 
-    <config group="email_templates" type="radio" name="article_removed" values="1,0" description="Article is removed">1</config>
-    <config group="email_templates" name="article_removed_subject" type="text" description="Subject:">Your article has been removed</config>
-    <config group="email_templates" name="article_removed_body" type="textarea" description="Email Body">
-        <![CDATA[
+        <email name="article_removed"
+               description="Article is removed"
+               variables=""
+               subject="Your article has been removed">
+            <![CDATA[
 <p>Greetings,</p>
-<p>Your article "{%TITLE%}" at <a href="{%SITE_URL%}">{%SITE_URL%}</a> has been removed.</p>
+<p>Your article "{$title}" at <a href="{$siteUrl}">{$siteName}</a> has been removed.</p>
 <p>If you do not know the reason of the deletion or if you want to recover your article, please contact an administrator of the site.</p>
-        ]]>
-    </config>
+            ]]>
+        </email>
+    </emails>
 
     <tooltips>
         <tooltip key="article_approval_body"><![CDATA[<b>{%TITLE%}</b> - Article title<br /><b>{%REASON%}</b> - Reason for approval<br /><b>{%EDIT_URL%}</b> - Url for edit article<br /><b>{%VIEW_URL%}</b> - Url for view article<br /><b>{%SITE_NAME%}</b> - Site name<br /><b>{%SITE_URL%}</b> - Site url (home page)]]></tooltip>

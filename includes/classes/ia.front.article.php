@@ -259,6 +259,8 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
 
     public function sendMail($articleId)
     {
+        $article = $this->getById($articleId);
+
         if ($this->iaCore->get('article_notif')) {
             $articleData = $this->getById($articleId, true);
             $iaMailer = $this->iaCore->factory('mailer');
@@ -266,7 +268,8 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
             $iaMailer->loadTemplate('article_notif');
             $iaMailer->setReplacements([
                 'title' => $articleData['title'],
-                'url' => IA_ADMIN_URL . 'publishing/articles/edit/' . $articleData['id'] . '/'
+                'url' => IA_ADMIN_URL . 'publishing/articles/edit/' . $articleData['id'] . '/',
+                'view_url' => $article['link']
             ]);
 
             return $iaMailer->sendToAdministrators();
