@@ -45,6 +45,11 @@ class iaArticle extends abstractModuleAdmin implements iaPublishingModule
         $this->_iaArticlecat = $this->iaCore->factoryModule('articlecat', $this->getModuleName(), iaCore::ADMIN);
     }
 
+    public function getUrl(array $entry)
+    {
+        return $this->getInfo('url') . 'article/' . iaDb::printf(':category_alias:id-:title_alias.html', $entry);
+    }
+
     public function insert(array $itemData)
     {
         $itemData['date_added'] = date(iaDb::DATETIME_FORMAT);
@@ -77,14 +82,19 @@ SQL;
         ]);
 
         if ($entries = $this->iaDb->getAll($sql)) {
-            $baseUrl = $this->getInfo('url');
-
             foreach ($entries as $entry) {
-                $result[] = $baseUrl . iaDb::printf(':category_alias:id-:title_alias.html', $entry);
+                $result[] = $this->getUrl($entry);
             }
         }
 
         return $result;
+    }
+
+    public function getById($id, $process = true)
+    {
+        $rows = $this->get('a.*', 'a.id = ' . (int)$id, '', 0, 1);
+
+        return $rows ? $rows[0] : $rows;
     }
 
     public function get($columns, $where, $order = '', $start = null, $limit = null)
@@ -139,8 +149,6 @@ SQL;
                     $action = iaCore::STATUS_APPROVAL;
                 }
 
-
-
                 $this->_sendMail('article_' . $action, $owner['email'], $entry);
             }
         }
@@ -164,8 +172,6 @@ SQL;
 
     protected function _sendMail($action, $email, $data)
     {
-        $category = $this->_iaArticlecat->getById($data['category_id']);
-
         if ($this->iaCore->get($action) && $email) {
             $iaMailer = $this->iaCore->factory('mailer');
 
@@ -174,7 +180,7 @@ SQL;
             $iaMailer->setReplacements([
                 'title' => $data['title'],
                 'reason' => isset($data['reason']) ? $data['reason'] : '',
-                'view_url' => IA_URL . 'article/' . $category['title_alias'] . $data['id'] . '-' . $data['title_alias'] . '.html',
+                'view_url' => $this->getUrl($data),
                 'edit_url' => IA_MODULE_URL . 'edit/' . $data['id'] . '/'
             ]);
 
