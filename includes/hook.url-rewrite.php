@@ -24,6 +24,9 @@ $isCompactUrlMode = (bool)$iaCore->get('articles_compact_url');
 $isCategory = true;
 $isArticle = false;
 $extras = $iaCore->getModules($package);
+$page = $this->iaView->name() . '/';
+
+$moduleUrl = $iaDb->one('url', iaDb::convertIds($package, 'name'), 'modules');
 
 if ($iaCore->checkDomain() && $isDefaultPackage) {
     $accessGranted = true;
@@ -31,7 +34,7 @@ if ($iaCore->checkDomain() && $isDefaultPackage) {
     if (isset($extras['url']) && $extras['url'] == $iaView->domainUrl) {
         $accessGranted = true;
     }
-} elseif ($isCompactUrlMode && count($iaCore->requestPath) > 0) {
+} elseif ($isCompactUrlMode && count($iaCore->requestPath) > 0 && $moduleUrl == $page) {
     $accessGranted = true;
 } elseif (!$isCompactUrlMode && !empty($iaCore->requestPath[0]) && 'article' == $iaCore->requestPath[0]) {
     $accessGranted = true;
