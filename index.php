@@ -74,7 +74,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             $articles = $iaArticle->get($where . " ORDER BY t1.`views_num` DESC", $start, $pagination['limit']);
 
             $rssFeed = 'popular';
-            $pagination['total'] = $iaDb->foundRows();
+            $pagination['total'] = $iaArticle->getFoundRows();
             $iaView->assign('articles_sorting', false);
 
             break;
@@ -83,7 +83,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             $articles = $iaArticle->get($where . " ORDER BY t1.date_added DESC", $start, $pagination['limit']);
 
             $rssFeed = 'latest';
-            $pagination['total'] = $iaDb->foundRows();
+            $pagination['total'] = $iaArticle->getFoundRows();
             $iaView->assign('articles_sorting', false);
 
             break;
@@ -139,7 +139,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
             $articles = $iaArticle->get('AND t1.`member_id` = ' . iaUsers::getIdentity()->id . ' ORDER BY t1.' . $order,
                 $start, $pagination['limit'], true);
 
-            $pagination['total'] = $iaDb->foundRows();
+            $pagination['total'] = $iaArticle->getFoundRows();
 
             break;
 
@@ -233,7 +233,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
                 $articles = $iaArticle->get($stmt, $start, $pagination['limit']);
 
-                $pagination['total'] = $iaDb->foundRows();
+                $pagination['total'] = $iaArticle->getFoundRows();
 
                 $caption = iaLanguage::getf('articles_by_date', [
                     'year' => $year,
