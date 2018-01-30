@@ -5,7 +5,7 @@ Ext.onReady(function () {
                 columns: [
                     'selection',
                     'expander',
-                    {name: 'title', title: _t('title'), width: 2, editor: 'text'},
+                    {name: 'title', title: _t('title'), width: 1, editor: 'text'},
                     {
                         name: 'category_title', title: _t('category'), renderer: function (value, metadata, record) {
                         return (record.data.category_level > 0)
@@ -15,14 +15,14 @@ Ext.onReady(function () {
                     }, width: 1
                     },
                     {
-                        name: 'member', title: _t('owner'), width: 100, renderer: function (value, metadata, record) {
+                        name: 'member', title: _t('owner'), width: 150, renderer: function (value, metadata, record) {
                         return record.data.member_id
                             ? '<a href="' + intelli.config.admin_url + '/members/edit/' + record.data.member_id + '/">' + value + '</a>'
                             : value;
                     }
                     },
-                    {name: 'date_added', title: _t('date_added'), width: 130},
-                    {name: 'date_modified', title: _t('date_modified'), width: 130},
+                    {name: 'date_added', title: _t('date_added'), width: 170, hidden: true},
+                    {name: 'date_modified', title: _t('date_modified'), width: 170},
                     'status',
                     'update',
                     'delete'
@@ -83,18 +83,18 @@ Ext.onReady(function () {
 intelli.titleCache = '';
 intelli.fillUrlBox = function () {
     var alias = $('#input-alias').val();
-    var title = ('' == alias ? $('#field_articles_title').val() : alias);
+    var title = ('' === alias ? $('#field_article_title').val() : alias);
     var category = $('#input-tree').val();
     var cache = title + '%%' + category;
     var id = $('#js-entry-id').val();
 
-    if ('' != title && intelli.titleCache != cache) {
+    if ('' !== title && intelli.titleCache !== cache) {
         var params = {title: title, category: category};
         if (id != '') {
             params.id = id;
         }
 
-        $.getJSON(intelli.config.admin_url + '/publishing/articles/alias.json', params, function (response) {
+        $.getJSON(intelli.config.admin_url + '/publishing/articles/slug.json', params, function (response) {
             if (response.data) {
                 $('#js-url-preview')
                     .html(response.data + (response.exists ? ' <b style="color:red">' + response.exists + '</b>' : ''))
@@ -107,9 +107,9 @@ intelli.fillUrlBox = function () {
 };
 
 $(function () {
-    $('#field_articles_title').keyup(function () {
+    $('#field_article_title').keyup(function () {
         $('#field-title-alias').show();
     });
 
-    $('#field_articles_title, #input-alias').blur(intelli.fillUrlBox).blur();
+    $('#field_article_title, #input-alias').blur(intelli.fillUrlBox).blur();
 });

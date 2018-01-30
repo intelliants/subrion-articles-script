@@ -21,7 +21,7 @@ class iaArticle extends abstractModuleAdmin implements iaPublishingModule
 {
     protected static $_table = 'articles';
 
-    protected $_itemName = 'articles';
+    protected $_itemName = 'article';
 
     protected $_statuses = [
         iaCore::STATUS_ACTIVE,
@@ -42,7 +42,7 @@ class iaArticle extends abstractModuleAdmin implements iaPublishingModule
     {
         parent::init();
 
-        $this->_iaArticlecat = $this->iaCore->factoryModule('articlecat', $this->getModuleName(), iaCore::ADMIN);
+        $this->_iaArticlecat = $this->iaCore->factoryItem('articlecat');
     }
 
     public function getUrl(array $entry)

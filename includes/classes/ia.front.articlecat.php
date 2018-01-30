@@ -23,16 +23,12 @@ class iaArticlecat extends iaAbstractFrontHelperCategoryFlat implements iaPublis
 
     protected $_moduleName = 'publishing';
 
-    protected $_itemName = 'articlecats';
+    protected $_itemName = 'articlecat';
 
     protected $_recountOptions = [
         'listingsTable' => 'articles',
         'columnCounter' => 'num_articles',
         'columnTotalCounter' => 'num_all_articles'
-    ];
-
-    private $_urlPatterns = [
-        'default' => ':base:alias'
     ];
 
 
@@ -41,21 +37,7 @@ class iaArticlecat extends iaAbstractFrontHelperCategoryFlat implements iaPublis
         return $this->getInfo('url')
             . (isset($data['category_alias']) ? $data['category_alias'] : $data['title_alias']);
     }
-/*
-    public function url($action, array $data)
-    {
-        $params = [
-            'base' => ,
-            'action' => $action,
-            'alias' => isset($data['title_alias']) ? $data['title_alias'] : ''
-        ];
-        $params['alias'] = isset($data['category_alias']) ? $data['category_alias'] : $data['title_alias'];
 
-        isset($this->_urlPatterns[$action]) || $action = 'default';
-
-        return iaDb::printf($this->_urlPatterns[$action], $params);
-    }
-*/
     /**
      * Returns article categories
      *

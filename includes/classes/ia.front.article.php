@@ -21,7 +21,7 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
 {
     protected static $_table = 'articles';
 
-    protected $_itemName = 'articles';
+    protected $_itemName = 'article';
 
     protected $_statuses = [iaCore::STATUS_ACTIVE, iaCore::STATUS_APPROVAL, self::STATUS_REJECTED, self::STATUS_HIDDEN, self::STATUS_SUSPENDED, self::STATUS_DRAFT, self::STATUS_PENDING];
 
@@ -101,7 +101,7 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
                 return $result;
 
             case 'c':
-                $iaArticlecat = $this->iaCore->factoryModule('articlecat', $this->getModuleName());
+                $iaArticlecat = $this->iaCore->factoryItem('articlecat');
 
                 $sql = sprintf('SELECT `id` FROM `%s` WHERE `parent_id` = %d', $iaArticlecat::getTable(true), $value);
 
@@ -135,7 +135,7 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
 
     public function get($stmtWhere = null, $start = 0, $limit = 0, $joinTransactions = false)
     {
-        $this->iaCore->factoryModule('articlecat', $this->getModuleName());
+        $this->iaCore->factoryItem('articlecat');
         if (!$limit) {
             $limit = 1000;
         }
@@ -182,7 +182,7 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
 
     public function getArticleBy($where, $order = '', $displayInactive = false, $decorateValues = true)
     {
-        $this->iaCore->factoryModule('articlecat', $this->getModuleName());
+        $this->iaCore->factoryItem('articlecat');
 
         $accountId = iaUsers::hasIdentity() ? iaUsers::getIdentity()->id : 0;
 
@@ -254,7 +254,7 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
     public function updateCounters($itemId, array $itemData, $action, $previousData = null)
     {
         $this->_checkIfCountersNeedUpdate($action, $itemData, $previousData,
-            $this->iaCore->factoryModule('articlecat', $this->getModuleName()));
+            $this->iaCore->factoryItem('articlecat'));
     }
 
     public function sendMail($articleId)

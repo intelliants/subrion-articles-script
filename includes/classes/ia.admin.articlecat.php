@@ -23,7 +23,7 @@ class iaArticlecat extends iaAbstractHelperCategoryFlat implements iaPublishingM
 
     protected $_moduleName = 'publishing';
 
-    protected $_itemName = 'articlecats';
+    protected $_itemName = 'articlecat';
 
     public $dashboardStatistics = ['icon' => 'folder', 'url' => 'publishing/categories/'];
 

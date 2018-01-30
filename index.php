@@ -66,8 +66,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
         $order = ' `' . $sort . '` ' . $type;
     }
 
-    $iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
-    $iaArticlecat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
+    $iaArticle = $iaCore->factoryItem('article');
+    $iaArticlecat = $iaCore->factoryItem('articlecat');
 
     switch ($iaView->name()) {
         case 'popular_articles':
@@ -287,7 +287,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 }
 
 if (iaView::REQUEST_XML == $iaView->getRequestType()) {
-    $iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
+    $iaArticle = $iaCore->factoryItem('article');
 
     $stmt = ' ORDER BY t1.`date_added` DESC';
     $limit = (int)$iaCore->get('art_perpage', 10);

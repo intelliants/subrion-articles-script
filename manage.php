@@ -17,7 +17,7 @@
  *
  ******************************************************************************/
 
-$aiArticlecat = $iaCore->factoryModule('articlecat', IA_CURRENT_MODULE);
+$aiArticlecat = $iaCore->factoryItem('articlecat');
 
 if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
     $iaView->assign($aiArticlecat->getJsonTree($_GET));
@@ -30,7 +30,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
     $iaField = $iaCore->factory('field');
     $iaUtil = $iaCore->factory('util');
-    $iaArticle = $iaCore->factoryModule('article', IA_CURRENT_MODULE);
+    $iaArticle = $iaCore->factoryItem('article');
 
     $itemData = [];
 

@@ -6,7 +6,7 @@
             <span class="fa fa-user"></span>
             {lang key='by'}
             {if $item.account_username}
-                <a href="{ia_url item='members' data=$author type='url'}">{$item.account_fullname}</a>
+                <a href="{ia_url item='member' data=$author type='url'}">{$item.account_fullname|escape}</a>
             {else}
                 {lang key='guest'}
             {/if}
@@ -27,7 +27,7 @@
 
     {if !empty($item.gallery)}
         <div class="ia-item-view__section">
-            <h3>{lang key='field_articles_gallery'}</h3>
+            <h3>{lang key='field_article_gallery'}</h3>
             {ia_add_media files='fotorama'}
             <div class="ia-item-view__gallery">
                 <div class="fotorama"
@@ -46,7 +46,7 @@
 
     {if $item.url && $item.url != 'http://'}
         <div class="ia-item-view__section">
-            <h3>{lang key='field_articles_url'}</h3>
+            <h3>{lang key='field_article_url'}</h3>
             <a href="{$item.url}" target="_blank">{$item.url}</a><br>
             {$item.url_description}
         </div>

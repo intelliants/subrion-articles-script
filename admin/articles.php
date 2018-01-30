@@ -20,7 +20,6 @@
 class iaBackendController extends iaAbstractControllerModuleBackend
 {
     protected $_name = 'articles';
-    protected $_itemName = 'articles';
 
     protected $_helperName = 'article';
 
@@ -40,10 +39,10 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
     public function init()
     {
-        $this->_iaArticlecat = $this->_iaCore->factoryModule('articlecat', $this->getModuleName(), iaCore::ADMIN);
+        $this->_iaArticlecat = $this->_iaCore->factoryItem('articlecat');
     }
 
-    protected function _modifyGridParams(&$conditions, &$values, array $params)
+    protected function _gridModifyParams(&$conditions, &$values, array $params)
     {
         if (!empty($params['member'])) {
             $stmt = iaDb::printf("`fullname` LIKE ':member%' OR  `username` LIKE ':member' ", ['member' => iaSanitize::sql($params['member'])]);
@@ -129,7 +128,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
         $iaView->assign('tree', $this->getHelper()->getTreeVars($entryData));
     }
 
-    protected function _getJsonAlias($params)
+    protected function _getJsonSlug($params)
     {
         $title = isset($params['title']) ? $params['title'] : '';
         $id = empty($params['id']) ? $this->_iaDb->getNextId() : (int)$params['id'];

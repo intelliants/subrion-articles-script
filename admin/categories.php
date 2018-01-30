@@ -20,7 +20,6 @@
 class iaBackendController extends iaAbstractControllerModuleBackend
 {
     protected $_name = 'categories';
-    protected $_itemName = 'articlecats';
 
     protected $_helperName = 'articlecat';
 
@@ -178,7 +177,7 @@ SQL;
         $output = [];
 
         if (isset($_POST['action'])) {
-            $iaArticle = $this->_iaCore->factoryModule('article', $this->getModuleName(), iaCore::ADMIN);
+            $iaArticle = $this->_iaCore->factoryItem('article');
 
             switch ($_POST['action']) {
                 // fixing paths

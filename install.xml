@@ -4,9 +4,9 @@
     <summary>This package is intended to publish articles on your Subrion CMS powered website</summary>
     <author>Intelliants LLC</author>
     <contributor>Intelliants LLC</contributor>
-    <version>4.1.1</version>
-    <date>2016-04-14</date>
-    <compatibility>4.1.3</compatibility>
+    <version>4.2.0</version>
+    <date>2018-01-30</date>
+    <compatibility>4.2.0</compatibility>
     <url>articles</url>
 
     <screenshots>
@@ -19,8 +19,8 @@
     </screenshots>
 
     <items>
-        <item pages="favorites,view_member,view_article,add_article,edit_article">articles</item>
-        <item payable="0" table_name="articles_categories" pages="publishing_home">articlecats</item>
+        <item pages="favorites,view_member,view_article,add_article,edit_article">article</item>
+        <item payable="0" table_name="articles_categories" pages="publishing_home">articlecat</item>
     </items>
 
     <actions>
@@ -44,15 +44,15 @@
     </adminpages>
 
     <pages>
-        <page group="publishing" url="|PACKAGE|" name="publishing_home" suburl="articles/categories" menus="publishing,main" fields_item="articles">Articles</page>
-        <page group="publishing" url="|PACKAGE|article/" name="view_article" filename="view" readonly="1" nofollow="1" fields_item="articles">View Article</page>
-        <page group="publishing" url="|PACKAGE|add/" action="add" parent="publishing_home" name="add_article" filename="manage" menus="publishing,main" fields_item="articles">Add Article</page>
-        <page group="publishing" url="|PACKAGE|edit/" action="edit" parent="publishing_home" name="edit_article" filename="manage" readonly="1" fields_item="articles">Edit Article</page>
+        <page group="publishing" url="|PACKAGE|" name="publishing_home" suburl="articles/categories" menus="publishing,main" fields_item="article">Articles</page>
+        <page group="publishing" url="|PACKAGE|article/" name="view_article" filename="view" readonly="1" nofollow="1" fields_item="article">View Article</page>
+        <page group="publishing" url="|PACKAGE|add/" action="add" parent="publishing_home" name="add_article" filename="manage" menus="publishing,main" fields_item="article">Add Article</page>
+        <page group="publishing" url="|PACKAGE|edit/" action="edit" parent="publishing_home" name="edit_article" filename="manage" readonly="1" fields_item="article">Edit Article</page>
         <page group="publishing" url="|PACKAGE|delete/" name="delete_article" filename="manage" action="delete" parent="view_article" service="1">Delete Article</page>
-        <page group="publishing" url="|PACKAGE|date/" name="date_articles" menus="publishing" fields_item="articles">Articles Archive</page>
-        <page group="publishing" url="profile/articles/" name="my_articles" menus="account" nofollow="1" parent="profile" fields_item="articles">My Articles</page>
-        <page group="publishing" url="|PACKAGE|latest/" name="latest_articles" menus="publishing" fields_item="articles">Latest Articles</page>
-        <page group="publishing" url="|PACKAGE|popular/" name="popular_articles" menus="publishing" fields_item="articles">Popular Articles</page>
+        <page group="publishing" url="|PACKAGE|date/" name="date_articles" menus="publishing" fields_item="article">Articles Archive</page>
+        <page group="publishing" url="profile/articles/" name="my_articles" menus="account" nofollow="1" parent="profile" fields_item="article">My Articles</page>
+        <page group="publishing" url="|PACKAGE|latest/" name="latest_articles" menus="publishing" fields_item="article">Latest Articles</page>
+        <page group="publishing" url="|PACKAGE|popular/" name="popular_articles" menus="publishing" fields_item="article">Popular Articles</page>
         <page group="publishing" url="|PACKAGE|rss/" name="rss_articles" service="1">RSS Articles</page>
     </pages>
 
@@ -186,52 +186,54 @@
     </tooltips>
 
     <fields_groups>
-        <group item="articles" name="general" title="General" tabview="1"><![CDATA[]]></group>
-        <group item="articles" name="articles_link" title="Link" tabview="1">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
-        <group item="articlecats" name="general" title="General"><![CDATA[]]></group>
-        <group item="members" name="publishing" title="Publishing" tabview="1">Setup your AdSense ID that is used to share ads profits on the articles you submit.</group>
-        <group item="members" name="articles_link" title="Link" tabcontainer="publishing">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
+        <group item="article" name="general" title="General" tabview="1"><![CDATA[]]></group>
+        <group item="article" name="link" title="Link" tabview="1">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
+
+        <group item="articlecat" name="general" title="General"><![CDATA[]]></group>
+
+        <group item="member" name="publishing" title="Publishing" tabview="1">Setup your AdSense ID that is used to share ads profits on the articles you submit.</group>
+        <group item="member" name="articles_link" title="Link" tabcontainer="publishing">This information is added to the end of each article. These fields are optional. If filled, these values would appear by default for your articles. Sure, you are able to specify custom values for each article.</group>
     </fields_groups>
 
     <fields>
-        <field item="articles" name="title" type="text" group="general" length="200"
+        <field item="article" name="title" type="text" group="general" length="200"
             required="1" editable="0" link_to="1" multilingual="1"
             required_checks="if (isset($_POST['title']) &amp;&amp; is_array($_POST['title'])){ $maxLength = (int)iaCore::instance()-&gt;get('max_title'); foreach ($_POST['title'] as $iso =&gt; $value) { if (!empty($value)) { $l = utf8_strlen($value); if ($l &lt; 3 || $l &gt; $maxLength) $errors['title'] = iaLanguage::get('title_incorrect'); } }}"
             page="edit_article,add_article,view_article,favorites,publishing_home,rss_articles">Title</field>
-        <field item="articles" name="summary" group="general" type="textarea" editable="0"
+        <field item="article" name="summary" group="general" type="textarea" editable="0"
             page="publishing_home,view_member" multilingual="1">Summary</field>
-        <field item="articles" name="body" group="general" type="textarea" editor="1" editable="0" required="1"
+        <field item="article" name="body" group="general" type="textarea" editor="1" editable="0" required="1"
             required_checks="if (isset($_POST['body']) &amp;&amp; is_array($_POST['body'])){ list($min, $max) = explode(',', iaCore::instance()-&gt;get('article_length'));  foreach ($_POST['body'] as $iso =&gt; $value) { $l = utf8_strlen(html_entity_decode(str_replace(array('\r','\n'), '*', iaSanitize::tags($value)))); if ($l &lt; $min || $l &gt; $max) $errors['body'] = iaLanguage::getf('body_length_error', array('min' =&gt; $min, 'max' =&gt; $max)); }}"
             page="edit_article,add_article,view_article,rss_articles" multilingual="1">Body</field>
-        <field item="articles" name="meta_description" group="general" type="textarea"
+        <field item="article" name="meta_description" group="general" type="textarea"
             adminonly="1" editable="0" multilingual="1">Meta-Description</field>
-        <field item="articles" name="meta_keywords" group="general" type="text" length="70" adminonly="1" editable="0" multilingual="1">Meta-Keywords</field>
-        <field item="articles" name="image" group="general" type="image" width="1600" height="900" thumb_width="800" thumb_height="450"
+        <field item="article" name="meta_keywords" group="general" type="text" length="70" adminonly="1" editable="0" multilingual="1">Meta-Keywords</field>
+        <field item="article" name="image" group="general" type="image" width="1600" height="900" thumb_width="800" thumb_height="450"
             editable="0" page="edit_article,add_article,favorites,publishing_home">Image</field>
-        <field item="articles" name="gallery" group="general" type="pictures"
+        <field item="article" name="gallery" group="general" type="pictures"
             width="1600" height="900" thumb_width="800" thumb_height="450" prefix="articles_" length="5"
             page="edit_article,add_article,view_article">Pictures</field>
-        <field item="articles" name="url" type="text" group="articles_link" length="255"
+        <field item="article" name="url" type="text" group="link" length="255"
             actions="if (!empty($_POST['url']) &amp;&amp; $_POST['url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['url'])) { $error = true; $messages[] = iaLanguage::get('incorrect_article_url'); }"
             page="edit_article,add_article,view_article,favorites,publishing_home">URL</field>
-        <field item="articles" name="url_description" type="textarea" group="articles_link" length="1024"
+        <field item="article" name="url_description" type="textarea" group="link" length="1024"
             page="edit_article,add_article,view_article,favorites,publishing_home">URL Description</field>
 
-        <field item="articlecats" name="title" group="general" type="text" length="70" required="1"
+        <field item="articlecat" name="title" group="general" type="text" length="70" required="1"
             searchable="1" page="publishing_home" multilingual="1">Title</field>
-        <field item="articlecats" name="description" group="general" type="textarea" editor="1"
+        <field item="articlecat" name="description" group="general" type="textarea" editor="1"
             searchable="1" page="publishing_home" multilingual="1">Description</field>
-        <field item="articlecats" name="meta_description" group="general" type="textarea"
+        <field item="articlecat" name="meta_description" group="general" type="textarea"
             adminonly="1" multilingual="1">Meta-Description</field>
-        <field item="articlecats" name="meta_keywords" group="general" type="text"
+        <field item="articlecat" name="meta_keywords" group="general" type="text"
             length="100" adminonly="1" multilingual="1">Meta-Keywords</field>
-        <field item="articlecats" name="icon" type="iconpicker" group="general" default="fa-folder"
+        <field item="articlecat" name="icon" type="iconpicker" group="general" default="fa-folder"
                adminonly="1" page="publishing_home">Icon</field>
 
-        <field item="members" name="adsense_id" group="publishing" type="text" length="23" page="profile">Google AdSense id</field>
-        <field item="members" name="articles_url" group="articles_link" type="text" length="255" page="profile"
+        <field item="member" name="adsense_id" group="publishing" type="text" length="23" page="profile">Google AdSense id</field>
+        <field item="member" name="articles_url" group="link" type="text" length="255" page="profile"
             actions="if (!empty($_POST['articles_url']) &amp;&amp; $_POST['articles_url'] !== 'http://' &amp;&amp; !iaValidate::isUrl($_POST['articles_url'])) { $error = true; $messages[] = iaLanguage::get('error_url');}">Article URL</field>
-        <field item="members" name="articles_url_description" group="articles_link" type="textarea" length="1024" page="profile">Article URL Description</field>
+        <field item="member" name="articles_url_description" group="articles_link" type="textarea" length="1024" page="profile">Article URL Description</field>
     </fields>
 
     <phrases>
@@ -295,8 +297,8 @@
         <phrase category="frontend" key="delete_article">Delete Article</phrase>
         <phrase category="frontend" key="do_you_really_want_to_delete_article">Do you really want to remove this article?</phrase>
         <phrase category="frontend" key="error_links_limit_reached">You have reached the allowed number of links: :found (:allowed allowed)</phrase>
-        <phrase category="frontend" key="field_articles_url">URL</phrase>
-        <phrase category="frontend" key="field_articles_url_description">URL Description</phrase>
+        <phrase category="frontend" key="field_article_url">URL</phrase>
+        <phrase category="frontend" key="field_article_url_description">URL Description</phrase>
         <phrase category="frontend" key="title_desc">Title (Descending)</phrase>
         <phrase category="frontend" key="title_asc">Title (Ascending)</phrase>
         <phrase category="frontend" key="views_desc">Views (Most viewed)</phrase>
@@ -320,27 +322,27 @@
     </phrases>
 
     <blocks>
-        <block name="articles_archive" title="Articles Archive" position="right" type="smarty" header="1" collapsible="1" filename="block.articles-archive"><![CDATA[]]></block>
-        <block name="new_articles" title="New Articles" position="bottom" type="smarty" header="0" sticky="0" pages="index,publishing_home" filename="block.new-articles"><![CDATA[]]></block>
-        <block name="featured_articles" title="Featured Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--featured" filename="block.featured-articles"><![CDATA[]]></block>
-        <block name="sponsored_articles" title="Sponsored Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--sponsored" filename="block.sponsored-articles"><![CDATA[]]></block>
-        <block name="random_articles" title="Random Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" filename="block.random-articles"><![CDATA[]]></block>
-        <block name="latest_articles" order="2" title="Latest Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.latest-articles"><![CDATA[]]></block>
-        <block name="popular_articles" order="3" title="Popular Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.popular-articles"><![CDATA[]]></block>
-        <block name="sticky_articles" title="Sticky Articles" position="left" type="smarty" header="1" sticky="0" pages="index" collapsible="1" filename="block.sticky-articles"><![CDATA[]]></block>
-        <block name="top_categories" order="1" title="Top Categories" position="left" type="smarty" header="1" sticky="1" collapsible="1" pages="publishing_home" filename="block.top-categories"><![CDATA[]]></block>
-        <block name="priority_categories" order="2" title="Featured Categories" position="bottom" type="smarty" header="1" sticky="0" collapsible="1" pages="index" filename="block.priority-categories"><![CDATA[]]></block>
-        <block name="author_info" title="Author" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" order="-1" filename="block.author"><![CDATA[]]></block>
-        <block name="related_articles" title="Related Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.related-articles" status="inactive"><![CDATA[]]></block>
-        <block name="most_viewed_articles" title="Most Viewed Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-viewed-articles" status="inactive"><![CDATA[]]></block>
-        <block name="most_recent_articles" title="Most Recent Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-recent-articles"><![CDATA[]]></block>
-        <block name="author_articles" title="More Author Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.author-articles" status="inactive"><![CDATA[]]></block>
+        <block name="articles_archive" title="Articles Archive" position="right" type="smarty" header="1" collapsible="1" filename="block.articles-archive.tpl"><![CDATA[]]></block>
+        <block name="new_articles" title="New Articles" position="bottom" type="smarty" header="0" sticky="0" pages="index,publishing_home" filename="block.new-articles.tpl"><![CDATA[]]></block>
+        <block name="featured_articles" title="Featured Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--featured" filename="block.featured-articles.tpl"><![CDATA[]]></block>
+        <block name="sponsored_articles" title="Sponsored Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" classname="box--sponsored" filename="block.sponsored-articles.tpl"><![CDATA[]]></block>
+        <block name="random_articles" title="Random Articles" position="right" type="smarty" header="1" sticky="1" collapsible="1" filename="block.random-articles.tpl"><![CDATA[]]></block>
+        <block name="latest_articles" order="2" title="Latest Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.latest-articles.tpl"><![CDATA[]]></block>
+        <block name="popular_articles" order="3" title="Popular Articles" position="left" type="smarty" header="1" sticky="1" collapsible="1" filename="block.popular-articles.tpl"><![CDATA[]]></block>
+        <block name="sticky_articles" title="Sticky Articles" position="left" type="smarty" header="1" sticky="0" pages="index" collapsible="1" filename="block.sticky-articles.tpl"><![CDATA[]]></block>
+        <block name="top_categories" order="1" title="Top Categories" position="left" type="smarty" header="1" sticky="1" collapsible="1" pages="publishing_home" filename="block.top-categories.tpl"><![CDATA[]]></block>
+        <block name="priority_categories" order="2" title="Featured Categories" position="bottom" type="smarty" header="1" sticky="0" collapsible="1" pages="index" filename="block.priority-categories.tpl"><![CDATA[]]></block>
+        <block name="author_info" title="Author" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" order="-1" filename="block.author.tpl"><![CDATA[]]></block>
+        <block name="related_articles" title="Related Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.related-articles.tpl" status="inactive"><![CDATA[]]></block>
+        <block name="most_viewed_articles" title="Most Viewed Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-viewed-articles.tpl" status="inactive"><![CDATA[]]></block>
+        <block name="most_recent_articles" title="Most Recent Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.most-recent-articles.tpl"><![CDATA[]]></block>
+        <block name="author_articles" title="More Author Articles" position="bottom" type="smarty" sticky="0" header="1" pages="view_article" collapsible="1" filename="block.author-articles.tpl" status="inactive"><![CDATA[]]></block>
     </blocks>
 
     <hooks>
-        <hook name="phpCoreUrlRewrite" page_type="front" filename="hook.url-rewrite"><![CDATA[]]></hook>
-        <hook name="phpCoreBeforePageDisplay" page_type="front" filename="hook.blocks-load"><![CDATA[]]></hook>
-        <hook name="smartyFrontFiltersBeforeFields" type="smarty" page_type="front" filename="search.filters"><![CDATA[]]></hook>
+        <hook name="phpCoreUrlRewrite" page_type="front" filename="hook.url-rewrite.php"><![CDATA[]]></hook>
+        <hook name="phpCoreBeforePageDisplay" page_type="front" filename="hook.blocks-load.php"><![CDATA[]]></hook>
+        <hook name="smartyFrontFiltersBeforeFields" type="smarty" page_type="front" filename="search.filters.tpl"><![CDATA[]]></hook>
         <hook name="populateCommonStatisticsBlock" page_type="front">
             <![CDATA[
 $condition = iaDb::printf("`status` = ':status'", array('status' => iaCore::STATUS_ACTIVE));
@@ -362,11 +364,11 @@ $statistics['publishing'] = [
 {/if}
             ]]>
         </hook>
-        <hook name="adminDatabaseConsistency" type="smarty" page_type="admin" filename="hook.db-consistency"><![CDATA[]]></hook>
+        <hook name="adminDatabaseConsistency" type="smarty" page_type="admin" filename="hook.db-consistency.tpl"><![CDATA[]]></hook>
         <hook name="phpAdminDatabaseConsistencyType" page_type="admin" pages="database">
             <![CDATA[
 if ('repair_article_categories' == $type) {
-    $iaCore->factoryModule('articlecat', 'publishing', iaCore::ADMIN)->rebuild();
+    $iaCore->factoryItem('articlecat')->rebuild();
     $iaView->setMessages(iaLanguage::get('categories_repaired'), iaView::SUCCESS);
 }
             ]]>

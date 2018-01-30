@@ -1,6 +1,6 @@
 {if !empty($author)}
     <div class="ia-item-author p-a clearfix">
-        <a class="pull-left m-r" href="{ia_url type='url' item='members' data=$author}">
+        <a class="pull-left m-r" href="{ia_url type='url' item='member' data=$author}">
             {if $author.avatar}
                 {ia_image file=$author.avatar type='thumbnail' width=80 class='img-circle' title=$author.fullname}
             {else}
@@ -8,7 +8,7 @@
             {/if}
         </a>
         <div class="media-body">
-            <h4 class="media-heading"><a href="{ia_url type='url' item='members' data=$author}">{$author.fullname}</a></h4>
+            <h4 class="media-heading"><a href="{ia_url type='url' item='member' data=$author}">{$author.fullname|escape}</a></h4>
             {if !empty($author.biography)}
                 <p class="text-fade-50">{$author.biography|escape|nl2br}</p>
             {/if}

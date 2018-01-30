@@ -29,8 +29,8 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
 
     $defaultLimit = (int)$iaCore->get('art_per_block', 5);
 
-    $iaArticle = $iaCore->factoryModule('article', 'publishing');
-    $iaArticlecat = $iaCore->factoryModule('articlecat', $iaArticle->getModuleName());
+    $iaArticle = $iaCore->factoryItem('article');
+    $iaArticlecat = $iaCore->factoryItem('articlecat');
 
     if ($iaView->blockExists('random_articles')) {
         $max = (int)$iaDb->one('MAX(`id`) as `max`', null, 'articles');
@@ -132,7 +132,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     }
 
     if ($iaView->blockExists('top_categories')) {
-        $data = $iaCore->factoryModule('articlecat', 'publishing')
+        $data = $iaCore->factoryItem('articlecat')
             ->get($iaCore->get('art_view_category', true) ? '' : ' && `num_all_articles` > 0', 0, $iaCore->get('article_top_categories', 12), 1, '`num_all_articles` DESC, `title_' . $iaView->language . '` ASC');
         if ($data) {
             $iaView->assign('top_categories', $data);
@@ -140,7 +140,7 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     }
 
     if ($iaView->blockExists('priority_categories')) {
-        $data = $iaCore->factoryModule('articlecat', 'publishing')->get(' && `priority` = 1 ' . ($iaCore->get('art_view_category', true) ? '' : ' && `num_all_articles` > 0'),
+        $data = $iaCore->factoryItem('articlecat')->get(' && `priority` = 1 ' . ($iaCore->get('art_view_category', true) ? '' : ' && `num_all_articles` > 0'),
             0, $iaCore->get('article_top_categories', 12), 1, '`title_' . $iaView->language . '` ASC');
         if ($data) {
             foreach ($data as $key => $value) {
