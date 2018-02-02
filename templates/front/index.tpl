@@ -69,7 +69,7 @@
 
     <div class="ia-items">
         {foreach $articles as $listing}
-            {include file='extra:publishing/list-articles'}
+            {include 'module:publishing/list-articles.tpl'}
         {/foreach}
     </div>
 
