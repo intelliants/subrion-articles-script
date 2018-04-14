@@ -3,7 +3,7 @@
     {if $new_articles}
         <div class="new-articles">
             {foreach $new_articles as $listing}
-                {include 'extra:publishing/list-articles'}
+                {include 'module:publishing/list-articles.tpl'}
             {/foreach}
         </div>
     {else}
