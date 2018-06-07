@@ -103,7 +103,7 @@ class iaArticle extends abstractModuleFront implements iaPublishingModule
             case 'c':
                 $iaArticlecat = $this->iaCore->factoryItem('articlecat');
 
-                $sql = sprintf('SELECT `id` FROM `%s` WHERE `parent_id` = %d', $iaArticlecat::getTable(true), $value);
+                $sql = sprintf('SELECT `child_id` FROM `%s` WHERE `parent_id` = %d', $iaArticlecat->getTableFlat(true), $value);
 
                 return ['col' => ':column', 'cond' => 'IN', 'val' => '(' . $sql . ')', 'field' => 'category_id'];
 
