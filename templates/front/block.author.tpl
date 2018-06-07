@@ -71,7 +71,7 @@ $(function() {
         e.preventDefault();
 
         if (!$(this).hasClass('disabled')) {
-            var url = intelli.config.ia_url + 'actions/read.json';
+            var url = intelli.config.url + 'actions/read.json';
             var params = { };
             $.each($('input', '#send-email-box'), function()
             {
