@@ -10,14 +10,20 @@ $(function () {
         if (value != '') {
             $.getJSON(intelli.config.packages.publishing.url + 'publishing/read.json', {id: value}, function (response) {
                 if (response && response.length > 0) {
-                    var d = $scSelect.data('id');
+                    var id = $scSelect.data('value');
                     $.each(response, function (index, item) {
-                        var $option = $('<option>').val(item.id).text(item.text);
-                        if (d == item.id) $option.attr('selected', true);
+                        var $option = $('<option>').val(item.id).text(item.title);
+                        if (id == item.id) {
+                            $option.attr('selected', true);
+                        }
                         $scSelect.append($option);
                     });
 
                     $scSelect.prop('disabled', false);
+console.log(id);
+                    if (id) {
+                        $scSelect.trigger('change');
+                    }
                 }
             });
         }
@@ -26,7 +32,9 @@ $(function () {
         }
     });
 
-    if ($scSelect.data('id')) $cSelect.trigger('change');
+    if (intelli.pageName == 'search' && $scSelect.data('value')) {
+        $cSelect.trigger('change');
+    }
 
     $scSelect.on('change', function () {
         intelli.search.run();

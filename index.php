@@ -16,6 +16,11 @@
  * @link https://subrion.pro/product/publishing.html
  *
  ******************************************************************************/
+$iaArticlecat = $iaCore->factoryItem('articlecat');
+
+if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
+    $iaView->assign($iaArticlecat->getChildren($_GET['id']));
+}
 
 if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     $pagination = [
@@ -67,7 +72,6 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     }
 
     $iaArticle = $iaCore->factoryItem('article');
-    $iaArticlecat = $iaCore->factoryItem('articlecat');
 
     switch ($iaView->name()) {
         case 'popular_articles':
