@@ -4,8 +4,8 @@
     <summary>This package is intended to publish articles on your Subrion CMS powered website</summary>
     <author>Intelliants LLC</author>
     <contributor>Intelliants LLC</contributor>
-    <version>4.2.0</version>
-    <date>2018-04-14</date>
+    <version>4.2.1</version>
+    <date>2018-06-18</date>
     <compatibility>4.2</compatibility>
     <url>articles</url>
 
